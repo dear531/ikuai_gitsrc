@@ -75,19 +75,6 @@ void kernel_receive(struct sk_buff *__skb) //内核从用户空间接收数据
 
 int __init test_netlink_init(void)
 {
-#if 0
-	struct netlink_kernel_cfg nl_cfg = {
-		.flags = 0,
-		.groups = 0,
-		.input = nl_data_ready,
-	};
-#if 0
-	nl_sk = netlink_kernel_create(&init_net, NETLINK_TEST, 0, nl_data_ready, NULL, THIS_MODULE);
-	netlinkfd = netlink_kernel_create(&init_net, NETLINK_TEST, 0, kernel_receive, NULL, THIS_MODULE);
-#else
-	nl_sk = netlink_kernel_create(&init_net, NETLINK_TEST, &nl_cfg);
-#endif
-#endif
 	struct netlink_kernel_cfg nl_cfg = {
 		.flags = 0,
 		.groups = 0,

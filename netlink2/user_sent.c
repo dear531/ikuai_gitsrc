@@ -3,6 +3,9 @@
 #include <sys/socket.h>
 #include <string.h>
 #include <linux/netlink.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 
 #define NETLINK_TEST 17
 #define MSG_LEN 100
