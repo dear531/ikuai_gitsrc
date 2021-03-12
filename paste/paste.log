@@ -1,0 +1,29 @@
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/paste$ cat 2.txt 1.txt 
+3
+4
+5
+1
+2
+6
+7
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/paste$ cat 2.txt
+3
+4
+5
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/paste$ cat 1.txt 
+1
+2
+6
+7
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/paste$ paste 2.txt 1.txt 
+3	1
+4	2
+5	6
+	7
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/paste$ paste 2.txt 1.txt > 3.txt 
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/paste$ cat 3.txt 
+3	1
+4	2
+5	6
+	7
+
