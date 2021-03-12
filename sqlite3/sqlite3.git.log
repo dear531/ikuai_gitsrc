@@ -1,0 +1,23 @@
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> int[K[K[Kcreate tabe[Kles[K int[K[K[Ksu[Ktunde[K[K[Kdents [K 
+   ...> (int[K[K[Kid,[K inge[K[Kyt[K[Kteger,
+   ...> name tx[Kext,
+   ...> s[Kage ing[Kteger,
+   ...> score integer);
+sqlite> select [K[K[K[K[K[K[Kch[K[Kschema w[K[K[K[K[K[K[K[K.schec[Kme ow[K[K[K[Ka ow[K[Ktable stun[Kdents;
+sqlite> .schema table students;[K
+sqlite> .scha[Kem stund[K[Kdents
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+sqlite> .data[K[K[K[Kheader on
+sqlite> int[K[K[Kinsert into wo[K[Kd[Kstudents (id, name, s[Kage, so[Kcore)
+   ...> values )[K(0[K1, "le[K[K[K'le[K[KLeo', 39[K[K38, int[K[K[K1000[K)
+   ...> ;
+sqlite> int[K[K[Kselect f[K* from w[Kstunde[K[K[Kdents;
+id|name|age|score
+1|Leo|38|100
+sqlite> [Ksqlite> qi[Kuit[K[K[K[K.exit
