@@ -21,3 +21,36 @@ sqlite> int[K[K[Kselect f[K* from w[Kstunde[K[K[Kdents;
 id|name|age|score
 1|Leo|38|100
 sqlite> [Ksqlite> qi[Kuit[K[K[K[K.exit
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .baqc[K[Kckp[Kup config.tmp.db.[K[Kb
+sqlite> .exit
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/sqlite3$ ls -lrt
+总用量 16
+-rw-r--r-- 1 leocheung root 2048 3月  12 17:12 config1.db
+-rw-r--r-- 1 leocheung root 1012 3月  12 17:27 sqlite3.2.git.log
+-rw-r--r-- 1 leocheung root 2048 3月  12 17:52 config.tmp.db
+-rw-r--r-- 1 leocheung root 1154 3月  12 17:52 sqlite3.git.log
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/sqlite3$ sqlite3 config.tmp.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .databases
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/leocheung/ikuai_gitsrc/sqlite3/config.tmp.db        
+sqlite> .tables
+students
+sqlite> quit
+   ...> ;
+Error: near "quit": syntax error
+sqlite> .exit
+leocheung@leocheung-CW65S:~/ikuai_gitsrc/sqlite3$ git diff
+diff --git a/sqlite3/sqlite3.git.log b/sqlite3/sqlite3.git.log
+index b65943f..13b4db0 100644
+--- a/sqlite3/sqlite3.git.log
++++ b/sqlite3/sqlite3.git.log
+@@ -21,3 +21,7 @@ sqlite> select * from students;
+ id|name|age|score
+ 1|Leo|38|100
+ sqlite> ^Msqlite> .exit
+
