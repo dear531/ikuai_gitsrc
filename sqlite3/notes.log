@@ -54,3 +54,95 @@ index b65943f..13b4db0 100644
  1|Leo|38|100
  sqlite> ^Msqlite> .exit
 
+
+====.dump=====
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .dump students
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+INSERT INTO "students" VALUES(1,'Leo',38,100);
+COMMIT;
+sqlite> 
+
+==== .echo off|on =====
+
+
+sqlite> .show 
+.show 
+        echo: on
+         eqp: off
+     explain: auto
+     headers: off
+        mode: list
+   nullvalue: ""
+      output: stdout
+colseparator: "|"
+rowseparator: "\n"
+       stats: off
+       width: 
+sqlite> .echo off
+.echo off
+sqlite> .show
+        echo: off
+         eqp: off
+     explain: auto
+     headers: off
+        mode: list
+   nullvalue: ""
+      output: stdout
+colseparator: "|"
+rowseparator: "\n"
+       stats: off
+       width: 
+sqlite> select * from students;
+1|Leo|38|100
+sqlite> .echo on
+sqlite> .show
+.show
+        echo: on
+         eqp: off
+     explain: auto
+     headers: off
+        mode: list
+   nullvalue: ""
+      output: stdout
+colseparator: "|"
+rowseparator: "\n"
+       stats: off
+       width: 
+sqlite> select * from students;
+select * from students;
+1|Leo|38|100
+sqlite> 
+
+==== .explain ====
+sqlite> .explain on
+sqlite> select * from students;
+id    name           age   scor
+----  -------------  ----  ----
+1     Leo            38    100 
+sqlite> .explain off
+sqlite> select * from students;
+1|Leo|38|100
+sqlite> .header on
+sqlite> select * from students;
+id|name|age|score
+1|Leo|38|100
+sqlite> .explain on
+sqlite> select * from students;
+id    name           age   scor
+----  -------------  ----  ----
+1     Leo            38    100 
+sqlite> .explain off
+sqlite> select * from students;
+id|name|age|score
+1|Leo|38|100
+
