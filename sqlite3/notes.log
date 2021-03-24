@@ -146,3 +146,49 @@ sqlite> select * from students;
 id|name|age|score
 1|Leo|38|100
 
+
+==== .import ====
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3  config1.db ".dump" > 1.dump
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ cat 1.dump 
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+INSERT INTO "students" VALUES(1,'Leo',38,100);
+COMMIT;
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config2.db ".import 1.dump students"
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config2.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .databases
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config2.db      
+sqlite> .table
+students
+sqlite> select * from students
+   ...> ;
+BEGIN TRANSACTION;
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+INSERT INTO "students" VALUES(1,'Leo',38,100);
+COMMIT;
+sqlite> .schema students
+CREATE TABLE students(
+  "PRAGMA foreign_keys=OFF;" TEXT
+);
+sqlite> .open config1.db 
+sqlite> .schema students
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+sqlite> 
+
