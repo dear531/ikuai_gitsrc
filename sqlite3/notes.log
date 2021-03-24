@@ -192,3 +192,27 @@ age integer,
 score integer);
 sqlite> 
 
+
+==== .indices for index ====
+
+sqlite> .schema students
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+sqlite> .indices students --- 没有建立表索引无任何显示
+sqlite> CREATE INDEX students_id_index on students(id);
+sqlite> .indices stu --- 不写全表名，无任何显示
+sqlite> .indices students
+students_id_index
+sqlite> .indices --- 不写表名都显示索引
+students_id_index
+sqlite> .schema students
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+CREATE INDEX students_id_index on students(id);
+sqlite>
