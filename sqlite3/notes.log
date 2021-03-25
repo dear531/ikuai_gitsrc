@@ -230,3 +230,86 @@ sqlite> select * form students;
 Error: near "form": syntax error
 sqlite> .exit
 
+
+
+===== .mod ====
+
+sqlite> .mod csv
+sqlite> select * from students;
+1,Leo,38,100
+sqlite> .mod column
+sqlite> select * from students;
+1           Leo         38          100       
+sqlite> .header on
+sqlite> .mod csv
+sqlite> select * from students;
+id,name,age,score
+1,Leo,38,100
+sqlite> .mod column
+sqlite> select * from students;
+id          name        age         score     
+----------  ----------  ----------  ----------
+1           Leo         38          100       
+sqlite> .mod html
+sqlite> select * from students;
+<TR><TH>id</TH>
+<TH>name</TH>
+<TH>age</TH>
+<TH>score</TH>
+</TR>
+<TR><TD>1</TD>
+<TD>Leo</TD>
+<TD>38</TD>
+<TD>100</TD>
+</TR>
+sqlite> .head off
+sqlite> select * from students;
+<TR><TD>1</TD>
+<TD>Leo</TD>
+<TD>38</TD>
+<TD>100</TD>
+</TR>
+sqlite> .head on
+sqlite> .mod insert
+sqlite> select * from students;
+INSERT INTO table(id,name,age,score) VALUES(1,'Leo',38,100);
+sqlite> .mod line
+sqlite> select * from students;
+   id = 1
+ name = Leo
+  age = 38
+score = 100
+sqlite> insert into students(id, name, age, score) values (2, 'Annie', 30, 99);
+sqlite> select * from students;
+   id = 1
+ name = Leo
+  age = 38
+score = 100
+
+   id = 2
+ name = Annie
+  age = 30
+score = 99
+sqlite> .mod list
+sqlite> select * from students;
+id,name,age,score
+1,Leo,38,100
+2,Annie,30,99
+sqlite> .mod csv
+sqlite> select * from students;
+id,name,age,score
+1,Leo,38,100
+2,Annie,30,99
+sqlite> .mod tabs
+sqlite> select * from students;
+id	name	age	score
+1	Leo	38	100
+2	Annie	30	99
+sqlite> .mod tcl
+sqlite> select * from students;
+"id" "name" "age" "score"
+"1" "Leo" "38" "100"
+"2" "Annie" "30" "99"
+sqlite> 
+
+
