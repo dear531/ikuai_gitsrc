@@ -216,3 +216,17 @@ age integer,
 score integer);
 CREATE INDEX students_id_index on students(id);
 sqlite>
+
+
+==== .log =====
+
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+sqlite> .log sqlite3.log 
+sqlite> select * form students;
+Error: near "form": syntax error
+sqlite> select * form students;
+Error: near "form": syntax error
+sqlite> .exit
+
