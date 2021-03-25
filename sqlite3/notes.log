@@ -365,3 +365,21 @@ sqlite> .prompt 333
 333.prompt sqlite>
 sqlite>
 
+==== .read ====
+
+$ cat read.sql 
+INSERT INTO "students" VALUES(4,'Ultan',38,100);
+
+sqlite>select * from students;
+INSERT INTO table VALUES(1,'Leo',38,100);
+INSERT INTO table VALUES(2,'Annie',30,99);
+INSERT INTO table VALUES(3,NULL,NULL,NULL);
+sqlite>.read read.sql 
+
+sqlite>select * from students;
+INSERT INTO table VALUES(1,'Leo',38,100);
+INSERT INTO table VALUES(2,'Annie',30,99);
+INSERT INTO table VALUES(3,NULL,NULL,NULL);
+INSERT INTO table VALUES(4,'Ultan',38,100);
+sqlite>
+
