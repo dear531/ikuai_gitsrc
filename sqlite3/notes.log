@@ -332,4 +332,19 @@ sqlite> select * from students;
 3|NULL|NULL|NULL
 sqlite> 
 
+==== .output ====
+
+sqlite> .output sqlite.output.log
+sqlite> select * from students;
+sqlite> .output stdout
+sqlite> select * from students;
+1|Leo|38|100
+2|Annie|30|99
+3|NULL|NULL|NULL
+sqlite> 
+
+$ cat sqlite.output.log 
+1|Leo|38|100
+2|Annie|30|99
+3|NULL|NULL|NULL
 
