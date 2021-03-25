@@ -348,3 +348,20 @@ $ cat sqlite.output.log
 2|Annie|30|99
 3|NULL|NULL|NULL
 
+==== .print ====
+
+sqlite> .print string
+string
+sqlite> 
+
+==== .prompt ====
+$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .prompt 333
+333
+333
+333
+333.prompt sqlite>
+sqlite>
+
