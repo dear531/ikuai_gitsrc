@@ -312,4 +312,20 @@ sqlite> select * from students;
 "2" "Annie" "30" "99"
 sqlite> 
 
+==== nullvalue STRING ====
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> select * from students;
+1|Leo|38|100
+2|Annie|30|99
+3|||
+sqlite> .nullvalue NULL
+sqlite> select * from students;
+1|Leo|38|100
+2|Annie|30|99
+3|NULL|NULL|NULL
+sqlite> 
+
 
