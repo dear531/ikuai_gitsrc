@@ -383,3 +383,14 @@ INSERT INTO table VALUES(3,NULL,NULL,NULL);
 INSERT INTO table VALUES(4,'Ultan',38,100);
 sqlite>
 
+==== .schema ====
+
+sqlite>.schema students
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+CREATE INDEX students_id_index on students(id);
+sqlite>
+
