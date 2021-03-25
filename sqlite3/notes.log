@@ -230,6 +230,10 @@ sqlite> select * form students;
 Error: near "form": syntax error
 sqlite> .exit
 
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ cat sqlite3.log 
+(1) near "form": syntax error
+(1) near "form": syntax error
+
 
 
 ===== .mod ====
