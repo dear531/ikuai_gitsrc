@@ -394,3 +394,100 @@ score integer);
 CREATE INDEX students_id_index on students(id);
 sqlite>
 
+==== .separator ====
+
+sqlite> .header on
+sqlite> select * from students;
+id|name|age|score
+1|Leo|38|100
+2|Annie|30|99
+3|||
+4|Ultan|38|100
+sqlite> .separator |_|
+sqlite> select * from students;
+id|_|name|_|age|_|score
+1|_|Leo|_|38|_|100
+2|_|Annie|_|30|_|99
+3|_||_||_|
+4|_|Ultan|_|38|_|100
+sqlite> 
+
+==== .stats ====
+sqlite> .stats on
+sqlite> select * from students;
+id|_|name|_|age|_|score
+1|_|Leo|_|38|_|100
+2|_|Annie|_|30|_|99
+3|_||_||_|
+4|_|Ultan|_|38|_|100
+Memory Used:                         144560 (max 153656) bytes
+Number of Outstanding Allocations:   148 (max 163)
+Number of Pcache Overflow Bytes:     1024 (max 1024) bytes
+Number of Scratch Overflow Bytes:    0 (max 0) bytes
+Largest Allocation:                  129600 bytes
+Largest Pcache Allocation:           1024 bytes
+Largest Scratch Allocation:          0 bytes
+Lookaside Slots Used:                0 (max 0)
+Successful lookaside attempts:       0
+Lookaside failures due to size:      0
+Lookaside failures due to OOM:       0
+Pager Heap Usage:                    4464 bytes
+Page cache hits:                     14
+Page cache misses:                   2
+Page cache writes:                   0
+Schema Heap Usage:                   2136 bytes
+Statement Heap/Lookaside Usage:      3208 bytes
+Fullscan Steps:                      3
+Sort Operations:                     0
+Autoindex Inserts:                   0
+Virtual Machine Steps:               32
+sqlite> 
+
+==== .tables ====
+
+sqlite> .tables '%st%'
+students
+sqlite> .schema %stu%
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer);
+CREATE INDEX students_id_index on students(id);
+sqlite> 
+
+
+==== .timeout ====
+==== .width ====
+
+sqlite> .mod column
+sqlite> select * from students;
+i  name        age         score     
+-  ----------  ----------  ----------
+1  Leo         38          100       
+2  Annie       30          99        
+3                                    
+4  Ultan       38          100       
+sqlite> .width 20
+sqlite> select * from students;
+id                    name        age         score     
+--------------------  ----------  ----------  ----------
+1                     Leo         38          100       
+2                     Annie       30          99        
+3                                                       
+4                     Ultan       38          100       
+sqlite>
+
+===== .timer =====
+sqlite> .timer on
+sqlite> select * from students;
+id                    name        age         score     
+--------------------  ----------  ----------  ----------
+1                     Leo         38          100       
+2                     Annie       30          99        
+3                                                       
+4                     Ultan       38          100       
+Run Time: real 0.000 user 0.000000 sys 0.000000
+sqlite> 
+
+
