@@ -593,3 +593,62 @@ sqlite> select * from students, teacher where students.teacher_id = teacher.id;
 id|name|age|score|teacher_id|id|name
 1|Leo|38|100|1|1|Ocean
 
+
+==== bigen and timeout ====
+
+数据库窗口1：
+
+sqlite> begin;
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3||||
+4|Ultan|38|100|
+sqlite> update students set name = 'Vicky' where id = 3;
+
+数据库窗口2：
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .timeout 5000
+sqlite> update students set name = 'han' where id = 1;
+Error: database is locked
+sqlite> .timer on
+sqlite> update students set name = 'han' where id = 1;
+Run Time: real 5.015 user 0.004000 sys 0.008000
+Error: database is locked
+sqlite> 
+
+数据库窗口1：
+
+sqlite> commit;
+sqlite> 
+
+数据库窗口2：
+
+sqlite> .timer on
+sqlite> .timeout 5000
+sqlite> select * from students;
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+Run Time: real 0.000 user 0.000000 sys 0.000000
+sqlite> update students set name = 'han' where id = 1;
+Run Time: real 0.007 user 0.004000 sys 0.000000
+sqlite> select * from students;
+1|han|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+Run Time: real 0.000 user 0.000000 sys 0.000000
+sqlite> update students set name = 'Leo' where id = 1;
+Run Time: real 0.006 user 0.000000 sys 0.000000
+sqlite> select * from students;
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+Run Time: real 0.000 user 0.000000 sys 0.000000
+sqlite> 
+
