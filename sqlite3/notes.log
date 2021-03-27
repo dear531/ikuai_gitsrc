@@ -648,3 +648,16 @@ sqlite> select * from students;
 Run Time: real 0.000 user 0.000000 sys 0.000000
 sqlite> 
 
+sqlite> .database
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
+1    temp                                                                       
+2    attach           /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
+sqlite> detach attach;
+sqlite> .databases
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
+1    temp                                                                       
+sqlite> 
