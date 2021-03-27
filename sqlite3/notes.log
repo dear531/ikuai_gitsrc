@@ -541,3 +541,55 @@ id|name|reserved
 1|hello|
 sqlite> 
 
+
+==== attach ====
+
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> create table teacher(id, name);
+sqlite> insert into teacher(id,name) values(1, 'Ocean');
+sqlite> select * from teacher;
+1|Ocean
+sqlite> .header on
+sqlite> select * from teacher;
+id|name
+1|Ocean
+sqlite> .open config1.db 
+sqlite> .database
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
+sqlite> attach database '/home/zhangly/source/ikuai_gitsrc/sqlite3/attach.db' as attach;
+sqlite> .databases
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
+2    attach           /home/zhangly/source/ikuai_gitsrc/sqlite3/attach.db       
+sqlite> select * from students;
+id|name|age|score
+1|Leo|38|100
+2|Annie|30|99
+3|||
+4|Ultan|38|100
+sqlite> select * from teacher;
+id|name
+1|Ocean
+sqlite> alter table students add column teacher_id integer;
+sqlite> update students set teacher_id = 1 where id = 1;
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3||||
+4|Ultan|38|100|
+sqlite> .header on
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3||||
+4|Ultan|38|100|
+sqlite> select * from students, teacher where students.teacher_id = teacher.id;
+id|name|age|score|teacher_id|id|name
+1|Leo|38|100|1|1|Ocean
+
