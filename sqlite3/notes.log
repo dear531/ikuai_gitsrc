@@ -490,4 +490,33 @@ id                    name        age         score
 Run Time: real 0.000 user 0.000000 sys 0.000000
 sqlite> 
 
+==== 注释 ====
 
+--单行
+/* */块
+Enter ".help" for usage hints.
+sqlite> select * from students; /* 查询students表 */
+1|Leo|38|100
+2|Annie|30|99
+3|||
+4|Ultan|38|100
+sqlite> /*
+   ...> 查询students表
+   ...> */
+sqlite> select * from students;
+1|Leo|38|100
+2|Annie|30|99
+3|||
+4|Ultan|38|100
+sqlite> select * from students; --查询students表
+1|Leo|38|100
+2|Annie|30|99
+3|||
+4|Ultan|38|100
+sqlite> 
+sqlite> select * /*查询全部*/ from students;
+1|Leo|38|100
+2|Annie|30|99
+3|||
+4|Ultan|38|100
+sqlite> 
