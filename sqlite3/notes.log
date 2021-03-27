@@ -520,3 +520,24 @@ sqlite> select * /*查询全部*/ from students;
 3|||
 4|Ultan|38|100
 sqlite> 
+
+=== alter ====
+
+sqlite> create table t1 (id integer, name string);
+sqlite> insert into t1(id,name) values(1, 'hello');
+sqlite> .header on
+sqlite> select * from t1;
+id|name
+1|hello
+sqlite> alter table t1 add column reserved string;
+sqlite> select * from t1;
+id|name|reserved
+1|hello|
+sqlite> alter table t1 rename to t2;
+sqlite> select * from t1;
+Error: no such table: t1
+sqlite> select * from t2;
+id|name|reserved
+1|hello|
+sqlite> 
+
