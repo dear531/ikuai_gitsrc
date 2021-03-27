@@ -661,3 +661,14 @@ seq  name             file
 0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
 1    temp                                                                       
 sqlite> 
+
+==== exists ====
+
+sqlite> select * from students where  exists (select * from students);
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+sqlite> 
+
