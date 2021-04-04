@@ -1,0 +1,57 @@
+--转二层type值为0x88cclldp链路层发现协议的包：
+sudo tcpdump -i wlo1 -en 'ether[12]==0x88 and ether[13]==0xcc' -vv
+tcpdump: listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+10:56:09.368254 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204
+	Chassis ID TLV (1), length 7
+	  Subtype MAC address (4): 08:11:96:7d:08:f8
+	  0x0000:  0408 1196 7d08 f8
+	Port ID TLV (2), length 7
+	  Subtype MAC address (3): 08:11:96:7d:08:f8
+	  0x0000:  0308 1196 7d08 f8
+	Time to Live TLV (3), length 2: TTL 120s
+	  0x0000:  0078
+	System Name TLV (5), length 2: HP
+	  0x0000:  4850
+	System Description TLV (6), length 100
+	  Ubuntu Kylin 16.04.7 LTS Linux 4.4.0-206-generic #238-Ubuntu SMP Tue Mar 16 07:52:37 UTC 2021 x86_64
+	  0x0000:  5562 756e 7475 204b 796c 696e 2031 362e
+	  0x0010:  3034 2e37 204c 5453 204c 696e 7578 2034
+	  0x0020:  2e34 2e30 2d32 3036 2d67 656e 6572 6963
+	  0x0030:  2023 3233 382d 5562 756e 7475 2053 4d50
+	  0x0040:  2054 7565 204d 6172 2031 3620 3037 3a35
+	  0x0050:  323a 3337 2055 5443 2032 3032 3120 7838
+	  0x0060:  365f 3634
+	System Capabilities TLV (7), length 4
+	  System  Capabilities [Bridge, WLAN AP, Router, Station Only] (0x009c)
+	  Enabled Capabilities [WLAN AP] (0x0008)
+	  0x0000:  009c 0008
+	Management Address TLV (8), length 12
+	  Management Address length 5, AFI IPv4 (1): 192.168.124.2
+	  Interface Index Interface Numbering (2): 3
+	  0x0000:  0501 c0a8 7c02 0200 0000 0300
+	Management Address TLV (8), length 24
+	  Management Address length 17, AFI IPv6 (2): fe80::b096:d8d1:f4da:b3f
+	  Interface Index Interface Numbering (2): 3
+	  0x0000:  1102 fe80 0000 0000 0000 b096 d8d1 f4da
+	  0x0010:  0b3f 0200 0000 0300
+	Port Description TLV (4), length 4: wlo1
+	  0x0000:  776c 6f31
+	Organization specific TLV (127), length 9: OUI IEEE 802.3 Private (0x00120f)
+	  Link aggregation Subtype (3)
+	    aggregation status [supported], aggregation port ID 0
+	  0x0000:  0012 0f03 0100 0000 00
+	Organization specific TLV (127), length 9: OUI IEEE 802.3 Private (0x00120f)
+	  MAC/PHY configuration/status Subtype (1)
+	    autonegotiation [none] (0x00)
+	    PMD autoneg capability [unknown] (0x0000)
+	    MAU type Unknown (0x0000)
+	  0x0000:  0012 0f01 0000 0000 00
+	End TLV (0), length 0
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i wlo1 -en 'ether[12]==0x88 and ether[13]==0xcc'
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+10:58:09.430129 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+10:58:39.445389 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+10:59:09.456732 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+
