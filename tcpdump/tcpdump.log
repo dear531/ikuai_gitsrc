@@ -120,3 +120,37 @@ zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ curl youdao.com
                 text-decoration: none;
                 vertical-align: -9%"><img src="https://shared.ydstatic.com/images/icons/jgw.jpg" style="float: left; width: 14px"> <span style="float: left; line-height: 17px">京公网安备 11010802020092号</span></a></span></p></div></div><a id="backToTop" href="javascript:void(0);">返回到顶部</a><div id="handWrite" class="pm" style="display: none"><object width="346" height="216" type="application/x-shockwave-flash" id="hnw" data="https://shared.ydstatic.com/dict/v5.16/swf/Hnw.swf"><param name="movie" value="${DictStaticBase}swf/Hnw.swf"><param name="menu" value="false"><param name="allowScriptAccess" value="always"></object></div><div id="callback"></div><script src="https://shared.ydstatic.com/js/jquery/jquery-1.12.3.min.js"></script><script src="https://shared.ydstatic.com/dict/v2016/entry/jquery.mousewheel.js"></script><script src="https://shared.ydstatic.com/dict/v2016/entry/jquery.placeholder.js"></script><script src="https://shared.ydstatic.com/dict/v2016/entry/autocomplete_json.js"></script><script src="https://shared.ydstatic.com/dict/v2016/entry/pc5.js"></script><script defer="defer" src="https://shared.ydstatic.com/js/rlog/v1.js"></script></body></html>zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ 
 
+
+==== signal SIGUSR1 for tcpdump count, 发SIGUSR1信号让tcpdump打印当前包的接受情况====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ps -ef |grep tcpdump
+root      5296  3377  0 12:44 pts/1    00:00:00 sudo tcpdump -i wlo1 -en ether[12]==0x88 and ether[13]==0xcc
+root      5297  5296  0 12:44 pts/1    00:00:00 tcpdump -i wlo1 -en ether[12]==0x88 and ether[13]==0xcc
+zhangly   5329  4170  0 12:47 pts/18   00:00:00 grep --color=auto tcpdump
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo kill -s SIGUSR1 5297
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo kill -s SIGUSR1 5297
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i wlo1 -en 'ether[12]==0x88 and ether[13]==0xcc'
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+
+
+12:44:43.847092 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+^T^T
+^T^T12:45:13.877336 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:45:43.907535 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:46:13.937779 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:46:43.943212 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:47:13.962779 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:47:43.967157 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+tcpdump: 7 packets captured, 7 packets received by filter, 0 packets dropped by kernel
+12:48:13.997407 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:48:44.017355 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:49:14.032989 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:49:44.060369 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:50:14.080140 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:50:44.089832 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:51:14.108595 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+12:51:44.138791 08:11:96:7d:08:f8 > 01:80:c2:00:00:0e, ethertype LLDP (0x88cc), length 218: LLDP, length 204: HP
+tcpdump: 15 packets captured, 15 packets received by filter, 0 packets dropped by kernel
+
