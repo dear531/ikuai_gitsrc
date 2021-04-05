@@ -368,3 +368,27 @@ listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
 15 packets received by filter
 0 packets dropped by kernel
 
+=== -j and -J set stamp types and show stamp types 设置和显示时间戳种类，例子只支持主机时间戳====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ tcpdump -J
+Time stamp types for wlo1 (use option -j to set):
+  host (Host)
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ 
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i wlo1 --immediate-mode -j host
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+17:24:55.955365 IP 192.168.124.2.37478 > 36.152.44.205.https: Flags [P.], seq 4088956464:4088956509, ack 1176864446, win 237, length 45
+17:24:55.956523 IP 192.168.124.2.56712 > moshujia.cn.domain: 45370+ PTR? 205.44.152.36.in-addr.arpa. (44)
+17:24:55.956556 IP 192.168.124.2.56712 > public1.114dns.com.domain: 45370+ PTR? 205.44.152.36.in-addr.arpa. (44)
+17:24:55.965655 IP moshujia.cn.domain > 192.168.124.2.56712: 45370 NXDomain 0/0/0 (44)
+17:24:55.966502 IP 192.168.124.2.56712 > moshujia.cn.domain: 63470+ PTR? 2.124.168.192.in-addr.arpa. (44)
+17:24:55.979520 IP 36.152.44.205.https > 192.168.124.2.37478: Flags [.], ack 45, win 1076, length 0
+17:24:55.979560 IP moshujia.cn.domain > 192.168.124.2.56712: 63470 NXDomain* 0/0/0 (44)
+17:24:55.980491 IP 192.168.124.2.56712 > moshujia.cn.domain: 24124+ PTR? 114.114.114.114.in-addr.arpa. (46)
+17:24:55.984501 IP moshujia.cn.domain > 192.168.124.2.56712: 24124 1/0/0 PTR public1.114dns.com. (78)
+17:24:55.988101 IP public1.114dns.com.domain > 192.168.124.2.56712: 45370 NXDomain 0/0/0 (44)
+^C
+10 packets captured
+12 packets received by filter
+2 packets dropped by kernel
+
