@@ -212,3 +212,22 @@ zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ tcpdump -D
 10.usbmon3 (USB bus number 3)
 11.usbmon4 (USB bus number 4)
 
+==== -e show the link level (mac address) information, 显示mac地址信息=====
+
+zhangly@HP:~/source/ikuai_gitsrc$ sudo tcpdump -i wlo1 arp -vv
+tcpdump: listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+12:08:43.786485 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+12:08:43.786508 ARP, Ethernet (len 6), IPv4 (len 4), Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+^C
+2 packets captured
+2 packets received by filter
+0 packets dropped by kernel
+zhangly@HP:~/source/ikuai_gitsrc$ sudo tcpdump -i wlo1 arp -vv -e
+tcpdump: listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+12:08:48.802749 08:11:96:7d:08:f8 (oui Unknown) > 04:d7:a5:5e:d2:f6 (oui Unknown), ethertype ARP (0x0806), length 42: Ethernet (len 6), IPv4 (len 4), Request who-has moshujia.cn tell 192.168.124.2, length 28
+12:08:48.804855 04:d7:a5:5e:d2:f6 (oui Unknown) > 08:11:96:7d:08:f8 (oui Unknown), ethertype ARP (0x0806), length 42: Ethernet (len 6), IPv4 (len 4), Reply moshujia.cn is-at 04:d7:a5:5e:d2:f6 (oui Unknown), length 28
+^C
+2 packets captured
+2 packets received by filter
+0 packets dropped by kernel
+
