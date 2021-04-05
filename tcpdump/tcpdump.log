@@ -231,3 +231,115 @@ tcpdump: listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 byt
 2 packets received by filter
 0 packets dropped by kernel
 
+==== -C 以秒为单位循环输出文件，和-w配合使用，如果指定大小，则按大小分割 =====
+
+设定每一秒为一个单位循环输出
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i lo -w tcpdump.cap -C 1 -G 1
+
+
+第一次执行以后
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60236 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  3.01 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ 
+
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrht
+总用量 1.1M
+-rw-r--r-- 1 root    root    150K 4月   5 14:33 tcpdump.cap2
+-rw-r--r-- 1 root    root    814K 4月   5 14:34 tcpdump.cap1
+-rw-r--r-- 1 root    root     87K 4月   5 14:35 tcpdump.cap
+-rw-rw-r-- 1 zhangly zhangly  23K 4月   5 14:38 tcpdump.log
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ 
+
+
+多执行几次
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60642 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  8.13 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60644 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  3.10 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60646 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  3.50 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60648 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  3.45 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60650 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  8.74 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60652 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  2.46 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60654 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  5.76 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60656 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  2.89 Gbits/sec
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ iperf -c 127.0.0.1 -n 100000
+------------------------------------------------------------
+Client connecting to 127.0.0.1, TCP port 5001
+TCP window size: 2.50 MByte (default)
+------------------------------------------------------------
+[  3] local 127.0.0.1 port 60658 connected with 127.0.0.1 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0- 0.0 sec   128 KBytes  2.99 Gbits/sec
+
+输出文件没有增加
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrth
+总用量 1.1M
+-rw-r--r-- 1 root    root    150K 4月   5 14:33 tcpdump.cap2
+-rw-r--r-- 1 root    root    814K 4月   5 14:34 tcpdump.cap1
+-rw-rw-r-- 1 zhangly zhangly  24K 4月   5 14:40 tcpdump.log
+-rw-r--r-- 1 root    root     87K 4月   5 14:41 tcpdump.cap
+
+
