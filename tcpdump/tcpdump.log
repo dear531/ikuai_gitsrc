@@ -392,3 +392,31 @@ listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
 12 packets received by filter
 2 packets dropped by kernel
 
+=== -l 查看数据包完成内容 ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -l | tee dat
+[sudo] zhangly 的密码： 
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+18:47:18.322065 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+18:47:18.322100 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+18:47:18.584232 IP 192.168.124.2.56712 > moshujia.cn.domain: 28329+ PTR? 2.124.168.192.in-addr.arpa. (44)
+18:47:18.584259 IP 192.168.124.2.56712 > public1.114dns.com.domain: 28329+ PTR? 2.124.168.192.in-addr.arpa. (44)
+18:47:18.592733 IP moshujia.cn.domain > 192.168.124.2.56712: 28329 NXDomain* 0/0/0 (44)
+18:47:18.616114 IP public1.114dns.com.domain > 192.168.124.2.56712: 28329 NXDomain* 0/1/0 (79)
+18:47:19.582911 IP 192.168.124.2.56712 > moshujia.cn.domain: 15285+ PTR? 114.114.114.114.in-addr.arpa. (46)
+18:47:19.593640 IP moshujia.cn.domain > 192.168.124.2.56712: 15285 1/0/0 PTR public1.114dns.com. (78)
+^C8 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ cat dat 
+18:47:18.322065 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+18:47:18.322100 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+18:47:18.584232 IP 192.168.124.2.56712 > moshujia.cn.domain: 28329+ PTR? 2.124.168.192.in-addr.arpa. (44)
+18:47:18.584259 IP 192.168.124.2.56712 > public1.114dns.com.domain: 28329+ PTR? 2.124.168.192.in-addr.arpa. (44)
+18:47:18.592733 IP moshujia.cn.domain > 192.168.124.2.56712: 28329 NXDomain* 0/0/0 (44)
+18:47:18.616114 IP public1.114dns.com.domain > 192.168.124.2.56712: 28329 NXDomain* 0/1/0 (79)
+18:47:19.582911 IP 192.168.124.2.56712 > moshujia.cn.domain: 15285+ PTR? 114.114.114.114.in-addr.arpa. (46)
+18:47:19.593640 IP moshujia.cn.domain > 192.168.124.2.56712: 15285 1/0/0 PTR public1.114dns.com. (78)
+
