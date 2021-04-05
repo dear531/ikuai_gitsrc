@@ -439,3 +439,55 @@ listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
 22:25:18.289257 IP moshujia.domain > 192.168.124.2.56712: 65483 NXDomain* 0/0/0 (45)
 
 
+==== --number show packge number at beginning of the line ====
+
+第一列输出即是：
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i wlo1 --immediate-mode -j host --number
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+    1  22:39:40.406930 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+    2  22:39:40.406997 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+    3  22:39:40.408349 IP 192.168.124.2.56712 > moshujia.cn.domain: 60714+ PTR? 2.124.168.192.in-addr.arpa. (44)
+    4  22:39:40.408377 IP 192.168.124.2.56712 > public1.114dns.com.domain: 60714+ PTR? 2.124.168.192.in-addr.arpa. (44)
+    5  22:39:40.422191 IP moshujia.cn.domain > 192.168.124.2.56712: 60714 NXDomain* 0/0/0 (44)
+    6  22:39:40.423271 IP 192.168.124.2.56712 > moshujia.cn.domain: 45080+ PTR? 114.114.114.114.in-addr.arpa. (46)
+    7  22:39:40.439762 IP public1.114dns.com.domain > 192.168.124.2.56712: 60714 NXDomain* 0/1/0 (79)
+    8  22:39:40.447168 IP moshujia.cn.domain > 192.168.124.2.56712: 45080 1/0/0 PTR public1.114dns.com. (78)
+    9  22:39:43.098618 LLDP, length 204: HP
+   10  22:39:44.397455 IP moshujia.cn.37091 > 255.255.255.255.mmcc: UDP, length 16
+   11  22:39:44.397718 IP moshujia.cn.58533 > 255.255.255.255.987: UDP, length 19
+   12  22:39:44.398059 IP 192.168.124.2.56712 > moshujia.cn.domain: 45970+ PTR? 255.255.255.255.in-addr.arpa. (46)
+   13  22:39:44.423464 IP moshujia.cn.domain > 192.168.124.2.56712: 45970* 0/0/0 (46)
+^C
+13 packets captured
+13 packets received by filter
+0 packets dropped by kernel
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i wlo1 --immediate-mode -j host -#
+[sudo] zhangly 的密码： 
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+    1  23:21:35.965664 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 362
+    2  23:21:35.965841 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 356
+    3  23:21:35.966110 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 358
+    4  23:21:35.966485 IP 192.168.124.2.56712 > moshujia.cn.domain: 51899+ PTR? 250.255.255.239.in-addr.arpa. (46)
+    5  23:21:35.966522 IP 192.168.124.2.56712 > public1.114dns.com.domain: 51899+ PTR? 250.255.255.239.in-addr.arpa. (46)
+    6  23:21:35.977367 IP moshujia.cn.domain > 192.168.124.2.56712: 51899 NXDomain 0/0/0 (46)
+    7  23:21:35.978206 IP 192.168.124.2.56712 > moshujia.cn.domain: 32713+ PTR? 2.124.168.192.in-addr.arpa. (44)
+    8  23:21:35.996388 IP moshujia.cn.domain > 192.168.124.2.56712: 32713 NXDomain* 0/0/0 (44)
+    9  23:21:35.997142 IP 192.168.124.2.56712 > moshujia.cn.domain: 19782+ PTR? 114.114.114.114.in-addr.arpa. (46)
+   10  23:21:35.997969 IP public1.114dns.com.domain > 192.168.124.2.56712: 51899 NXDomain 0/1/0 (103)
+   11  23:21:36.005047 IP moshujia.cn.domain > 192.168.124.2.56712: 19782 1/0/0 PTR public1.114dns.com. (78)
+   12  23:21:36.477556 IP moshujia.cn.37091 > 255.255.255.255.mmcc: UDP, length 16
+   13  23:21:36.477735 IP moshujia.cn.58533 > 255.255.255.255.987: UDP, length 19
+   14  23:21:36.478069 IP 192.168.124.2.56712 > moshujia.cn.domain: 31598+ PTR? 255.255.255.255.in-addr.arpa. (46)
+   15  23:21:36.487498 IP moshujia.cn.domain > 192.168.124.2.56712: 31598* 0/0/0 (46)
+   16  23:21:37.911155 IP 192.168.124.3.60819 > 239.255.255.250.1900: UDP, length 152
+   17  23:21:37.911687 IP 192.168.124.2.56712 > moshujia.cn.domain: 1026+ PTR? 3.124.168.192.in-addr.arpa. (44)
+   18  23:21:37.924343 IP moshujia.cn.domain > 192.168.124.2.56712: 1026 NXDomain* 0/0/0 (44)
+^C
+18 packets captured
+18 packets received by filter
+0 packets dropped by kernel
+
