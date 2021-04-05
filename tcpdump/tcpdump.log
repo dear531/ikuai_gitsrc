@@ -343,3 +343,28 @@ zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrth
 -rw-r--r-- 1 root    root     87K 4月   5 14:41 tcpdump.cap
 
 
+==== --immediate-mode 收到包立即输出，在输出到屏幕的情况下，也是默认的====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i wlo1 --immediate-mode
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
+16:38:39.618762 IP 192.168.124.2.56834 > 103.39.76.66.https: Flags [S], seq 1847247609, win 29200, options [mss 1460,sackOK,TS val 4689408 ecr 0,nop,wscale 7], length 0
+16:38:39.620246 IP 192.168.124.2.56712 > moshujia.cn.domain: 35157+ PTR? 66.76.39.103.in-addr.arpa. (43)
+16:38:39.620281 IP 192.168.124.2.56712 > public1.114dns.com.domain: 35157+ PTR? 66.76.39.103.in-addr.arpa. (43)
+16:38:39.637465 IP moshujia.cn.domain > 192.168.124.2.56712: 35157 NXDomain 0/0/0 (43)
+16:38:39.637987 IP 192.168.124.2.56712 > moshujia.cn.domain: 34005+ PTR? 2.124.168.192.in-addr.arpa. (44)
+16:38:39.646804 IP moshujia.cn.domain > 192.168.124.2.56712: 34005 NXDomain* 0/0/0 (44)
+16:38:39.647430 IP 192.168.124.2.56712 > moshujia.cn.domain: 30980+ PTR? 114.114.114.114.in-addr.arpa. (46)
+16:38:39.649004 IP public1.114dns.com.domain > 192.168.124.2.56712: 35157 NXDomain 0/1/0 (131)
+16:38:39.657541 IP moshujia.cn.domain > 192.168.124.2.56712: 30980 1/0/0 PTR public1.114dns.com. (78)
+16:38:40.278207 IP moshujia.cn.37091 > 255.255.255.255.mmcc: UDP, length 16
+16:38:40.278425 IP 192.168.124.2.56712 > moshujia.cn.domain: 13154+ PTR? 255.255.255.255.in-addr.arpa. (46)
+16:38:40.278468 IP moshujia.cn.58533 > 255.255.255.255.987: UDP, length 19
+16:38:40.297622 IP moshujia.cn.domain > 192.168.124.2.56712: 13154* 0/0/0 (46)
+16:38:40.802773 IP 192.168.124.2.56836 > 103.39.76.66.https: Flags [S], seq 766574595, win 29200, options [mss 1460,sackOK,TS val 4689704 ecr 0,nop,wscale 7], length 0
+16:38:40.834746 IP 192.168.124.2.56838 > 103.39.76.66.https: Flags [S], seq 3055625007, win 29200, options [mss 1460,sackOK,TS val 4689712 ecr 0,nop,wscale 7], length 0
+^C
+15 packets captured
+15 packets received by filter
+0 packets dropped by kernel
+
