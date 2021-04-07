@@ -503,3 +503,36 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
     6  22:40:01.495403 IP moshujia.cn.domain > 192.168.124.2.59583: UDP, length 46
     7  22:40:01.496237 IP localhost.33570 > HP.domain: UDP, length 44
     8  22:40:01.496345 IP 192.168.124.2.59583 > moshujia.cn.domain: UDP, length 44
+
+==== -S  Print absolute, rather than relative, TCP sequence numbers. 打印tcp绝对的序列号，而不是相对的=====
+
+以下是绝对的
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -S -i lo tcp and port 8888
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on lo, link-type EN10MB (Ethernet), capture size 262144 bytes
+23:31:14.611061 IP localhost.57238 > localhost.8888: Flags [P.], seq 3126491315:3126491320, ack 201624152, win 342, options [nop,nop,TS val 1356657 ecr 1083881], length 5
+23:31:14.611096 IP localhost.8888 > localhost.57238: Flags [.], ack 3126491320, win 342, options [nop,nop,TS val 1356657 ecr 1356657], length 0
+23:31:22.248644 IP localhost.57238 > localhost.8888: Flags [P.], seq 3126491320:3126491325, ack 201624152, win 342, options [nop,nop,TS val 1358566 ecr 1356657], length 5
+23:31:22.248678 IP localhost.8888 > localhost.57238: Flags [.], ack 3126491325, win 342, options [nop,nop,TS val 1358566 ecr 1358566], length 0
+^C
+4 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+
+以下是默认不带参数的相对的
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i lo tcp and port 8888
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on lo, link-type EN10MB (Ethernet), capture size 262144 bytes
+23:32:21.090536 IP localhost.57238 > localhost.8888: Flags [P.], seq 3126491325:3126491330, ack 201624152, win 342, options [nop,nop,TS val 1373276 ecr 1358566], length 5
+23:32:21.090563 IP localhost.8888 > localhost.57238: Flags [.], ack 5, win 342, options [nop,nop,TS val 1373276 ecr 1373276], length 0
+23:32:24.785212 IP localhost.57238 > localhost.8888: Flags [P.], seq 5:10, ack 1, win 342, options [nop,nop,TS val 1374200 ecr 1373276], length 5
+23:32:24.785235 IP localhost.8888 > localhost.57238: Flags [.], ack 10, win 342, options [nop,nop,TS val 1374200 ecr 1374200], length 0
+23:32:57.960817 IP localhost.57238 > localhost.8888: Flags [F.], seq 10, ack 1, win 342, options [nop,nop,TS val 1382494 ecr 1374200], length 0
+23:32:57.961044 IP localhost.8888 > localhost.57238: Flags [F.], seq 1, ack 11, win 342, options [nop,nop,TS val 1382494 ecr 1382494], length 0
+23:32:57.961108 IP localhost.57238 > localhost.8888: Flags [.], ack 2, win 342, options [nop,nop,TS val 1382494 ecr 1382494], length 0
+^C
+7 packets captured
+14 packets received by filter
+0 packets dropped by kernel
+
