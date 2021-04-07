@@ -491,3 +491,15 @@ listening on wlo1, link-type EN10MB (Ethernet), capture size 262144 bytes
 18 packets received by filter
 0 packets dropped by kernel
 
+===== -q quick output, output lines are shorter 少的输出组合上打印行数的 ========
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -q --number
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+    1  22:40:01.461739 IP moshujia.cn.37091 > 255.255.255.255.mmcc: UDP, length 16
+    2  22:40:01.461852 IP moshujia.cn.58533 > 255.255.255.255.987: UDP, length 19
+    3  22:40:01.462922 IP localhost.41252 > HP.domain: UDP, length 46
+    4  22:40:01.463116 IP 192.168.124.2.59583 > moshujia.cn.domain: UDP, length 46
+    5  22:40:01.463153 IP 192.168.124.2.59583 > public1.114dns.com.domain: UDP, length 46
+    6  22:40:01.495403 IP moshujia.cn.domain > 192.168.124.2.59583: UDP, length 46
+    7  22:40:01.496237 IP localhost.33570 > HP.domain: UDP, length 44
+    8  22:40:01.496345 IP 192.168.124.2.59583 > moshujia.cn.domain: UDP, length 44
