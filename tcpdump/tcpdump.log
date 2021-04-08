@@ -536,3 +536,57 @@ listening on lo, link-type EN10MB (Ethernet), capture size 262144 bytes
 14 packets received by filter
 0 packets dropped by kernel
 
+==== -s set package size and show the protocol where trancat at which protocol 设置包大小，在截断处显示截断的那层的协议名 =====
+zhangly@HP:~$ sudo tcpdump -i any -s 20
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 20 bytes
+22:58:33.993854 IP [|ip]
+22:58:34.526485 
+	0x0000:  0207 0408                                ....
+22:58:35.245877 [|ARP]
+22:58:35.880118 [|ARP]
+22:58:35.880160 [|ARP]
+22:58:39.052263 IP [|ip]
+^C
+6 packets captured
+6 packets received by filter
+0 packets dropped by kernel
+zhangly@HP:~$ man tcpdump
+zhangly@HP:~$ sudo tcpdump -i any -s 50
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 50 bytes
+22:59:34.041470 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+22:59:34.042828 IP localhost.42489 > HP.domain: [|domain]
+22:59:34.043028 IP 192.168.124.2.40980 > moshujia.cn.domain: [|domain]
+22:59:34.050913 IP moshujia.cn.domain > 192.168.124.2.40980: [|domain]
+22:59:34.051140 IP HP.domain > localhost.42489: [|domain]
+22:59:34.051592 IP localhost.56177 > HP.domain: [|domain]
+22:59:34.051753 IP 192.168.124.2.40980 > moshujia.cn.domain: [|domain]
+22:59:34.059613 IP moshujia.cn.domain > 192.168.124.2.40980: [|domain]
+22:59:34.059838 IP HP.domain > localhost.56177: [|domain]
+22:59:34.060379 IP localhost.48213 > HP.domain: [|domain]
+22:59:34.060551 IP 192.168.124.2.40980 > moshujia.cn.domain: [|domain]
+22:59:34.072734 IP moshujia.cn.domain > 192.168.124.2.40980: [|domain]
+22:59:34.072956 IP HP.domain > localhost.48213: [|domain]
+22:59:34.554642 
+	0x0000:  0207 0408 1196 7d08 f804 0703 0811 967d  ......}........}
+	0x0010:  08f8 0602 0078 0a02 4850 0c64 5562 756e  .....x..HP.dUbun
+	0x0020:  7475                                     tu
+22:59:35.271082 ARP, Request who-has 192.168.124.8 tell 192.168.124.8, length 28
+22:59:35.878487 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+22:59:35.878542 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+22:59:36.350873 IP 192.168.124.2.46594 > server-13-33-171-22.maa50.r.cloudfront.net.https: [|tcp]
+22:59:36.351279 IP localhost.57024 > HP.domain: [|domain]
+22:59:36.351516 IP 192.168.124.2.40980 > moshujia.cn.domain: [|domain]
+22:59:36.351562 IP 192.168.124.2.40980 > public1.114dns.com.domain: [|domain]
+22:59:36.417142 IP moshujia.cn.domain > 192.168.124.2.40980: [|domain]
+22:59:36.417390 IP HP.domain > localhost.57024: [|domain]
+22:59:36.417928 IP localhost.52844 > HP.domain: [|domain]
+22:59:36.418103 IP 192.168.124.2.40980 > moshujia.cn.domain: [|domain]
+22:59:36.426728 IP moshujia.cn.domain > 192.168.124.2.40980: [|domain]
+22:59:36.426973 IP HP.domain > localhost.52844: [|domain]
+^C
+27 packets captured
+37 packets received by filter
+0 packets dropped by kernel
+
