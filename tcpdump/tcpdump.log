@@ -623,3 +623,100 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 22 packets received by filter
 10 packets dropped by kernel
 
+
+==== -tt ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -tt
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+1617980646.309508 IP 192.168.124.2.36326 > server-13-224-161-9.hkg54.r.cloudfront.net.https: Flags [.], ack 297519223, win 318, options [nop,nop,TS val 1414440 ecr 589050988], length 0
+1617980646.310856 IP localhost.55187 > HP.domain: 25639+ PTR? 9.161.224.13.in-addr.arpa. (43)
+1617980646.311051 IP 192.168.124.2.48312 > moshujia.cn.domain: 54832+ PTR? 9.161.224.13.in-addr.arpa. (43)
+1617980646.319354 IP moshujia.cn.domain > 192.168.124.2.48312: 54832 1/0/0 PTR server-13-224-161-9.hkg54.r.cloudfront.net. (99)
+1617980646.319577 IP HP.domain > localhost.55187: 25639 1/0/0 PTR server-13-224-161-9.hkg54.r.cloudfront.net. (99)
+1617980646.354758 IP server-13-224-161-9.hkg54.r.cloudfront.net.https > 192.168.124.2.36326: Flags [.], ack 1, win 133, options [nop,nop,TS val 589061036 ecr 1404411], length 0
+^C
+6 packets captured
+14 packets received by filter
+6 packets dropped by kernel
+
+==== -ttt print time difference ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -ttt
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+ 00:00:00.000000 ARP, Request who-has 192.168.124.8 tell 192.168.124.8, length 28
+ 00:00:00.001338 IP localhost.43947 > HP.domain: 54583+ PTR? 8.124.168.192.in-addr.arpa. (44)
+ 00:00:00.000206 IP 192.168.124.2.48312 > moshujia.cn.domain: 20532+ PTR? 8.124.168.192.in-addr.arpa. (44)
+ 00:00:00.000035 IP 192.168.124.2.48312 > public1.114dns.com.domain: 20532+ PTR? 8.124.168.192.in-addr.arpa. (44)
+ 00:00:00.017268 IP moshujia.cn.domain > 192.168.124.2.48312: 20532 NXDomain* 0/0/0 (44)
+ 00:00:00.000915 IP localhost.47907 > HP.domain: 43485+ PTR? 2.124.168.192.in-addr.arpa. (44)
+ 00:00:00.000176 IP 192.168.124.2.48312 > moshujia.cn.domain: 41482+ PTR? 2.124.168.192.in-addr.arpa. (44)
+ 00:00:00.859612 IP 192.168.124.2.36326 > server-13-224-161-9.hkg54.r.cloudfront.net.https: Flags [.], ack 297519223, win 318, options [nop,nop,TS val 1432032 ecr 589121348], length 0
+ 00:00:00.000393 IP localhost.60732 > HP.domain: 12328+ PTR? 9.161.224.13.in-addr.arpa. (43)
+ 00:00:00.000214 IP 192.168.124.2.48312 > moshujia.cn.domain: 17751+ PTR? 9.161.224.13.in-addr.arpa. (43)
+ 00:00:00.003343 IP moshujia.cn.domain > 192.168.124.2.48312: 17751 1/0/0 PTR server-13-224-161-9.hkg54.r.cloudfront.net. (99)
+ 00:00:00.000172 IP HP.domain > localhost.60732: 12328 1/0/0 PTR server-13-224-161-9.hkg54.r.cloudfront.net. (99)
+ 00:00:00.040480 IP server-13-224-161-9.hkg54.r.cloudfront.net.https > 192.168.124.2.36326: Flags [.], ack 1, win 133, options [nop,nop,TS val 589131402 ecr 1404411], length 0
+ 00:00:02.716342 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+ 00:00:00.000401 IP localhost.36702 > HP.domain: 9781+ PTR? 255.255.255.255.in-addr.arpa. (46)
+ 00:00:00.000214 IP 192.168.124.2.48312 > moshujia.cn.domain: 48763+ PTR? 255.255.255.255.in-addr.arpa. (46)
+ 00:00:00.014510 IP moshujia.cn.domain > 192.168.124.2.48312: 48763* 0/0/0 (46)
+ 00:00:00.000186 IP HP.domain > localhost.36702: 9781* 0/0/0 (46)
+^C
+18 packets captured
+36 packets received by filter
+10 packets dropped by kernel
+
+==== -tttt ==== 
+
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+2021-04-09 23:10:24.239108 IP 111.13.18.180.http > 192.168.124.2.32994: Flags [F.], seq 1894533188, ack 2186645221, win 30, options [nop,nop,TS val 1872510212 ecr 1493923], length 0
+2021-04-09 23:10:24.239386 IP 192.168.124.2.32994 > 111.13.18.180.http: Flags [F.], seq 1, ack 1, win 634, options [nop,nop,TS val 1508922 ecr 1872510212], length 0
+2021-04-09 23:10:24.240390 IP localhost.47851 > HP.domain: 52139+ PTR? 2.124.168.192.in-addr.arpa. (44)
+2021-04-09 23:10:24.240547 IP 192.168.124.2.48312 > moshujia.cn.domain: 7512+ PTR? 2.124.168.192.in-addr.arpa. (44)
+2021-04-09 23:10:24.240577 IP 192.168.124.2.48312 > public1.114dns.com.domain: 7512+ PTR? 2.124.168.192.in-addr.arpa. (44)
+2021-04-09 23:10:24.245756 IP 111.13.18.180.http > 192.168.124.2.32994: Flags [.], ack 2, win 30, options [nop,nop,TS val 1872510218 ecr 1508922], length 0
+2021-04-09 23:10:24.269423 IP localhost.49099 > HP.domain: 36773+ PTR? 114.114.114.114.in-addr.arpa. (46)
+2021-04-09 23:10:24.269594 IP 192.168.124.2.48312 > moshujia.cn.domain: 60896+ PTR? 114.114.114.114.in-addr.arpa. (46)
+2021-04-09 23:10:24.272786 IP public1.114dns.com.domain > 192.168.124.2.48312: 7512 NXDomain* 0/1/0 (79)
+2021-04-09 23:10:24.278807 IP moshujia.cn.domain > 192.168.124.2.48312: 60896 1/0/0 PTR public1.114dns.com. (78)
+2021-04-09 23:10:24.354420 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+2021-04-09 23:10:24.354505 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+2021-04-09 23:10:24.444972 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+2021-04-09 23:10:24.445318 IP localhost.57687 > HP.domain: 52942+ PTR? 255.255.255.255.in-addr.arpa. (46)
+2021-04-09 23:10:24.445601 IP 192.168.124.2.48312 > moshujia.cn.domain: 54990+ PTR? 255.255.255.255.in-addr.arpa. (46)
+2021-04-09 23:10:24.453591 IP moshujia.cn.domain > 192.168.124.2.48312: 54990* 0/0/0 (46)
+2021-04-09 23:10:24.453813 IP HP.domain > localhost.57687: 52942* 0/0/0 (46)
+^C
+17 packets captured
+38 packets received by filter
+17 packets dropped by kernel
+
+==== -ttttt ====== 
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -ttttt
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+ 00:00:00.000000 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+ 00:00:00.000053 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+ 00:00:00.001344 IP localhost.38331 > HP.domain: 25386+ PTR? 2.124.168.192.in-addr.arpa. (44)
+ 00:00:00.001542 IP 192.168.124.2.48312 > moshujia.cn.domain: 17491+ PTR? 2.124.168.192.in-addr.arpa. (44)
+ 00:00:00.001575 IP 192.168.124.2.48312 > public1.114dns.com.domain: 17491+ PTR? 2.124.168.192.in-addr.arpa. (44)
+ 00:00:00.016261 IP moshujia.cn.domain > 192.168.124.2.48312: 17491 NXDomain* 0/0/0 (44)
+ 00:00:00.017251 IP localhost.60270 > HP.domain: 1682+ PTR? 114.114.114.114.in-addr.arpa. (46)
+ 00:00:00.017421 IP 192.168.124.2.48312 > moshujia.cn.domain: 13687+ PTR? 114.114.114.114.in-addr.arpa. (46)
+ 00:00:00.022185 IP moshujia.cn.domain > 192.168.124.2.48312: 13687 1/0/0 PTR public1.114dns.com. (78)
+ 00:00:00.044008 IP public1.114dns.com.domain > 192.168.124.2.48312: 17491 NXDomain* 0/1/0 (79)
+ 00:00:00.090597 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+ 00:00:00.091176 IP localhost.48314 > HP.domain: 32123+ PTR? 255.255.255.255.in-addr.arpa. (46)
+ 00:00:00.091473 IP 192.168.124.2.48312 > moshujia.cn.domain: 13804+ PTR? 255.255.255.255.in-addr.arpa. (46)
+ 00:00:00.117698 IP moshujia.cn.domain > 192.168.124.2.48312: 13804* 0/0/0 (46)
+ 00:00:00.117905 IP HP.domain > localhost.48314: 32123* 0/0/0 (46)
+ 00:00:01.430054 ARP, Request who-has 192.168.124.8 tell 192.168.124.8, length 28
+^C
+16 packets captured
+30 packets received by filter
+9 packets dropped by kernel
+
