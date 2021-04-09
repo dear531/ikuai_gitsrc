@@ -590,3 +590,36 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 50 bytes
 37 packets received by filter
 0 packets dropped by kernel
 
+==== -t dont print time stamp =====
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -t
+[sudo] zhangly 的密码： 
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+IP localhost.36047 > HP.domain: 34336+ PTR? 255.255.255.255.in-addr.arpa. (46)
+IP 192.168.124.2.48312 > moshujia.cn.domain: 26152+ PTR? 255.255.255.255.in-addr.arpa. (46)
+IP moshujia.cn.domain > 192.168.124.2.48312: 26152* 0/0/0 (46)
+IP HP.domain > localhost.36047: 34336* 0/0/0 (46)
+IP localhost.45116 > HP.domain: 49719+ PTR? 2.124.168.192.in-addr.arpa. (44)
+IP 192.168.124.2.48312 > moshujia.cn.domain: 57654+ PTR? 2.124.168.192.in-addr.arpa. (44)
+^C
+7 packets captured
+19 packets received by filter
+9 packets dropped by kernel
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any 
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+23:01:06.340586 IP moshujia.cn.37091 > 255.255.255.255.mmcc: UDP, length 16
+23:01:06.340803 IP moshujia.cn.58533 > 255.255.255.255.987: UDP, length 19
+23:01:06.341364 IP localhost.58754 > HP.domain: 49725+ PTR? 255.255.255.255.in-addr.arpa. (46)
+23:01:06.341567 IP 192.168.124.2.48312 > moshujia.cn.domain: 2221+ PTR? 255.255.255.255.in-addr.arpa. (46)
+23:01:06.341603 IP 192.168.124.2.48312 > public1.114dns.com.domain: 2221+ PTR? 255.255.255.255.in-addr.arpa. (46)
+23:01:06.353588 IP moshujia.cn.domain > 192.168.124.2.48312: 2221* 0/0/0 (46)
+23:01:06.354442 IP localhost.39587 > HP.domain: 53934+ PTR? 2.124.168.192.in-addr.arpa. (44)
+23:01:06.354614 IP 192.168.124.2.48312 > moshujia.cn.domain: 58173+ PTR? 2.124.168.192.in-addr.arpa. (44)
+23:01:06.372134 IP public1.114dns.com.domain > 192.168.124.2.48312: 2221* 0/1/0 (81)
+^C
+9 packets captured
+22 packets received by filter
+10 packets dropped by kernel
+
