@@ -720,3 +720,49 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 30 packets received by filter
 9 packets dropped by kernel
 
+
+==== -v print verbose =====
+
+zhangly@HP:~$ sudo tcpdump -i any
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+14:40:43.827536 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 294
+14:40:43.827921 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+14:40:43.828350 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 366
+14:40:43.828744 IP localhost.33015 > HP.domain: 43563+ PTR? 250.255.255.239.in-addr.arpa. (46)
+14:40:43.828755 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 358
+14:40:43.828910 IP 192.168.124.2.54386 > moshujia.cn.domain: 56458+ PTR? 250.255.255.239.in-addr.arpa. (46)
+14:40:43.840212 IP localhost.39971 > HP.domain: 12598+ PTR? 2.124.168.192.in-addr.arpa. (44)
+14:40:43.840313 IP 192.168.124.2.54386 > moshujia.cn.domain: 57955+ PTR? 2.124.168.192.in-addr.arpa. (44)
+14:40:43.848450 IP moshujia.cn.domain > 192.168.124.2.54386: 57955 NXDomain* 0/0/0 (44)
+14:40:43.848689 IP HP.domain > localhost.39971: 12598 NXDomain* 0/0/0 (44)
+^C
+10 packets captured
+23 packets received by filter
+10 packets dropped by kernel
+zhangly@HP:~$ sudo tcpdump -i any -v
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+14:40:49.756422 IP (tos 0x0, ttl 255, id 10772, offset 0, flags [none], proto UDP (17), length 216)
+    192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+14:40:49.757755 IP (tos 0x0, ttl 64, id 10758, offset 0, flags [DF], proto UDP (17), length 74)
+    localhost.37024 > HP.domain: 9417+ PTR? 255.255.255.255.in-addr.arpa. (46)
+14:40:49.757913 IP (tos 0x0, ttl 64, id 22166, offset 0, flags [DF], proto UDP (17), length 74)
+    192.168.124.2.54386 > moshujia.cn.domain: 44509+ PTR? 255.255.255.255.in-addr.arpa. (46)
+14:40:49.767834 IP (tos 0x0, ttl 128, id 31274, offset 0, flags [none], proto UDP (17), length 74)
+    moshujia.cn.domain > 192.168.124.2.54386: 44509* 0/0/0 (46)
+14:40:49.768014 IP (tos 0x0, ttl 64, id 44876, offset 0, flags [DF], proto UDP (17), length 74)
+    HP.domain > localhost.37024: 9417* 0/0/0 (46)
+14:40:49.777172 IP (tos 0x0, ttl 64, id 10763, offset 0, flags [DF], proto UDP (17), length 72)
+    localhost.48374 > HP.domain: 33190+ PTR? 2.124.168.192.in-addr.arpa. (44)
+14:40:49.777284 IP (tos 0x0, ttl 64, id 22171, offset 0, flags [DF], proto UDP (17), length 72)
+    192.168.124.2.54386 > moshujia.cn.domain: 22062+ PTR? 2.124.168.192.in-addr.arpa. (44)
+^C
+7 packets captured
+19 packets received by filter
+9 packets dropped by kernel
+
+
+zhangly@HP:~$ sudo tcpdump -i any -v -w tmp.cap 
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+Got 3
+
