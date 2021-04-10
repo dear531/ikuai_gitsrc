@@ -959,3 +959,89 @@ zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrt
 -rw-r--r-- 1 root    root    1053158 4月  10 18:06 tmp.cap1
 -rw-r--r-- 1 root    root     527482 4月  10 18:06 tmp.cap2
 
+==== -x print minus link level header and -xx include link level head in hex ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -e -x
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+18:51:14.154238   B 84:9f:b5:e2:56:2a (oui Unknown) ethertype ARP (0x0806), length 44: Request who-has moshujia.cn tell 192.168.124.9, length 28
+	0x0000:  0001 0800 0604 0001 849f b5e2 562a c0a8
+	0x0010:  7c09 0000 0000 0000 c0a8 7c01
+18:51:14.154812  In 00:00:00:00:00:00 (oui Ethernet) ethertype IPv4 (0x0800), length 88: localhost.37942 > HP.domain: 23672+ PTR? 9.124.168.192.in-addr.arpa. (44)
+	0x0000:  4500 0048 50e1 4000 4011 eac1 7f00 0001
+	0x0010:  7f00 0101 9436 0035 0034 ff47 5c78 0100
+	0x0020:  0001 0000 0000 0000 0139 0331 3234 0331
+	0x0030:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0040:  7270 6100 000c 0001
+18:51:14.154883 Out 08:11:96:7d:08:f8 (oui Unknown) ethertype IPv4 (0x0800), length 88: 192.168.124.2.54386 > moshujia.cn.domain: 25447+ PTR? 9.124.168.192.in-addr.arpa. (44)
+	0x0000:  4500 0048 7cdc 4000 4011 4474 c0a8 7c02
+	0x0010:  c0a8 7c01 d472 0035 0034 8d6a 6367 0100
+	0x0020:  0001 0000 0000 0000 0139 0331 3234 0331
+	0x0030:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0040:  7270 6100 000c 0001
+18:51:14.154899 Out 08:11:96:7d:08:f8 (oui Unknown) ethertype IPv4 (0x0800), length 88: 192.168.124.2.54386 > public1.114dns.com.domain: 25447+ PTR? 9.124.168.192.in-addr.arpa. (44)
+	0x0000:  4500 0048 c8da 4000 4011 503b c0a8 7c02
+	0x0010:  7272 7272 d472 0035 0034 e52f 6367 0100
+	0x0020:  0001 0000 0000 0000 0139 0331 3234 0331
+	0x0030:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0040:  7270 6100 000c 0001
+18:51:14.173574  In 04:d7:a5:5e:d2:f6 (oui Unknown) ethertype IPv4 (0x0800), length 88: moshujia.cn.domain > 192.168.124.2.54386: 25447 NXDomain* 0/0/0 (44)
+	0x0000:  4500 0048 9dfd 0000 8011 2353 c0a8 7c01
+	0x0010:  c0a8 7c02 0035 d472 0034 08e7 6367 8583
+	0x0020:  0001 0000 0000 0000 0139 0331 3234 0331
+	0x0030:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0040:  7270 6100 000c 0001
+18:51:14.173949  In 00:00:00:00:00:00 (oui Ethernet) ethertype IPv4 (0x0800), length 88: localhost.39545 > HP.domain: 61144+ PTR? 2.124.168.192.in-addr.arpa. (44)
+	0x0000:  4500 0048 50e3 4000 4011 eabf 7f00 0001
+	0x0010:  7f00 0101 9a79 0035 0034 ff47 eed8 0100
+	0x0020:  0001 0000 0000 0000 0132 0331 3234 0331
+	0x0030:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0040:  7270 6100 000c 0001
+18:51:14.173992 Out 08:11:96:7d:08:f8 (oui Unknown) ethertype IPv4 (0x0800), length 88: 192.168.124.2.54386 > moshujia.cn.domain: 23663+ PTR? 2.124.168.192.in-addr.arpa. (44)
+	0x0000:  4500 0048 7cde 4000 4011 4472 c0a8 7c02
+	0x0010:  c0a8 7c01 d472 0035 0034 9469 5c6f 0100
+	0x0020:  0001 0000 0000 0000 0132 0331 3234 0331
+	0x0030:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0040:  7270 6100 000c 0001
+^C
+7 packets captured
+21 packets received by filter
+10 packets dropped by kernel
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -e -xx
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+18:51:18.762958  In 04:d7:a5:5e:d2:f6 (oui Unknown) ethertype ARP (0x0806), length 62: Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+	0x0000:  0000 0001 0006 04d7 a55e d2f6 0000 0806
+	0x0010:  0001 0800 0604 0001 04d7 a55e d2f6 c0a8
+	0x0020:  7c01 0811 967d 08f8 c0a8 7c02 0000 0000
+	0x0030:  0000 0000 0000 0000 0000 0000 0000
+18:51:18.763006 Out 08:11:96:7d:08:f8 (oui Unknown) ethertype ARP (0x0806), length 44: Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+	0x0000:  0004 0001 0006 0811 967d 08f8 0000 0806
+	0x0010:  0001 0800 0604 0002 0811 967d 08f8 c0a8
+	0x0020:  7c02 04d7 a55e d2f6 c0a8 7c01
+18:51:18.763815  In 00:00:00:00:00:00 (oui Ethernet) ethertype IPv4 (0x0800), length 88: localhost.56728 > HP.domain: 20410+ PTR? 2.124.168.192.in-addr.arpa. (44)
+	0x0000:  0000 0304 0006 0000 0000 0000 0000 0800
+	0x0010:  4500 0048 5249 4000 4011 e959 7f00 0001
+	0x0020:  7f00 0101 dd98 0035 0034 ff47 4fba 0100
+	0x0030:  0001 0000 0000 0000 0132 0331 3234 0331
+	0x0040:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0050:  7270 6100 000c 0001
+18:51:18.763962 Out 08:11:96:7d:08:f8 (oui Unknown) ethertype IPv4 (0x0800), length 88: 192.168.124.2.54386 > moshujia.cn.domain: 11342+ PTR? 2.124.168.192.in-addr.arpa. (44)
+	0x0000:  0004 0001 0006 0811 967d 08f8 0000 0800
+	0x0010:  4500 0048 7e0c 4000 4011 4344 c0a8 7c02
+	0x0020:  c0a8 7c01 d472 0035 0034 c48a 2c4e 0100
+	0x0030:  0001 0000 0000 0000 0132 0331 3234 0331
+	0x0040:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0050:  7270 6100 000c 0001
+18:51:18.776170  In 04:d7:a5:5e:d2:f6 (oui Unknown) ethertype IPv4 (0x0800), length 88: moshujia.cn.domain > 192.168.124.2.54386: 11342 NXDomain* 0/0/0 (44)
+	0x0000:  0000 0001 0006 04d7 a55e d2f6 0000 0800
+	0x0010:  4500 0048 9eb5 0000 8011 229b c0a8 7c01
+	0x0020:  c0a8 7c02 0035 d472 0034 4007 2c4e 8583
+	0x0030:  0001 0000 0000 0000 0132 0331 3234 0331
+	0x0040:  3638 0331 3932 0769 6e2d 6164 6472 0461
+	0x0050:  7270 6100 000c 0001
+^C
+5 packets captured
+8 packets received by filter
+1 packet dropped by kernel
+
