@@ -903,3 +903,19 @@ reading from file tmp.cap2, link-type LINUX_SLL (Linux cooked)
 
 tcpdump: : No such file or directory
 
+==== -r instance for reading standard input from pipe ===
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo cat tmp1.cap |tcpdump -r -
+reading from file -, link-type LINUX_SLL (Linux cooked)
+16:56:44.447853 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 294
+16:56:44.448203 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+16:56:44.448762 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 366
+16:56:44.449184 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 358
+16:56:44.449592 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+16:56:44.450006 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 342
+16:56:44.450455 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 374
+16:56:44.450863 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+16:56:44.451291 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 362
+16:56:44.451619 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 356
+16:56:44.452077 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 358
+
