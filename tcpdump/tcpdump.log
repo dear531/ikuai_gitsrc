@@ -1192,3 +1192,17 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 19 packets received by filter
 9 packets dropped by kernel
 
+
+==== -Z set user to use for read and write file ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -w tmp.cap -Z zhangly -v
+dropped privs to zhangly
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+^C1 packet captured
+1 packet received by filter
+0 packets dropped by kernel
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrt
+总用量 92
+-rw-rw-r-- 1 zhangly zhangly 85135 4月  10 19:30 tcpdump.log
+-rw-r--r-- 1 zhangly zhangly   272 4月  10 19:45 tmp.cap
+
