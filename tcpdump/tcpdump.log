@@ -943,3 +943,19 @@ reading from file -, link-type LINUX_SLL (Linux cooked)
 45 packets received by filter
 0 packets dropped by kernel
 
+
+==== -W limit the number of files ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -C 1 -W 3 -w tmp.cap -v -i any
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+^C319 packets captured
+1654 packets received by filter
+997 packets dropped by kernel
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrt
+总用量 2668
+-rw-r--r-- 1 root    root       4403 4月  10 16:56 tmp1.cap
+-rw-rw-r-- 1 zhangly zhangly   69625 4月  10 17:09 tcpdump.log
+-rw-r--r-- 1 root    root    1052464 4月  10 18:06 tmp.cap0
+-rw-r--r-- 1 root    root    1053158 4月  10 18:06 tmp.cap1
+-rw-r--r-- 1 root    root     527482 4月  10 18:06 tmp.cap2
+
