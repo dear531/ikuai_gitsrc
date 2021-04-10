@@ -919,3 +919,27 @@ reading from file -, link-type LINUX_SLL (Linux cooked)
 16:56:44.451619 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 356
 16:56:44.452077 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 358
 
+==== write and read standard via pipe ====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -w - -i any | tcpdump -r -
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+reading from file -, link-type LINUX_SLL (Linux cooked)
+17:08:48.723703 ARP, Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+17:08:48.723724 ARP, Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+17:08:49.789808 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+17:08:50.723575 IP moshujia.cn.37091 > 255.255.255.255.mmcc: UDP, length 16
+17:08:50.723901 IP moshujia.cn.58533 > 255.255.255.255.987: UDP, length 19
+17:08:54.788732 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+17:08:54.930170 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 294
+17:08:54.930488 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+17:08:54.930945 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 366
+17:08:54.931361 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 358
+17:08:54.931760 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+17:08:54.932202 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 342
+17:08:54.932629 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 374
+17:08:54.933034 IP moshujia.cn.1900 > 239.255.255.250.1900: UDP, length 303
+^Ctcpdump: pcap_loop: error reading dump file: Interrupted system call
+37 packets captured
+45 packets received by filter
+0 packets dropped by kernel
+
