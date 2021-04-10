@@ -1166,4 +1166,29 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 7 packets captured
 19 packets received by filter
 9 packets dropped by kernel
+===== -y Set the data link type to use while capturing packets to datalinktype =====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i lo -y EN10MB
+tcpdump: data link type EN10MB
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on lo, link-type EN10MB (Ethernet), capture size 262144 bytes
+^C
+0 packets captured
+0 packets received by filter
+0 packets dropped by kernel
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -y LINUX_SLL
+tcpdump: data link type LINUX_SLL
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+19:28:14.832567 IP 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+19:28:14.833481 IP localhost.55164 > HP.domain: 53082+ PTR? 255.255.255.255.in-addr.arpa. (46)
+19:28:14.833583 IP 192.168.124.2.54386 > moshujia.cn.domain: 1408+ PTR? 255.255.255.255.in-addr.arpa. (46)
+19:28:14.841342 IP moshujia.cn.domain > 192.168.124.2.54386: 1408* 0/0/0 (46)
+19:28:14.841556 IP HP.domain > localhost.55164: 53082* 0/0/0 (46)
+19:28:14.850466 IP localhost.53355 > HP.domain: 62845+ PTR? 2.124.168.192.in-addr.arpa. (44)
+19:28:14.850550 IP 192.168.124.2.54386 > moshujia.cn.domain: 55390+ PTR? 2.124.168.192.in-addr.arpa. (44)
+^C
+7 packets captured
+19 packets received by filter
+9 packets dropped by kernel
 
