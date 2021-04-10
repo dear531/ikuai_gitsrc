@@ -888,3 +888,18 @@ tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 2621
 23 packets received by filter
 9 packets dropped by kernel
 
+==== -V read list of files ===
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -V - -en
+tmp.cap1
+tmp.cap2
+reading from file tmp.cap1, link-type LINUX_SLL (Linux cooked)
+16:17:14.775656   B e0:98:06:20:e1:d7 ethertype IPv4 (0x0800), length 232: 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+16:17:16.118164   B e0:98:06:20:e1:d7 ethertype ARP (0x0806), length 44: Request who-has 192.168.124.8 tell 192.168.124.8, length 28
+reading from file tmp.cap2, link-type LINUX_SLL (Linux cooked)
+16:17:19.775357   B e0:98:06:20:e1:d7 ethertype IPv4 (0x0800), length 232: 192.168.124.8.49154 > 255.255.255.255.6667: UDP, length 188
+16:17:22.707322   B 04:d7:a5:5e:d2:f6 ethertype IPv4 (0x0800), length 60: 192.168.124.1.37091 > 255.255.255.255.5050: UDP, length 16
+16:17:22.707580   B 04:d7:a5:5e:d2:f6 ethertype IPv4 (0x0800), length 63: 192.168.124.1.58533 > 255.255.255.255.987: UDP, length 19
+
+tcpdump: : No such file or directory
+
