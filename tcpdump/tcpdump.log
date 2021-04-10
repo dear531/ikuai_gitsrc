@@ -766,3 +766,125 @@ zhangly@HP:~$ sudo tcpdump -i any -v -w tmp.cap
 tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 Got 3
 
+==== -vv and -vvv =====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -vv
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+15:40:36.108206 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 192.168.124.8 tell 192.168.124.8, length 28
+15:40:36.109138 IP (tos 0x0, ttl 64, id 15237, offset 0, flags [DF], proto UDP (17), length 72)
+    localhost.34454 > HP.domain: [bad udp cksum 0xff47 -> 0xa332!] 5583+ PTR? 8.124.168.192.in-addr.arpa. (44)
+15:40:36.109278 IP (tos 0x0, ttl 64, id 15538, offset 0, flags [DF], proto UDP (17), length 72)
+    192.168.124.2.54386 > moshujia.cn.domain: [udp sum ok] 15391+ PTR? 8.124.168.192.in-addr.arpa. (44)
+15:40:36.109313 IP (tos 0x0, ttl 64, id 22714, offset 0, flags [DF], proto UDP (17), length 72)
+    192.168.124.2.54386 > public1.114dns.com.domain: [udp sum ok] 15391+ PTR? 8.124.168.192.in-addr.arpa. (44)
+15:40:36.123637 IP (tos 0x0, ttl 128, id 60394, offset 0, flags [none], proto UDP (17), length 72)
+    moshujia.cn.domain > 192.168.124.2.54386: [udp sum ok] 15391 NXDomain* q: PTR? 8.124.168.192.in-addr.arpa. 0/0/0 (44)
+15:40:36.124268 IP (tos 0x0, ttl 64, id 15240, offset 0, flags [DF], proto UDP (17), length 72)
+    localhost.52312 > HP.domain: [bad udp cksum 0xff47 -> 0x272e!] 19479+ PTR? 2.124.168.192.in-addr.arpa. (44)
+15:40:36.124431 IP (tos 0x0, ttl 64, id 15540, offset 0, flags [DF], proto UDP (17), length 72)
+    192.168.124.2.54386 > moshujia.cn.domain: [udp sum ok] 1466+ PTR? 2.124.168.192.in-addr.arpa. (44)
+15:40:36.986662 
+	0x0000:  0207 0408 1196 7d08 f804 0703 0811 967d  ......}........}
+	0x0010:  08f8 0602 0078 0a02 4850 0c64 5562 756e  .....x..HP.dUbun
+	0x0020:  7475 204b 796c 696e 2031 362e 3034 2e37  tu.Kylin.16.04.7
+	0x0030:  204c 5453 204c 696e 7578 2034 2e34 2e30  .LTS.Linux.4.4.0
+	0x0040:  2d32 3036 2d67 656e 6572 6963 2023 3233  -206-generic.#23
+	0x0050:  382d 5562 756e 7475 2053 4d50 2054 7565  8-Ubuntu.SMP.Tue
+	0x0060:  204d 6172 2031 3620 3037 3a35 323a 3337  .Mar.16.07:52:37
+	0x0070:  2055 5443 2032 3032 3120 7838 365f 3634  .UTC.2021.x86_64
+	0x0080:  0e04 009c 0008 100c 0501 c0a8 7c02 0200  ............|...
+	0x0090:  0000 0300 1018 1102 fe80 0000 0000 0000  ................
+	0x00a0:  b096 d8d1 f4da 0b3f 0200 0000 0300 0804  .......?........
+	0x00b0:  776c 6f31 fe09 0012 0f03 0100 0000 00fe  wlo1............
+	0x00c0:  0900 120f 0100 0000 0000 0000            ............
+15:40:37.609420 IP (tos 0x0, ttl 4, id 46933, offset 0, flags [none], proto UDP (17), length 322)
+    moshujia.cn.1900 > 239.255.255.250.1900: [udp sum ok] UDP, length 294
+15:40:37.609735 IP (tos 0x0, ttl 4, id 46934, offset 0, flags [none], proto UDP (17), length 331)
+    moshujia.cn.1900 > 239.255.255.250.1900: [udp sum ok] UDP, length 303
+15:40:37.609863 IP (tos 0x0, ttl 64, id 15445, offset 0, flags [DF], proto UDP (17), length 74)
+    localhost.33767 > HP.domain: [bad udp cksum 0xff49 -> 0x1209!] 30321+ PTR? 250.255.255.239.in-addr.arpa. (46)
+15:40:37.610061 IP (tos 0x0, ttl 64, id 15889, offset 0, flags [DF], proto UDP (17), length 74)
+    192.168.124.2.54386 > moshujia.cn.domain: [udp sum ok] 28952+ PTR? 250.255.255.239.in-addr.arpa. (46)
+15:40:37.610127 IP (tos 0x0, ttl 4, id 46935, offset 0, flags [none], proto UDP (17), length 394)
+    moshujia.cn.1900 > 239.255.255.250.1900: [udp sum ok] UDP, length 366
+15:40:37.610733 IP (tos 0x0, ttl 4, id 46936, offset 0, flags [none], proto UDP (17), length 386)
+    moshujia.cn.1900 > 239.255.255.250.1900: [udp sum ok] UDP, length 358
+^C
+14 packets captured
+39 packets received by filter
+20 packets dropped by kernel
+
+==== -vvv with -X =====
+
+zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ sudo tcpdump -i any -vvv -X
+tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
+15:42:58.693750 IP (tos 0x0, ttl 128, id 3886, offset 0, flags [none], proto UDP (17), length 47)
+    moshujia.cn.58533 > 255.255.255.255.987: [udp sum ok] UDP, length 19
+	0x0000:  4500 002f 0f2e 0000 8011 eee6 c0a8 7c01  E../..........|.
+	0x0010:  ffff ffff e4a5 03db 001b e8b4 5352 4348  ............SRCH
+	0x0020:  202a 2048 5454 502f 312e 310d 0a0d 0a    .*.HTTP/1.1....
+15:42:58.693817 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 192.168.124.2 (08:11:96:7d:08:f8 (oui Unknown)) tell moshujia.cn, length 46
+	0x0000:  0001 0800 0604 0001 04d7 a55e d2f6 c0a8  ...........^....
+	0x0010:  7c01 0811 967d 08f8 c0a8 7c02 0000 0000  |....}....|.....
+	0x0020:  0000 0000 0000 0000 0000 0000 0000       ..............
+15:42:58.693830 ARP, Ethernet (len 6), IPv4 (len 4), Reply 192.168.124.2 is-at 08:11:96:7d:08:f8 (oui Unknown), length 28
+	0x0000:  0001 0800 0604 0002 0811 967d 08f8 c0a8  ...........}....
+	0x0010:  7c02 04d7 a55e d2f6 c0a8 7c01            |....^....|.
+15:42:58.695168 IP (tos 0x0, ttl 64, id 31798, offset 0, flags [DF], proto UDP (17), length 74)
+    localhost.54912 > HP.domain: [bad udp cksum 0xff49 -> 0x7409!] 49110+ PTR? 255.255.255.255.in-addr.arpa. (46)
+	0x0000:  4500 004a 7c36 4000 4011 bf6a 7f00 0001  E..J|6@.@..j....
+	0x0010:  7f00 0101 d680 0035 0036 ff49 bfd6 0100  .......5.6.I....
+	0x0020:  0001 0000 0000 0000 0332 3535 0332 3535  .........255.255
+	0x0030:  0332 3535 0332 3535 0769 6e2d 6164 6472  .255.255.in-addr
+	0x0040:  0461 7270 6100 000c 0001                 .arpa.....
+15:42:58.695354 IP (tos 0x0, ttl 64, id 34062, offset 0, flags [DF], proto UDP (17), length 74)
+    192.168.124.2.54386 > moshujia.cn.domain: [udp sum ok] 21548+ PTR? 255.255.255.255.in-addr.arpa. (46)
+	0x0000:  4500 004a 850e 4000 4011 3c40 c0a8 7c02  E..J..@.@.<@..|.
+	0x0010:  c0a8 7c01 d472 0035 0036 676f 542c 0100  ..|..r.5.6goT,..
+	0x0020:  0001 0000 0000 0000 0332 3535 0332 3535  .........255.255
+	0x0030:  0332 3535 0332 3535 0769 6e2d 6164 6472  .255.255.in-addr
+	0x0040:  0461 7270 6100 000c 0001                 .arpa.....
+15:42:58.695385 IP (tos 0x0, ttl 64, id 43087, offset 0, flags [DF], proto UDP (17), length 74)
+    192.168.124.2.54386 > public1.114dns.com.domain: [udp sum ok] 21548+ PTR? 255.255.255.255.in-addr.arpa. (46)
+	0x0000:  4500 004a a84f 4000 4011 70c4 c0a8 7c02  E..J.O@.@.p...|.
+	0x0010:  7272 7272 d472 0035 0036 bf34 542c 0100  rrrr.r.5.6.4T,..
+	0x0020:  0001 0000 0000 0000 0332 3535 0332 3535  .........255.255
+	0x0030:  0332 3535 0332 3535 0769 6e2d 6164 6472  .255.255.in-addr
+	0x0040:  0461 7270 6100 000c 0001                 .arpa.....
+15:42:58.722290 IP (tos 0x0, ttl 64, id 31802, offset 0, flags [DF], proto UDP (17), length 74)
+    localhost.59801 > HP.domain: [bad udp cksum 0xff49 -> 0x09a6!] 10025+ PTR? 114.114.114.114.in-addr.arpa. (46)
+	0x0000:  4500 004a 7c3a 4000 4011 bf66 7f00 0001  E..J|:@.@..f....
+	0x0010:  7f00 0101 e999 0035 0036 ff49 2729 0100  .......5.6.I')..
+	0x0020:  0001 0000 0000 0000 0331 3134 0331 3134  .........114.114
+	0x0030:  0331 3134 0331 3134 0769 6e2d 6164 6472  .114.114.in-addr
+	0x0040:  0461 7270 6100 000c 0001                 .arpa.....
+15:42:58.722395 IP (tos 0x0, ttl 64, id 34065, offset 0, flags [DF], proto UDP (17), length 74)
+    192.168.124.2.54386 > moshujia.cn.domain: [udp sum ok] 48148+ PTR? 114.114.114.114.in-addr.arpa. (46)
+	0x0000:  4500 004a 8511 4000 4011 3c3d c0a8 7c02  E..J..@.@.<=..|.
+	0x0010:  c0a8 7c01 d472 0035 0036 0f8f bc14 0100  ..|..r.5.6......
+	0x0020:  0001 0000 0000 0000 0331 3134 0331 3134  .........114.114
+	0x0030:  0331 3134 0331 3134 0769 6e2d 6164 6472  .114.114.in-addr
+	0x0040:  0461 7270 6100 000c 0001                 .arpa.....
+15:42:58.726496 IP (tos 0x0, ttl 128, id 1205, offset 0, flags [none], proto UDP (17), length 106)
+    moshujia.cn.domain > 192.168.124.2.54386: [udp sum ok] 48148 q: PTR? 114.114.114.114.in-addr.arpa. 1/0/0 114.114.114.114.in-addr.arpa. [3m21s] PTR public1.114dns.com. (78)
+	0x0000:  4500 006a 04b5 0000 8011 bc79 c0a8 7c01  E..j.......y..|.
+	0x0010:  c0a8 7c02 0035 d472 0056 a222 bc14 8180  ..|..5.r.V."....
+	0x0020:  0001 0001 0000 0000 0331 3134 0331 3134  .........114.114
+	0x0030:  0331 3134 0331 3134 0769 6e2d 6164 6472  .114.114.in-addr
+	0x0040:  0461 7270 6100 000c 0001 c00c 000c 0001  .arpa...........
+	0x0050:  0000 00c9 0014 0770 7562 6c69 6331 0631  .......public1.1
+	0x0060:  3134 646e 7303 636f 6d00                 14dns.com.
+15:42:58.728843 IP (tos 0x4, ttl 151, id 0, offset 0, flags [none], proto UDP (17), length 109)
+    public1.114dns.com.domain > 192.168.124.2.54386: [udp sum ok] 21548* q: PTR? 255.255.255.255.in-addr.arpa. 0/1/0 ns: 255.255.255.255.in-addr.arpa. [23h51m3s] SOA 255.255.255.255.in-addr.arpa. . 0 28800 7200 604800 86400 (81)
+	0x0000:  4504 006d 0000 0000 9711 01ed 7272 7272  E..m........rrrr
+	0x0010:  c0a8 7c02 0035 d472 0059 bfb4 542c 8580  ..|..5.r.Y..T,..
+	0x0020:  0001 0000 0001 0000 0332 3535 0332 3535  .........255.255
+	0x0030:  0332 3535 0332 3535 0769 6e2d 6164 6472  .255.255.in-addr
+	0x0040:  0461 7270 6100 000c 0001 c00c 0006 0001  .arpa...........
+	0x0050:  0001 4f67 0017 c00c 0000 0000 0000 0070  ..Og...........p
+	0x0060:  8000 001c 2000 093a 8000 0151 80         .......:...Q.
+^C
+10 packets captured
+23 packets received by filter
+9 packets dropped by kernel
+
