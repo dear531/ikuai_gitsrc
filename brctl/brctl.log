@@ -1,0 +1,51 @@
+==========================
+brctl addbr <name>
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl addbr br1
+[sudo] zhangly 的密码： 
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl show
+bridge name	bridge id		STP enabled	interfaces
+br1		8000.000000000000	no		
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ ip addr show br1 
+10: br1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether f6:41:18:ba:ec:5f brd ff:ff:ff:ff:ff:ff
+
+==========================
+The command brctl addif <brname> <ifname>
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl addif br1 enp0s25
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+br1		8000.101f74f898ff	no		enp0s25
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl addif br1 nat0-eth0
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+br1		8000.000000000003	no		enp0s25
+							nat0-eth0
+
+==========================
+brctl showmacs <brname>
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ brctl showmacs br1 
+port no	mac addr		is local?	ageing timer
+  2	00:00:00:00:00:03	yes		   0.00
+  2	00:00:00:00:00:03	yes		   0.00
+  1	10:1f:74:f8:98:ff	yes		   0.00
+  1	10:1f:74:f8:98:ff	yes		   0.00
+
+
+
+==========================
+brctl addif <brname> <ifname>
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl delif br1 nat0-eth0
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+br1		8000.101f74f898ff	no		enp0s25
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl delif br1 enp0s25
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+br1		8000.000000000000	no		
+
+==========================
+brctl delbr <name>
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ sudo brctl delbr br1 
+zhangly@HP:~/source/ikuai_gitsrc/brctl$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+
