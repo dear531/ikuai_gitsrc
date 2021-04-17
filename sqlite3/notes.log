@@ -778,3 +778,15 @@ avg(score)|age
 100.0|38
 sqlite> 
 
+
+=== .prompt ===
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .prompt test>
+test>
+test>.prompt sqlite> 
+sqlite>
+sqlite>
+
