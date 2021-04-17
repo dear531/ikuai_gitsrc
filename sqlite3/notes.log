@@ -760,3 +760,21 @@ id|name|age|score|teacher_id
 sqlite> select * from students where name glob 'v*';
 sqlite> 
 
+
+====== having ======
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+sqlite> select avg(score), age from students group by age;
+avg(score)|age
+|
+99.0|30
+100.0|38
+sqlite> select avg(score), age from students group by age having avg(score) = 100;
+avg(score)|age
+100.0|38
+sqlite> 
+
