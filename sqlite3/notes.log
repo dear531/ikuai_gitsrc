@@ -790,3 +790,29 @@ test>.prompt sqlite>
 sqlite>
 sqlite>
 
+
+=== .dump and .schema ====
+
+sqlite> .schema students
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer, teacher_id integer);
+CREATE INDEX students_id_index on students(id);
+sqlite> .dump students
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer, teacher_id integer);
+INSERT INTO "students" VALUES(1,'Leo',38,100,1);
+INSERT INTO "students" VALUES(2,'Annie',30,99,NULL);
+INSERT INTO "students" VALUES(3,'Vicky',NULL,NULL,NULL);
+INSERT INTO "students" VALUES(4,'Ultan',38,100,NULL);
+CREATE INDEX students_id_index on students(id);
+COMMIT;
+sqlite> 
+
