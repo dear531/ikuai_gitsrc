@@ -865,3 +865,18 @@ id|name|reserved
 6||2021-04-18 06:28:28
 sqlite> 
 
+
+==== pragma ===
+
+sqlite> pragma cache_size=4000;
+sqlite> pragma cache_size;
+cache_size
+4000
+sqlite> 
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> pragma cache_size;
+2000
+sqlite> 
+
