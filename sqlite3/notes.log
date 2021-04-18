@@ -880,3 +880,24 @@ sqlite> pragma cache_size;
 2000
 sqlite> 
 
+===== PRAGMA case_sensitive_like = [true|false]; =====
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .head on
+sqlite> select * from t2;
+id|name|reserved
+1|hello|
+5||2021-04-18 05:54:31
+6||2021-04-18 06:28:28
+sqlite> select * from t2 where name like 'H%';
+1|hello|
+sqlite> pragma case_sensitive_like = true;
+sqlite> select * from t2 where name like 'H%';
+sqlite> pragma case_sensitive_like = false;
+sqlite> select * from t2 where name like 'H%';
+1|hello|
+sqlite> 
+
+
