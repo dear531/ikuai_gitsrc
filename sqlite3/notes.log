@@ -816,3 +816,52 @@ CREATE INDEX students_id_index on students(id);
 COMMIT;
 sqlite> 
 
+
+=== trigger ====
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+sqlite> .tables
+students  t2        tmp5    
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+sqlite> select * from t2;
+id|name|reserved
+1|hello|
+sqlite> create trigger students_t2_trigger after insert
+   ...> on students
+   ...> begin
+   ...> insert into t2(id, reserved) values(new.id, datetime('now'));
+   ...> end;
+sqlite> insert into students (id,name,age,score,teacher_id) values (5, 'Ocean', 30, 100, 2);
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+5|Ocean|30|100|2
+sqlite> select * from t2;
+id|name|reserved
+1|hello|
+5||2021-04-18 05:54:31
+sqlite> insert into students (id,name,age,score,teacher_id) values (6, 'Jame', 50, 100, 2);
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+5|Ocean|30|100|2
+6|Jame|50|100|2
+sqlite> select * from t2;
+id|name|reserved
+1|hello|
+5||2021-04-18 05:54:31
+6||2021-04-18 06:28:28
+sqlite> 
+
