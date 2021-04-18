@@ -901,3 +901,12 @@ sqlite> select * from t2 where name like 'H%';
 sqlite> 
 
 
+===== PRAGMA count_changes ====
+
+sqlite> update tmp5 set teacher_id = 0;
+sqlite> PRAGMA count_changes = true;
+sqlite> update tmp5 set teacher_id = 0;
+rows updated
+4
+sqlite> 
+
