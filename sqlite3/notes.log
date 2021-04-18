@@ -980,3 +980,28 @@ sqlite> pragma max_page_count;
 sqlite> pragma page_size;
 1024
 
+
+===================
+sqlite> pragma recursive_triggers;
+0
+sqlite> pragma recursive_triggers = true;
+sqlite> pragma recursive_triggers;
+1
+sqlite> pragma schema_version;
+15
+sqlite> PRAGMA secure_delete;
+1
+sqlite> PRAGMA sql_trace = true;
+sqlite> PRAGMA sql_trace;
+sqlite> pragma synchronous;
+2
+sqlite> pragma synchronous;
+2
+sqlite> PRAGMA temp_store;
+0
+sqlite> PRAGMA temp_store_directory;
+sqlite> pragma user_version;
+0
+sqlite> pragma writable_schema;
+0
+
