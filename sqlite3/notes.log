@@ -959,10 +959,15 @@ on students
 begin
 insert into t2(id, reserved) values(new.id, datetime('now'));
 end;
-sqlite> pragma index_info(students_id_index);
+sqlite> pragma index_info(students_id_index); /* PRAGMA [database.]index_info( index_name ); */
 0|0|id
 sqlite> .indices students
 students_id_index
 sqlite> select * from sqlite_master where type='index';
 index|students_id_index|students|3|CREATE INDEX students_id_index on students(id)
+sqlite> 
+
+======== index_list Pragma =========
+sqlite> pragma index_list(students); /* PRAGMA [database.]index_list( table_name ); */
+0|students_id_index|0|c|0
 sqlite> 
