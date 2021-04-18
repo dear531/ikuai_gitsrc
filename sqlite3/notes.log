@@ -910,3 +910,19 @@ rows updated
 4
 sqlite> 
 
+
+======= sqlite> .open config2.db =======
+sqlite> .open config2.db
+sqlite> attach "/home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db" as config1
+   ...> ;
+sqlite> .databases
+seq  name             file                                                      
+---  ---------------  ----------------------------------------------------------
+0    main             /home/zhangly/source/ikuai_gitsrc/sqlite3/config2.db      
+2    config1          /home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db      
+sqlite> PRAGMA database_list;
+seq|name|file
+0|main|/home/zhangly/source/ikuai_gitsrc/sqlite3/config2.db
+2|config1|/home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db
+sqlite> 
+
