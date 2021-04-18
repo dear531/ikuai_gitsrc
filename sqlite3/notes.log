@@ -971,3 +971,12 @@ sqlite>
 sqlite> pragma index_list(students); /* PRAGMA [database.]index_list( table_name ); */
 0|students_id_index|0|c|0
 sqlite> 
+
+===== journal_mode max_page_count page_size pragma ======
+sqlite> pragma journal_mode;
+delete
+sqlite> pragma max_page_count;
+1073741823
+sqlite> pragma page_size;
+1024
+
