@@ -926,3 +926,10 @@ seq|name|file
 2|config1|/home/zhangly/source/ikuai_gitsrc/sqlite3/config1.db
 sqlite> 
 
+
+===== PRAGMA encoding =====
+sqlite> PRAGMA encoding;
+encoding
+UTF-8
+sqlite> 
+
