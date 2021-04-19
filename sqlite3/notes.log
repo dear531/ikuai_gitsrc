@@ -1062,3 +1062,41 @@ id|name|age|score|teacher_id
 4|Ultan|38|100|0
 sqlite> 
 
+
+==== reindex =====
+
+sqlite> .indices students
+students_id_index
+sqlite> reindex students_id_index;
+sqlite> .schema students
+CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer, teacher_id integer);
+CREATE INDEX students_id_index on students(id);
+CREATE TRIGGER students_t2_trigger after insert
+on students
+begin
+insert into t2(id, reserved) values(new.id, datetime('now'));
+end;
+sqlite> 
+
+
+==== data type ====
+
+sqlite> create table type (name text, money numeric, age integer, amout, describe blob);
+sqlite> .head on
+sqlite> .schema type
+CREATE TABLE type (name text, money numeric, age integer, amout, describe blob);
+sqlite> insert into type (name, money, age, amout, describe) 
+   ...> values('Leo', '3.14', 38, 100.0505, 135246);sqlite> select * from type;
+name|money|age|amout|describe
+Leo|3.14|38|100.0505|135246
+sqlite> insert into type (name, money, age, amout, describe)
+   ...> values ('Ocean', 1.01, 30, 30, 'WSE');
+sqlite> select * from type;name|money|age|amout|describe
+Leo|3.14|38|100.0505|135246
+Ocean|1.01|30|30|WSE
+sqlite> 
+
