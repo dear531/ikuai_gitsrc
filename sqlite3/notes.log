@@ -1100,3 +1100,28 @@ Leo|3.14|38|100.0505|135246
 Ocean|1.01|30|30|WSE
 sqlite> 
 
+===== create and insert via select ====
+
+zhangly@HP:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> .tables
+students  t2        tmp5      type    
+sqlite> create table t3 as
+   ...> select * from t2;
+sqlite> select * from t3;
+1|hello|
+5||2021-04-18 05:54:31
+6||2021-04-18 06:28:28
+sqlite> delete from t3;
+sqlite> select * from t3;
+sqlite> insert into t3
+   ...> select * from t2;
+sqlite> select * from t3;
+1|hello|
+5||2021-04-18 05:54:31
+6||2021-04-18 06:28:28
+sqlite> .schema t3
+CREATE TABLE t3(id INT,name NUM,reserved NUM);
+sqlite> 
+
