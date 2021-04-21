@@ -23,7 +23,7 @@ int main(void)
 	uname(&buf);
 	printf("buf.sysname:%s\nbuf.nodename:%s\nbuf.release:%s\nbuf.version:%s\nbuf.machine:%s\n"
            #ifdef _GNU_SOURCE
-               ",buf.domainname:%s\n"
+               "buf.domainname:%s\n"
            #endif
 ,
                buf.sysname, buf.nodename, buf.release, buf.version, buf.machine
