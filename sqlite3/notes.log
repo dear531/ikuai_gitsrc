@@ -1139,3 +1139,44 @@ id          name        age         score       teacher_id
 6           Jame        50          100         2         
 sqlite> 
 
+
+===== select * from sqlite_master ==== 
+
+sqlite> .schema sqlite_master
+CREATE TABLE sqlite_master (
+  type text,
+  name text,
+  tbl_name text,
+  rootpage integer,
+  sql text
+);
+sqlite> .head on
+sqlite> .mod line
+sqlite> select * from sqlite_master where tbl_name = 'students';
+    type = table
+    name = students
+tbl_name = students
+rootpage = 2
+     sql = CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer, teacher_id integer)
+
+    type = index
+    name = students_id_index
+tbl_name = students
+rootpage = 6
+     sql = CREATE INDEX students_id_index on students(id)
+
+    type = trigger
+    name = students_t2_trigger
+tbl_name = students
+rootpage = 0
+     sql = CREATE TRIGGER students_t2_trigger after insert
+on students
+begin
+insert into t2(id, reserved) values(new.id, datetime('now'));
+end
+sqlite> 
+
