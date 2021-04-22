@@ -1180,3 +1180,30 @@ insert into t2(id, reserved) values(new.id, datetime('now'));
 end
 sqlite> 
 
+===== .width on for auto width ==== 
+
+sqlite> .width on
+sqlite> .head on
+sqlite> select * from sqlite_master where tbl_name = 'students';
+type|name|tbl_name|rootpage|sql
+table|students|students|2|CREATE TABLE students 
+(id integer,
+name text,
+age integer,
+score integer, teacher_id integer)
+index|students_id_index|students|6|CREATE INDEX students_id_index on students(id)
+trigger|students_t2_trigger|students|0|CREATE TRIGGER students_t2_trigger after insert
+on students
+begin
+insert into t2(id, reserved) values(new.id, datetime('now'));
+end
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+5|Ocean|30|100|2
+6|Jame|50|100|2
+sqlite> 
+
