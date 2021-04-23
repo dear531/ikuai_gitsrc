@@ -1225,3 +1225,23 @@ sqlite> select 11 % 5;
 11 % 5
 1
 
+==== compire operation ====
+
+sqlite> select 1 > 2;
+0
+sqlite> select 1 < 2;
+1
+sqlite> select 1 != 2;
+1
+sqlite> select 1 <> 2;
+1
+sqlite> select 1 == 2;
+0
+sqlite> select 1 = 2;
+0
+sqlite> select 1 >= 2;
+0
+sqlite> select 1 <= 2;
+1
+sqlite> 
+
