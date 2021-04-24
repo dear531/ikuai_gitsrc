@@ -1273,3 +1273,9 @@ id|name|age|score|teacher_id
 3|Vicky|NULL|NULL|0
 sqlite> 
 
+==== || for concat string ====
+sqlite> select 'a' || 'b';
+'a' || 'b'
+ab
+sqlite> 
+
