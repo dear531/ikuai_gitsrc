@@ -1287,7 +1287,7 @@ id|name|age|score|teacher_id
 2|Annie|30|99|0
 3|Vicky|NULL|NULL|0
 4|Ultan|38|100|0
-sqlite> select * from tmp5 limit 2 offset 2;
+sqlite> select * from tmp5 limit 2 offset 2; /* limit is limit the number, offset is postion to bigen */
 id|name|age|score|teacher_id
 3|Vicky|NULL|NULL|0
 4|Ultan|38|100|0
