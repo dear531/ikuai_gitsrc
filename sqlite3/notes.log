@@ -1293,3 +1293,9 @@ id|name|age|score|teacher_id
 4|Ultan|38|100|0
 sqlite> 
 
+==== .mode line for operation ====
+sqlite> .mode line
+sqlite> select 1 + 2;
+1 + 2 = 3
+sqlite> 
+
