@@ -1324,3 +1324,23 @@ id|name|age|score|teacher_id
 1|Leo|38|100|0
 sqlite> 
 
+
+==== constraint primary key ====
+sqlite> create table tmp6 
+   ...> (id int primary key);
+sqlite> .schema tmp6
+CREATE TABLE tmp6 
+(id int primary key);
+sqlite> insert into tmp6 (id) values (1);
+sqlite> .head on
+sqlite> select * from tmp6;
+id
+1
+sqlite> alter table tmp6 add column name char(10);
+sqlite> insert into tmp6(name) values('Leo');
+sqlite> select * from tmp6;
+id|name
+1|NULL
+NULL|Leo
+sqlite> drop table tmp6;
+
