@@ -1245,3 +1245,31 @@ sqlite> select 1 <= 2;
 1
 sqlite> 
 
+===== is NULL ====
+
+sqlite> .nullvalue NULL
+sqlite> .nullvalue NULL
+sqlite> select * from tmp5;
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+2|Annie|30|99|0
+3|Vicky|NULL|NULL|0
+4|Ultan|38|100|0
+sqlite> select * from tmp5 where score is NULL;
+id|name|age|score|teacher_id
+3|Vicky|NULL|NULL|0
+sqlite> 
+
+sqlite> select * from tmp5 where score is NULL;
+id|name|age|score|teacher_id
+3|Vicky|NULL|NULL|0
+sqlite> select * from tmp5 where score is 100;
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+4|Ultan|38|100|0
+sqlite> select * from tmp5 where score is not 100;
+id|name|age|score|teacher_id
+2|Annie|30|99|0
+3|Vicky|NULL|NULL|0
+sqlite> 
+
