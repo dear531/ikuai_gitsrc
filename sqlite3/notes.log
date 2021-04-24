@@ -1299,3 +1299,8 @@ sqlite> select 1 + 2;
 1 + 2 = 3
 sqlite> 
 
+=== usage of function datetime ====
+sqlite> select datetime('now', 'localtime');
+datetime('now', 'localtime') = 2021-04-24 14:51:40
+sqlite> 
+
