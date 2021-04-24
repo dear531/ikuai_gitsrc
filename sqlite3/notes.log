@@ -1314,3 +1314,13 @@ id|name|age|score|teacher_id
 1|Leo|38|100|0
 sqlite> 
 
+
+==== glob for * and ? ====
+sqlite> select * from tmp5 where name glob '???';
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+sqlite> select * from tmp5 where name glob 'L*';
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+sqlite> 
+
