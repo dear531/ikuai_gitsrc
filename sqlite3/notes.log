@@ -1344,3 +1344,41 @@ id|name
 NULL|Leo
 sqlite> drop table tmp6;
 
+
+==== constraint =====
+sqlite> create table tmp6
+   ...> (id int primary key not null,
+   ...> name text not null,
+   ...> score int check(score >= 0 and score <= 100));
+sqlite> .schema tmp6
+CREATE TABLE tmp6
+(id int primary key not null,
+name text not null,
+score int check(score >= 0 and score <= 100));
+sqlite> insert into tmp6 (id ,name, score)
+   ...> values(1, 'Leo', 100);
+sqlite> insert into tmp6 (id ,name, score)
+   ...> values(2, 'Ocean', 101);
+Error: CHECK constraint failed: tmp6
+sqlite> insert into tmp6 (name, score)
+   ...> values('Ocean', 100);
+Error: NOT NULL constraint failed: tmp6.id
+sqlite> insert into tmp6 (id ,name, score)
+   ...> values(2, 'Ocean', 101);
+Error: CHECK constraint failed: tmp6
+sqlite> 
+sqlite> CREATE TABLE tmp6
+   ...> (id int primary key not null,
+   ...> name text not null,
+   ...> score int check(score >= 0 and score <= 100),
+   ...> teacher_id int not null unique);
+sqlite> insert into tmp6 (id, name, score, teacher_id)
+   ...> values (1, 'Leo', 100, 1);
+sqlite> insert into tmp6 (id, name, score, teacher_id)
+   ...> values (2, 'Ocean', 99, 1);
+Error: UNIQUE constraint failed: tmp6.teacher_id
+sqlite> alter table tmp6
+   ...> add column sellphone char(13) default '0000000000000';
+sqlite> select * from tmp6;
+id|name|score|teacher_id|sellphone
+1|Leo|100|
