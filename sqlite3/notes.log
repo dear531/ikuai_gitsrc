@@ -1304,3 +1304,13 @@ sqlite> select datetime('now', 'localtime');
 datetime('now', 'localtime') = 2021-04-24 14:51:40
 sqlite> 
 
+
+==== like (_) for single char =====
+sqlite> select * from tmp5 where name like '___';
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+sqlite> select * from tmp5 where name like '_eo';
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+sqlite> 
+
