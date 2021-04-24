@@ -1279,3 +1279,17 @@ sqlite> select 'a' || 'b';
 ab
 sqlite> 
 
+
+==== limit and offset to show portin ====
+qlite> select * from tmp5;
+id|name|age|score|teacher_id
+1|Leo|38|100|0
+2|Annie|30|99|0
+3|Vicky|NULL|NULL|0
+4|Ultan|38|100|0
+sqlite> select * from tmp5 limit 2 offset 2;
+id|name|age|score|teacher_id
+3|Vicky|NULL|NULL|0
+4|Ultan|38|100|0
+sqlite> 
+
