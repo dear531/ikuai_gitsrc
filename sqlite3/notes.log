@@ -1382,3 +1382,16 @@ sqlite> alter table tmp6
 sqlite> select * from tmp6;
 id|name|score|teacher_id|sellphone
 1|Leo|100|
+======= crass join ========
+sqlite> select * from join1;
+1|join1
+2|join11
+sqlite> select * from join2;
+2|join2
+22|join22
+sqlite> select * from join1 cross join join2;
+1|join1|2|join2
+1|join1|22|join22
+2|join11|2|join2
+2|join11|22|join22
+sqlite> 
