@@ -1395,3 +1395,52 @@ sqlite> select * from join1 cross join join2;
 2|join11|2|join2
 2|join11|22|join22
 sqlite> 
+
+sqlite> select * from join1, join2;
+1|join1|2|join2
+1|join1|22|join22
+2|join11|2|join2
+2|join11|22|join22
+
+===== [inner] join on =====
+sqlite> select * from join1 join join2 on id1 = id2;
+2|join11|2|join2
+sqlite> select * from join1 inner join join2 on id1 = id2;
+2|join11|2|join2
+
+/* 有名称一致的字段 */
+sqlite> select * from students;
+id|name|age|score|teacher_id
+1|Leo|38|100|1
+2|Annie|30|99|
+3|Vicky|||
+4|Ultan|38|100|
+5|Ocean|30|100|2
+6|Jame|50|100|2
+sqlite> select * from teacher;
+id|name
+1|Ocean
+2|Ulten
+sqlite> select * from students join teacher using(id);
+id|name|age|score|teacher_id|name
+1|Leo|38|100|1|Ocean
+2|Annie|30|99||Ulten
+
+
+=====natural join======
+sqlite> select * from join1 natural join join2;
+id1|name1|id2|name2
+1|join1|2|join2
+1|join1|22|join22
+2|join11|2|join2
+2|join11|22|join22
+sqlite> select * from join1 join join2;
+id1|name1|id2|name2
+1|join1|2|join2
+1|join1|22|join22
+2|join11|2|join2
+2|join11|22|join22
+
+sqlite> select * from join1 a, join2 b where a.id1 = b.id2;
+2|join11|2|join2
+
