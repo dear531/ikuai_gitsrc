@@ -1480,3 +1480,78 @@ sqlite> select * from join1
 22|join22
 3|repeated
 
+
+==== INDEXED BY =====
+sqlite> explain select * from students INDEXED BY students_id_index where id = 1;
+addr  opcode         p1    p2    p3    p4             p5  comment      
+----  -------------  ----  ----  ----  -------------  --  -------------
+0     Init           0     17    0                    00  Start at 17  
+1     OpenRead       0     2     0     5              00  root=2 iDb=0; students
+2     OpenRead       1     6     0     k(2,,)         02  root=6 iDb=0; students_id_index
+3     Integer        1     1     0                    00  r[1]=1       
+4     SeekGE         1     14    1     1              00  key=r[1]     
+5       IdxGT          1     14    1     1              00  key=r[1]     
+6       Seek           1     0     0                    00  Move 0 to 1.rowid
+7       Column         1     0     2                    00  r[2]=students.id
+8       Column         0     1     3                    00  r[3]=students.name
+9       Column         0     2     4                    00  r[4]=students.age
+10      Column         0     3     5                    00  r[5]=students.score
+11      Column         0     4     6                    00  r[6]=students.teacher_id
+12      ResultRow      2     5     0                    00  output=r[2..6]
+13    Next           1     5     0                    00               
+14    Close          0     0     0                    00               
+15    Close          1     0     0                    00               
+16    Halt           0     0     0                    00               
+17    Transaction    0     0     38    0              01  usesStmtJournal=0
+18    TableLock      0     2     0     students       00  iDb=0 root=2 write=0
+19    Goto           0     1     0                    00               
+sqlite> explain
+   ...> select * from students INDEXED BY students_id_index where id = 1;
+addr  opcode         p1    p2    p3    p4             p5  comment      
+----  -------------  ----  ----  ----  -------------  --  -------------
+0     Init           0     17    0                    00  Start at 17  
+1     OpenRead       0     2     0     5              00  root=2 iDb=0; students
+2     OpenRead       1     6     0     k(2,,)         02  root=6 iDb=0; students_id_index
+3     Integer        1     1     0                    00  r[1]=1       
+4     SeekGE         1     14    1     1              00  key=r[1]     
+5       IdxGT          1     14    1     1              00  key=r[1]     
+6       Seek           1     0     0                    00  Move 0 to 1.rowid
+7       Column         1     0     2                    00  r[2]=students.id
+8       Column         0     1     3                    00  r[3]=students.name
+9       Column         0     2     4                    00  r[4]=students.age
+10      Column         0     3     5                    00  r[5]=students.score
+11      Column         0     4     6                    00  r[6]=students.teacher_id
+12      ResultRow      2     5     0                    00  output=r[2..6]
+13    Next           1     5     0                    00               
+14    Close          0     0     0                    00               
+15    Close          1     0     0                    00               
+16    Halt           0     0     0                    00               
+17    Transaction    0     0     38    0              01  usesStmtJournal=0
+18    TableLock      0     2     0     students       00  iDb=0 root=2 write=0
+19    Goto           0     1     0                    00               
+sqlite> explain
+   ...> select * from students where id = 1;
+addr  opcode         p1    p2    p3    p4             p5  comment      
+----  -------------  ----  ----  ----  -------------  --  -------------
+0     Init           0     17    0                    00  Start at 17  
+1     OpenRead       0     2     0     5              00  root=2 iDb=0; students
+2     OpenRead       1     6     0     k(2,,)         02  root=6 iDb=0; students_id_index
+3     Integer        1     1     0                    00  r[1]=1       
+4     SeekGE         1     14    1     1              00  key=r[1]     
+5       IdxGT          1     14    1     1              00  key=r[1]     
+6       Seek           1     0     0                    00  Move 0 to 1.rowid
+7       Column         1     0     2                    00  r[2]=students.id
+8       Column         0     1     3                    00  r[3]=students.name
+9       Column         0     2     4                    00  r[4]=students.age
+10      Column         0     3     5                    00  r[5]=students.score
+11      Column         0     4     6                    00  r[6]=students.teacher_id
+12      ResultRow      2     5     0                    00  output=r[2..6]
+13    Next           1     5     0                    00               
+14    Close          0     0     0                    00               
+15    Close          1     0     0                    00               
+16    Halt           0     0     0                    00               
+17    Transaction    0     0     38    0              01  usesStmtJournal=0
+18    TableLock      0     2     0     students       00  iDb=0 root=2 write=0
+19    Goto           0     1     0                    00               
+sqlite> 
+
