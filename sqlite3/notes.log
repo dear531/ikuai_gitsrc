@@ -1450,3 +1450,33 @@ sqlite> select * from join1 left outer join join2 on id1 = id2;
 2|join11|2|join2
 sqlite> 
 
+
+===== union and union all ====
+
+sqlite> select * from join1;
+1|join1
+2|join11
+3|repeated
+sqlite> select * from join2;
+2|join2
+22|join22
+3|repeated
+sqlite> 
+sqlite> select * from join1
+   ...> union
+   ...> select * from join2;
+1|join1
+2|join11
+2|join2
+3|repeated
+22|join22
+sqlite> select * from join1
+   ...> union all
+   ...> select * from join2;
+1|join1
+2|join11
+3|repeated
+2|join2
+22|join22
+3|repeated
+
