@@ -1601,3 +1601,35 @@ selectid    order       from        detail
 0           0           0           SCAN TABLE students
 sqlite> 
 
+==== vacuum and auto-vacuum ======
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db -header "select count(*), id, name from t2 group by id, name;" -column
+count(*)    id          name      
+----------  ----------  ----------
+120         2           tmp2      
+1           5                     
+1           6                     
+101         44          tmp2      
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ ls -al config1.db 
+-rw-r--r-- 1 leocheung root 21504 4月  29 11:22 config1.db
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db "delete from t2 where id = 2"
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db -header "select count(*), id, name from t2 group by id, name;" -column
+count(*)    id          name      
+----------  ----------  ----------
+1           5                     
+1           6                     
+101         44          tmp2      
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ ls -al config1.db
+-rw-r--r-- 1 leocheung root 21504 4月  29 11:53 config1.db
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 config1.db 
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+sqlite> vacuum t2;
+sqlite> 
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ ls -al config1.db 
+-rw-r--r-- 1 leocheung root 20480 4月  29 11:54 config1.db
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ 
+
+SQLite 的 Auto-VACUUM 与 VACUUM 不大一样，它只是把空闲页移到数据库末尾，从而减小数据库大小。通过这样做，它可以明显地把数据库碎片化，而 VACUUM 则是反碎片化。所以 Auto-VACUUM 只会让数据库更小。
+
+在 SQLite 提示符中，您可以通过下面的编译运行，启用/禁用 SQLite 的 Auto-VACUUM：
