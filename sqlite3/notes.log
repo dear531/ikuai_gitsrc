@@ -1633,3 +1633,40 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$
 SQLite 的 Auto-VACUUM 与 VACUUM 不大一样，它只是把空闲页移到数据库末尾，从而减小数据库大小。通过这样做，它可以明显地把数据库碎片化，而 VACUUM 则是反碎片化。所以 Auto-VACUUM 只会让数据库更小。
 
 在 SQLite 提示符中，您可以通过下面的编译运行，启用/禁用 SQLite 的 Auto-VACUUM：
+
+=========
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ cat time2.sql 
+SELECT date('now');
+SELECT date('now','start of month','+1 month','-1 day');
+SELECT datetime(1092941466, 'unixepoch');
+SELECT datetime(1092941466, 'unixepoch', 'localtime');
+SELECT strftime('%s','now');
+SELECT julianday('now') - julianday('1776-07-04');
+SELECT strftime('%s','now') - strftime('%s','2004-01-01 02:34:56');
+SELECT date('now','start of year','+9 months','weekday 2');
+SELECT (julianday('now') - 2440587.5)*86400.0;
+SELECT time('12:00', 'localtime');
+SELECT time('12:00', 'utc');
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 < time2.sql  -echo
+SELECT date('now');
+2021-04-29
+SELECT date('now','start of month','+1 month','-1 day');
+2021-04-30
+SELECT datetime(1092941466, 'unixepoch');
+2004-08-19 18:51:06
+SELECT datetime(1092941466, 'unixepoch', 'localtime');
+2004-08-20 02:51:06
+SELECT strftime('%s','now');
+1619669061
+SELECT julianday('now') - julianday('1776-07-04');
+89418.1696943981
+SELECT strftime('%s','now') - strftime('%s','2004-01-01 02:34:56');
+546744565
+SELECT date('now','start of year','+9 months','weekday 2');
+2021-10-05
+SELECT (julianday('now') - 2440587.5)*86400.0;
+1619669061.59599
+SELECT time('12:00', 'localtime');
+20:00:00
+SELECT time('12:00', 'utc');
+04:00:00
