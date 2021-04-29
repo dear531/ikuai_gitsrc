@@ -1670,3 +1670,33 @@ SELECT time('12:00', 'localtime');
 20:00:00
 SELECT time('12:00', 'utc');
 04:00:00
+
+==== frequently function =====
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 t "SELECT random()" -echo -column
+SELECT random()
+-6288393992630093425
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 t "SELECT abs(5), abs(-15), abs(NULL), abs(0), abs('ABC');" -echo -column -header
+SELECT abs(5), abs(-15), abs(NULL), abs(0), abs('ABC');
+abs(5)      abs(-15)    abs(NULL)   abs(0)      abs('ABC')
+----------  ----------  ----------  ----------  ----------
+5           15                      0           0.0       
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 t  -echo -column -header "select lower('Aa');"
+select lower('Aa');
+lower('Aa')
+-----------
+aa         
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 t  -echo -column -header "select upper('Aa');"
+select upper('Aa');
+upper('Aa')
+-----------
+AA         
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 t  -echo -column -header "select length('Aa');"
+select length('Aa');
+length('Aa')
+------------
+2           
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/sqlite3$ sqlite3 t  -echo -column -header "select sqlite_version();"
+select sqlite_version();
+sqlite_version()
+----------------
+3.11.0 
