@@ -28,3 +28,20 @@ num   pkts bytes target     prot opt in     out     source               destina
 Chain OUTPUT (policy ACCEPT 351 packets, 36266 bytes)
 num   pkts bytes target     prot opt in     out     source               destination         
 
+
+=== -x 显示统计的精确值 ===
+
+leo@HP:~$ sudo iptables -L -nv --line-numbers -x
+Chain INPUT (policy ACCEPT 2749 packets, 1012233 bytes)
+num      pkts      bytes target     prot opt in     out     source               destination         
+1           0        0 DROP       tcp  --  *      *       39.156.68.154        0.0.0.0/0            tcp spt:443
+2           0        0 DROP       tcp  --  *      *       110.242.69.86        0.0.0.0/0            tcp spt:443
+3           0        0 DROP       tcp  --  *      *       124.237.176.248      0.0.0.0/0            tcp spt:443
+4           7      420 DROP       tcp  --  *      *       112.34.111.167       0.0.0.0/0            tcp spt:80
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+num      pkts      bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 1641 packets, 135125 bytes)
+num      pkts      bytes target     prot opt in     out     source               destination         
+
