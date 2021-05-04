@@ -1,0 +1,30 @@
+====== 显示表的详情 ======
+-L 不加参数则为filter表
+-v 显示更多的信息保in，out列，以及包的多少以及总字节数
+leo@HP:~$ sudo iptables -L 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+DROP       tcp  --  39.156.68.154        anywhere             tcp spt:https
+DROP       tcp  --  110.242.69.86        anywhere             tcp spt:https
+DROP       tcp  --  124.237.176.248      anywhere             tcp spt:https
+DROP       tcp  --  112.34.111.167       anywhere             tcp spt:http
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+leo@HP:~$ sudo iptables -L -nv --line-numbers
+Chain INPUT (policy ACCEPT 1058 packets, 342K bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 DROP       tcp  --  *      *       39.156.68.154        0.0.0.0/0            tcp spt:443
+2        0     0 DROP       tcp  --  *      *       110.242.69.86        0.0.0.0/0            tcp spt:443
+3        0     0 DROP       tcp  --  *      *       124.237.176.248      0.0.0.0/0            tcp spt:443
+4        7   420 DROP       tcp  --  *      *       112.34.111.167       0.0.0.0/0            tcp spt:80
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 351 packets, 36266 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+
