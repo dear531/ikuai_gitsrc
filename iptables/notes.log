@@ -380,3 +380,19 @@ leo@HP:~/source/ikuai_gitsrc/iptables$ netcat -vz 192.168.2.103 22
 netcat: connect to 192.168.2.103 port 22 (tcp) failed: Connection timed out
 leo@HP:~/source/ikuai_gitsrc/iptables$
 
+==== iptables -A INPUT -t filter -s ip1,ip2 -j REJECT ====
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -t filter -A INPUT -s 112.34.111.167,39.156.68.154 -j REJECT
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -L -vn
+[sudo] leo 的密码： 
+Chain INPUT (policy ACCEPT 75118 packets, 29M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 REJECT     all  --  *      *       112.34.111.167       0.0.0.0/0            reject-with icmp-port-unreachable
+    3   252 REJECT     all  --  *      *       39.156.68.154        0.0.0.0/0            reject-with icmp-port-unreachable
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 71903 packets, 9195K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+leo@HP:~/source/ikuai_gitsrc/iptables$ 
