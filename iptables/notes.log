@@ -138,3 +138,20 @@ PING hao123.com (39.156.68.154) 56(84) bytes of data.
 3 packets transmitted, 0 received, 100% packet loss, time 2041ms
 
 leo@HP:~/Downloads$
+
+==== 插入规则，-I chain number 数字是几，就将插入的规则设置为几插入，原来该位置上的规则向后移动 ====
+
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+2        0     0 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ sudo iptables -I INPUT 2 -p tcp --sport 433 -j ACCEPT
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+2        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:433
+3        0     0 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ 
+
