@@ -155,3 +155,29 @@ num   pkts bytes target     prot opt in     out     source               destina
 3        0     0 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
 leo@HP:~/Downloads$ 
 
+==== iptables -D chain number or iptables -D chain rulus ====
+
+按规则进行删除
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+[sudo] leo 的密码： 
+Chain INPUT (policy ACCEPT 32774 packets, 34M bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+2        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:433
+3        0     0 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ sudo iptables -D INPUT -p tcp --sport 433 -j ACCEPT
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+2        0     0 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
+
+
+按规则编号删除
+leo@HP:~/Downloads$ sudo iptables -D INPUT 2
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ 
+
