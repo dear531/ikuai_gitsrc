@@ -45,3 +45,15 @@ num      pkts      bytes target     prot opt in     out     source              
 Chain OUTPUT (policy ACCEPT 1641 packets, 135125 bytes)
 num      pkts      bytes target     prot opt in     out     source               destination         
 
+==== iptable -F ====
+
+leo@HP:~$ sudo iptables -A INPUT -p tcp --sport 80 -j DROP
+leo@HP:~$ sudo iptables -L INPUT -nvx
+Chain INPUT (policy ACCEPT 23 packets, 3217 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+       5      300 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:80
+leo@HP:~$ sudo iptables -F
+leo@HP:~$ sudo iptables -L INPUT -nvx
+Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
+    pkts      bytes target     prot opt in     out     source               destination         
+leo@HP:~$ 
