@@ -396,3 +396,34 @@ Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
 Chain OUTPUT (policy ACCEPT 71903 packets, 9195K bytes)
  pkts bytes target     prot opt in     out     source               destination         
 leo@HP:~/source/ikuai_gitsrc/iptables$ 
+
+==== ! -s ip rule ====
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -L -vn --line
+Chain INPUT (policy ACCEPT 2 packets, 168 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1       25  3995 DROP       all  --  *      *      !39.156.68.154        0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 12 packets, 904 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+不是该ip的包全都丢掉
+leo@HP:~/source/ikuai_gitsrc/iptables$ ping 39.156.68.154
+PING 39.156.68.154 (39.156.68.154) 56(84) bytes of data.
+64 bytes from 39.156.68.154: icmp_seq=1 ttl=51 time=10.7 ms
+64 bytes from 39.156.68.154: icmp_seq=2 ttl=51 time=9.90 ms
+^C
+--- 39.156.68.154 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 9.904/10.324/10.744/0.420 ms
+leo@HP:~/source/ikuai_gitsrc/iptables$ ping 192.168.2.103
+PING 192.168.2.103 (192.168.2.103) 56(84) bytes of data.
+^C
+--- 192.168.2.103 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1023ms
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ vim notes.log 
+
