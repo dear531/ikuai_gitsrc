@@ -234,3 +234,30 @@ Chain OUTPUT (policy ACCEPT 6 packets, 602 bytes)
 num   pkts bytes target     prot opt in     out     source               destination         
 leo@HP:~/Downloads$ 
 
+==== 设置好默认规则，如果不保存，重启之后，默认规则又变回最初的默认规则 ====
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -t filter -P INPUT DROP
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -L -vn
+Chain INPUT (policy DROP 2 packets, 432 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+leo@HP:~/source/ikuai_gitsrc/iptables$
+
+重启之后：
+
+leo@HP:~$ sudo iptables -L -vn
+[sudo] leo 的密码： 
+Chain INPUT (policy ACCEPT 760 packets, 903K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 565 packets, 45357 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+leo@HP:~$
