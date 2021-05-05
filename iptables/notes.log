@@ -102,3 +102,39 @@ Chain INPUT (policy ACCEPT 79 packets, 9219 bytes)
  pkts bytes target     prot opt in     out     source               destination         
     4   336 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
 leo@HP:~/Downloads$ 
+
+==== 命令顺序的先后，会影响处理包的优先级，排在前面的先处理包，accept和drop之后，会完成该包在该链上的执行 ====
+
+accept在前的情况：
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+Chain INPUT (policy ACCEPT 14 packets, 1323 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
+2        0     0 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+
+leo@HP:~/Downloads$ ping hao123.com
+PING hao123.com (39.156.68.154) 56(84) bytes of data.
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=1 ttl=51 time=11.4 ms
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=2 ttl=51 time=15.7 ms
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=3 ttl=51 time=10.1 ms
+^C
+--- hao123.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 10.155/12.427/15.701/2.375 ms
+leo@HP:~/Downloads$ 
+
+drop在前的情况：
+leo@HP:~/Downloads$ sudo iptables -L INPUT -vn --line-numbers
+Chain INPUT (policy ACCEPT 26 packets, 2899 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        3   252 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+2        0     0 ACCEPT     all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ 
+
+leo@HP:~/Downloads$ ping hao123.com
+PING hao123.com (39.156.68.154) 56(84) bytes of data.
+^C
+--- hao123.com ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2041ms
+
+leo@HP:~/Downloads$
