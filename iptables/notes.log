@@ -57,3 +57,48 @@ leo@HP:~$ sudo iptables -L INPUT -nvx
 Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
     pkts      bytes target     prot opt in     out     source               destination         
 leo@HP:~$ 
+==== iptables -A INPUT -s 39.156.68.154 -j DROP ====
+过滤所有源地址为39.156.68.154的包，在input挂在点filter表上
+
+用ping命令icmp验证
+
+leo@HP:~/Downloads$ sudo iptables -A INPUT -s 39.156.68.154 -j DROP
+leo@HP:~/Downloads$ sudo iptables -L -nv
+Chain INPUT (policy ACCEPT 9 packets, 1199 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 6 packets, 618 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+成功插入规则，并查看规则，且规则并没有成功拦截的包
+
+用ping命令进行发包
+
+leo@HP:~/Downloads$ ping hao123.com
+PING hao123.com (39.156.68.154) 56(84) bytes of data.
+^C
+--- hao123.com ping statistics ---
+4 packets transmitted, 0 received, 100% packet loss, time 3050ms
+
+leo@HP:~/Downloads$ 
+
+
+发送4个，但是接受0个
+
+eo@HP:~/Downloads$ sudo iptables -L INPUT -nv
+Chain INPUT (policy ACCEPT 79 packets, 9219 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4   336 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ 
+
+iptables统计与ping命令显示结果一致
+
+leo@HP:~/Downloads$ sudo iptables -L INPUT -nv
+Chain INPUT (policy ACCEPT 79 packets, 9219 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4   336 DROP       all  --  *      *       39.156.68.154        0.0.0.0/0           
+leo@HP:~/Downloads$ 
