@@ -337,3 +337,46 @@ Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
 Chain OUTPUT (policy ACCEPT 71 packets, 5342 bytes)
  pkts bytes target     prot opt in     out     source               destination         
 leo@HP:~$ 
+
+==== REJECT and DROP ====
+
+REJECT行为，设置后对方均给出了拒绝的回复
+
+root@OpenWrt:/# iptables -L INPUT -t filter -vn --line
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 REJECT     icmp --  *      *       192.168.2.102        0.0.0.0/0            reject-with icmp-port-unreachable
+2        1    60 REJECT     tcp  --  *      *       192.168.2.102        0.0.0.0/0            reject-with icmp-port-unreachable
+root@OpenWrt:/# 
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ netcat -vz 192.168.2.103 22
+netcat: connect to 192.168.2.103 port 22 (tcp) failed: Connection refused
+leo@HP:~/source/ikuai_gitsrc/iptables$ ping 192.168.2.103
+PING 192.168.2.103 (192.168.2.103) 56(84) bytes of data.
+From 192.168.2.103 icmp_seq=1 Destination Port Unreachable
+From 192.168.2.103 icmp_seq=2 Destination Port Unreachable
+^C
+--- 192.168.2.103 ping statistics ---
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1008ms
+
+leo@HP:~/source/ikuai_gitsrc/iptables$
+
+
+DROP后的行为均是没有相应超时
+
+root@OpenWrt:/# iptables -L INPUT -t filter -vn --line
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        2   168 DROP       icmp --  *      *       192.168.2.102        0.0.0.0/0           
+2        0     0 DROP       tcp  --  *      *       192.168.2.102        0.0.0.0/0           
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ ping 192.168.2.103
+PING 192.168.2.103 (192.168.2.103) 56(84) bytes of data.
+^C
+--- 192.168.2.103 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1014ms
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ netcat -vz 192.168.2.103 22
+netcat: connect to 192.168.2.103 port 22 (tcp) failed: Connection timed out
+leo@HP:~/source/ikuai_gitsrc/iptables$
+
