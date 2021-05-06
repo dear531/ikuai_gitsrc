@@ -483,3 +483,24 @@ Chain INPUT (policy ACCEPT 2 packets, 684 bytes)
  pkts bytes target     prot opt in     out     source               destination         
    44  7174 REJECT     all  --  *      *       192.168.3.0/24       0.0.0.0/0            reject-with icmp-port-unreachable
 leo@leo-virtual-machine:/etc/phpldapadmin$
+
+==== append rule and default rule target ====
+
+添加规则为不为192.168.3.0/24段则接受 
+leo@leo-virtual-machine:/etc/phpldapadmin$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 12 packets, 1371 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   12  1006 ACCEPT     all  --  *      *      !192.168.3.0/24       0.0.0.0/0           
+
+当ping是该网段的包时，事实上未匹配上任何规则，则走默认规则，还是接受
+但有一个明显的区别，就在于该包是通过未匹配上规则的方式通过的
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/iptables$ ping 192.168.3.139
+PING 192.168.3.139 (192.168.3.139) 56(84) bytes of data.
+64 bytes from 192.168.3.139: icmp_seq=1 ttl=64 time=0.531 ms
+64 bytes from 192.168.3.139: icmp_seq=2 ttl=64 time=0.264 ms
+64 bytes from 192.168.3.139: icmp_seq=3 ttl=64 time=0.599 ms
+^C
+--- 192.168.3.139 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 0.264/0.464/0.599/0.146 ms
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/iptables$ 
