@@ -550,3 +550,14 @@ PING 192.168.2.102 (192.168.2.102): 56 data bytes
 2 packets transmitted, 0 packets received, 100% packet loss
 root@OpenWrt:/# 
 
+
+==== iptables -p number ====
+
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -t filter -A INPUT -p 6 -j REJECT
+leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -t filter -L INPUT
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+REJECT     tcp  --  anywhere             anywhere             reject-with icmp-port-unreachable
+leo@HP:~/source/ikuai_gitsrc/iptables$ netcat -vz 127.0.0.1 22
+netcat: connect to 127.0.0.1 port 22 (tcp) failed: Connection refused
+
