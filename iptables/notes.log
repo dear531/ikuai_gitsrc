@@ -504,3 +504,49 @@ PING 192.168.3.139 (192.168.3.139) 56(84) bytes of data.
 3 packets transmitted, 3 received, 0% packet loss, time 2002ms
 rtt min/avg/max/mdev = 0.264/0.464/0.599/0.146 ms
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/iptables$ 
+
+==== 完全匹配和部分匹配 ====
+
+leo@HP:~/source/openwrt/bin/targets/x86/generic$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 66 packets, 12438 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    2   168 DROP       icmp --  *      *       192.168.2.104        192.168.2.102       
+leo@HP:~/source/openwrt/bin/targets/x86/generic$
+
+源地址不匹配目的地址匹配，是匹配不上的
+
+root@OpenWrt:/# ip addr show br-lan
+3: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether 52:54:00:bc:0a:0b brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.103/24 brd 192.168.2.255 scope global br-lan
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:febc:a0b/64 scope link 
+       valid_lft forever preferred_lft forever
+root@OpenWrt:/# ping 192.168.2.102
+PING 192.168.2.102 (192.168.2.102): 56 data bytes
+64 bytes from 192.168.2.102: seq=0 ttl=64 time=0.310 ms
+64 bytes from 192.168.2.102: seq=1 ttl=64 time=0.471 ms
+^C
+--- 192.168.2.102 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.310/0.390/0.471 ms
+root@OpenWrt:/# 
+
+完全匹配被丢弃
+
+root@OpenWrt:/# ip addr show br-lan
+3: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether 52:54:00:20:04:67 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.104/24 brd 192.168.2.255 scope global br-lan
+       valid_lft forever preferred_lft forever
+    inet6 fdc7:3236:7eea::1/60 scope global noprefixroute 
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:fe20:467/64 scope link 
+       valid_lft forever preferred_lft forever
+root@OpenWrt:/# ping 192.168.2.102
+PING 192.168.2.102 (192.168.2.102): 56 data bytes
+^C
+--- 192.168.2.102 ping statistics ---
+2 packets transmitted, 0 packets received, 100% packet loss
+root@OpenWrt:/# 
+
