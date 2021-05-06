@@ -553,6 +553,8 @@ root@OpenWrt:/#
 
 ==== iptables -p number ====
 
+leo@HP:~/source/ikuai_gitsrc/iptables$ cat /etc/protocols  |grep -i tcp
+tcp	6	TCP		# transmission control protocol
 leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -t filter -A INPUT -p 6 -j REJECT
 leo@HP:~/source/ikuai_gitsrc/iptables$ sudo iptables -t filter -L INPUT
 Chain INPUT (policy ACCEPT)
