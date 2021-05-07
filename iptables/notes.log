@@ -504,3 +504,98 @@ PING 192.168.3.139 (192.168.3.139) 56(84) bytes of data.
 3 packets transmitted, 3 received, 0% packet loss, time 2002ms
 rtt min/avg/max/mdev = 0.264/0.464/0.599/0.146 ms
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/iptables$ 
+
+==== iptable -i interface[+] ====
+
+拒绝所有所有br开头上的icmp报文
+
+leocheung@leocheung-CW65S:~$ sudo iptables -t filter -R INPUT 5 -i br+ -p icmp -j REJECT
+leocheung@leocheung-CW65S:~$ sudo iptables -t filter -L INPUT -nv --line
+Chain INPUT (policy ACCEPT 32 packets, 4120 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5        0     0 REJECT     icmp --  br+    *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leocheung@leocheung-CW65S:~$
+
+对端发起ping命令
+
+root@iKuai:/root$ping 169.254.8.40
+PING 169.254.8.40 (169.254.8.40) 56(84) bytes of data.
+From 169.254.8.40 icmp_seq=1 Destination Port Unreachable
+From 169.254.8.40 icmp_seq=2 Destination Port Unreachable
+From 169.254.8.40 icmp_seq=3 Destination Port Unreachable
+From 169.254.8.40 icmp_seq=4 Destination Port Unreachable
+^C
+--- 169.254.8.40 ping statistics ---
+4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3003ms
+
+root@iKuai:/root$
+
+
+==== 如果不制定目标，则默认规则为该链的默认目标 ====
+
+修改filter表INPUT链的目标为丢弃
+
+leocheung@leocheung-CW65S:~$ sudo iptables -P INPUT DROP -t filter
+leocheung@leocheung-CW65S:~$ sudo iptables -t filter -L INPUT -nv --line
+Chain INPUT (policy DROP 27 packets, 3140 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5    58200   77M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+6        0     0            icmp --  br+    *       0.0.0.0/0            0.0.0.0/0           
+leocheung@leocheung-CW65S:~$
+
+从对端发起ping命令，全都被丢弃
+
+root@iKuai:/root$ping 169.254.8.40
+PING 169.254.8.40 (169.254.8.40) 56(84) bytes of data.
+^C
+--- 169.254.8.40 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2000ms
+
+root@iKuai:/root$
+
+将再将链的默认目标变为接受，记录已经变过来了，另外条目的匹配记录也显示为三条，刚ping包全部匹配到了
+
+leocheung@leocheung-CW65S:~$ sudo iptables -P INPUT ACCEPT -t filter
+leocheung@leocheung-CW65S:~$ sudo iptables -t filter -L INPUT -nv --line
+Chain INPUT (policy ACCEPT 48 packets, 6542 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5    89516  118M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+6        3   252            icmp --  br+    *       0.0.0.0/0            0.0.0.0/0           
+leocheung@leocheung-CW65S:~$
+
+在发起ping命令，全部成功了，执行了通过
+
+root@iKuai:/root$ping 169.254.8.40
+PING 169.254.8.40 (169.254.8.40) 56(84) bytes of data.
+64 bytes from 169.254.8.40: icmp_req=1 ttl=64 time=0.362 ms
+64 bytes from 169.254.8.40: icmp_req=2 ttl=64 time=0.573 ms
+64 bytes from 169.254.8.40: icmp_req=3 ttl=64 time=0.646 ms
+^C
+--- 169.254.8.40 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+rtt min/avg/max/mdev = 0.362/0.527/0.646/0.120 ms
+
+查看记录情况为在先前的记录上又匹配到了三条记录：
+
+leocheung@leocheung-CW65S:~$ sudo iptables -t filter -L INPUT -nv --line
+Chain INPUT (policy ACCEPT 48 packets, 6542 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5    89516  118M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
+6        3   252            icmp --  br+    *       0.0.0.0/0            0.0.0.0/0           
+leocheung@leocheung-CW65S:~$
