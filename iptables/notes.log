@@ -656,3 +656,37 @@ num   pkts bytes target     prot opt in     out     source               destina
 5    89516  118M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           
 6        3   252            icmp --  br+    *       0.0.0.0/0            0.0.0.0/0           
 leocheung@leocheung-CW65S:~$
+
+
+==== iptable -o ====
+
+leo@HP:~/source/ikuai_gitsrc$ sudo iptables -t filter -A OUTPUT -p icmp -s 192.168.100.1 -j REJECT
+leo@HP:~/source/ikuai_gitsrc$ ping 192.168.100.204
+PING 192.168.100.204 (192.168.100.204) 56(84) bytes of data.
+ping: sendmsg: 不允许的操作
+ping: sendmsg: 不允许的操作
+ping: sendmsg: 不允许的操作
+^C
+--- 192.168.100.204 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2046ms
+
+leo@HP:~/source/ikuai_gitsrc$ sudo iptables -t filter -L OUTPUT -vn
+Chain OUTPUT (policy ACCEPT 18 packets, 2975 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   25  8260 ACCEPT     udp  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            udp dpt:68
+    6   588 REJECT     icmp --  *      *       192.168.100.1        0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~/source/ikuai_gitsrc$ sudo iptables -t filter -D OUTPUT -p icmp -s 192.168.100.1 -j REJECT
+leo@HP:~/source/ikuai_gitsrc$ ping 192.168.100.204
+PING 192.168.100.204 (192.168.100.204) 56(84) bytes of data.
+64 bytes from 192.168.100.204: icmp_seq=1 ttl=64 time=0.840 ms
+64 bytes from 192.168.100.204: icmp_seq=2 ttl=64 time=0.285 ms
+^C
+--- 192.168.100.204 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.285/0.562/0.840/0.278 ms
+leo@HP:~/source/ikuai_gitsrc$ sudo iptables -t filter -L OUTPUT -vn
+Chain OUTPUT (policy ACCEPT 13 packets, 1402 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   25  8260 ACCEPT     udp  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            udp dpt:68
+leo@HP:~/source/ikuai_gitsrc$ 
+
