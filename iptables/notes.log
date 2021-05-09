@@ -690,3 +690,30 @@ Chain OUTPUT (policy ACCEPT 13 packets, 1402 bytes)
    25  8260 ACCEPT     udp  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            udp dpt:68
 leo@HP:~/source/ikuai_gitsrc$ 
 
+==== iptables-extensions -m multiport for multiple port ====
+
+leo@HP:~$ sudo iptables -A INPUT -t filter -p tcp -m tcp -m multiport --port 80,443 -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -t filter -nv
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    2   120 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp multiport ports 80,443 reject-with icmp-port-unreachable
+leo@HP:~$ curl https://www.baidu.com
+^C
+leo@HP:~$ curl www.hao123.com
+^C
+leo@HP:~$ sudo iptables -D INPUT -t filter -p tcp -m tcp -m multiport --port 80,443 -j REJECT
+leo@HP:~$ curl www.hao123.com |wc -l
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  384k    0  384k    0     0  1472k      0 --:--:-- --:--:-- --:--:-- 1472k
+194
+leo@HP:~$ curl https://www.baidu.com |wc -l
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  2443  100  2443    0     0  28080      0 --:--:-- --:--:-- --:--:-- 28080
+3
+leo@HP:~$ 
