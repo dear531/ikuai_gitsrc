@@ -731,3 +731,91 @@ Chain INPUT (policy ACCEPT 21 packets, 1971 bytes)
     0     0 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            /* icmp myself */ reject-with icmp-port-unreachable
 leo@HP:~/tmp/gittest/git3$ 
 
+==== iptables -m iprange ====
+
+设置ip范围规则
+leo@HP:~/tmp/gittest/git3$ sudo iptables -t filter -A INPUT -m iprange --src-range 192.168.100.204-192.168.100.225 -j REJECT
+leo@HP:~/tmp/gittest/git3$ sudo iptables -t filter -L INPUT --line
+Chain INPUT (policy ACCEPT)
+num  target     prot opt source               destination         
+1    ACCEPT     udp  --  anywhere             anywhere             udp dpt:domain
+2    ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:domain
+3    ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootps
+4    ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:bootps
+5    REJECT     all  --  anywhere             anywhere             source IP range 192.168.100.204-192.168.100.225 reject-with icmp-port-unreachable
+leo@HP:~/tmp/gittest/git3$
+
+从以下两个虚拟机分别ping主机：
+
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+^C
+--- 192.168.100.1 ping statistics ---
+2 packets transmitted, 0 packets received, 100% packet loss
+root@OpenWrt:/# ip addr show br-lan
+4: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether 52:54:00:20:04:67 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.225/24 brd 192.168.100.255 scope global br-lan
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:fe20:467/64 scope link 
+       valid_lft forever preferred_lft forever
+root@OpenWrt:/# 
+
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+^C
+--- 192.168.100.1 ping statistics ---
+2 packets transmitted, 0 packets received, 100% packet loss
+root@OpenWrt:/# ip addr show br-lan
+4: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether 52:54:00:bc:0a:0b brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.204/24 brd 192.168.100.255 scope global br-lan
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:febc:a0b/64 scope link 
+       valid_lft forever preferred_lft forever
+root@OpenWrt:/# 
+
+查看包的状态，已经匹配并且拦截到包了
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ sudo iptables -t filter -L INPUT --line -vn
+Chain INPUT (policy ACCEPT 165 packets, 22765 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1       28  1904 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3       26  8528 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5        9   756 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            source IP range 192.168.100.204-192.168.100.225 reject-with icmp-port-unreachable
+
+删掉规则：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ sudo iptables -t filter -D INPUT -m iprange --src-range 192.168.100.204-192.168.100.225 -j REJECT
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ sudo iptables -t filter -L INPUT --line -vn
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1       28  1904 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3       26  8528 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$
+
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+64 bytes from 192.168.100.1: seq=0 ttl=64 time=0.945 ms
+64 bytes from 192.168.100.1: seq=1 ttl=64 time=0.673 ms
+^C
+--- 192.168.100.1 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.673/0.809/0.945 ms
+root@OpenWrt:/# 
+
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+64 bytes from 192.168.100.1: seq=0 ttl=64 time=0.388 ms
+64 bytes from 192.168.100.1: seq=1 ttl=64 time=0.759 ms
+^C
+--- 192.168.100.1 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.388/0.573/0.759 ms
+root@OpenWrt:/# 
+
+再从两个虚拟机ping主机，均正常
