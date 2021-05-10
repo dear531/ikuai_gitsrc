@@ -819,3 +819,43 @@ round-trip min/avg/max = 0.388/0.573/0.759 ms
 root@OpenWrt:/# 
 
 再从两个虚拟机ping主机，均正常
+
+==== iptables -m string --string pattern ====
+
+设置过滤包的关键字
+
+leo@HP:~$ sudo iptables -A INPUT -t filter -m string --algo bm --string abcd -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 10 packets, 2398 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "abcd" ALGO name bm TO 65535 reject-with icmp-port-unreachable
+
+netcat工具模拟服务器
+leo@HP:~$ netcat -l 8000
+1234
+^C
+
+netcat工具模拟客户端
+leo@HP:~$ nc 127.0.0.1 8000
+1234
+abcd
+^C
+
+结果是abcd的包发不过去
+
+查看规则的匹配情况，重复发了很多次
+
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 41 packets, 6299 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+   26  1846 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "abcd" ALGO name bm TO 65535 reject-with icmp-port-unreachable
+leo@HP:~$ 
+
