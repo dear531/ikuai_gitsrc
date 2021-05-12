@@ -859,3 +859,37 @@ Chain INPUT (policy ACCEPT 41 packets, 6299 bytes)
    26  1846 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "abcd" ALGO name bm TO 65535 reject-with icmp-port-unreachable
 leo@HP:~$ 
 
+
+==== iptables -m limit ====
+
+leo@HP:~$ sudo iptables -t filter -A INPUT -m limit --limit 10/minute --limit-burst 5 -p icmp --source 192.168.124.8 -j ACCEPT 
+leo@HP:~$ sudo iptables -t filter -A INPUT -p icmp -j REJECT
+leo@HP:~$ sudo iptables -t filter -L INPUT -nv --line
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5        0     0 ACCEPT     icmp --  *      *       192.168.124.8        0.0.0.0/0            limit: avg 10/min burst 5
+6        0     0 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$ sudo iptables -t filter -L INPUT -nv --line
+Chain INPUT (policy ACCEPT 8 packets, 1127 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+2        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+3        0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+4        0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+5        6   504 ACCEPT     icmp --  *      *       192.168.124.8        0.0.0.0/0            limit: avg 10/min burst 5
+6       10   980 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$ 
+
+leo@HP:~$ ping 192.168.124.8
+PING 192.168.124.8 (192.168.124.8) 56(84) bytes of data.
+64 bytes from 192.168.124.8: icmp_seq=1 ttl=64 time=0.111 ms
+64 bytes from 192.168.124.8: icmp_seq=2 ttl=64 time=0.092 ms
+^C
+--- 192.168.124.8 ping statistics ---
+7 packets transmitted, 2 received, 71% packet loss, time 6120ms
+rtt min/avg/max/mdev = 0.092/0.101/0.111/0.013 ms
+leo@HP:~$
