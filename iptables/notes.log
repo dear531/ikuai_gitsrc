@@ -893,3 +893,63 @@ PING 192.168.124.8 (192.168.124.8) 56(84) bytes of data.
 7 packets transmitted, 2 received, 71% packet loss, time 6120ms
 rtt min/avg/max/mdev = 0.092/0.101/0.111/0.013 ms
 leo@HP:~$
+
+leo@HP:~$ sudo iptables -t filter -A INPUT -p icmp -m limit --limit 10/minute --limit-burst 5 -j ACCEPT
+leo@HP:~$ sudo iptables -t filter -A INPUT -p icmp -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -vn -t filter
+Chain INPUT (policy ACCEPT 12 packets, 1910 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4   272 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    5  1640 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 10/min burst 5
+    0     0 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$ sudo iptables -L INPUT -vn -t filter
+Chain INPUT (policy ACCEPT 29 packets, 4274 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4   272 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    5  1640 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    7   588 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 10/min burst 5
+    9   756 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$ sudo iptables -L INPUT -vn -t filter
+Chain INPUT (policy ACCEPT 38 packets, 5536 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4   272 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    5  1640 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+   13  1092 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 10/min burst 5
+   23  1932 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$ 
+
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+64 bytes from 192.168.100.1: seq=0 ttl=64 time=0.388 ms
+64 bytes from 192.168.100.1: seq=1 ttl=64 time=0.457 ms
+64 bytes from 192.168.100.1: seq=2 ttl=64 time=0.571 ms
+64 bytes from 192.168.100.1: seq=3 ttl=64 time=0.463 ms
+64 bytes from 192.168.100.1: seq=4 ttl=64 time=0.551 ms
+64 bytes from 192.168.100.1: seq=6 ttl=64 time=0.556 ms
+64 bytes from 192.168.100.1: seq=12 ttl=64 time=0.522 ms
+^C
+--- 192.168.100.1 ping statistics ---
+16 packets transmitted, 7 packets received, 56% packet loss
+round-trip min/avg/max = 0.388/0.501/0.571 ms
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+64 bytes from 192.168.100.1: seq=0 ttl=64 time=0.345 ms
+64 bytes from 192.168.100.1: seq=1 ttl=64 time=0.609 ms
+64 bytes from 192.168.100.1: seq=2 ttl=64 time=0.643 ms
+64 bytes from 192.168.100.1: seq=4 ttl=64 time=0.579 ms
+64 bytes from 192.168.100.1: seq=10 ttl=64 time=0.542 ms
+64 bytes from 192.168.100.1: seq=16 ttl=64 time=0.570 ms
+64 bytes from 192.168.100.1: seq=22 ttl=64 time=0.601 ms
+^C
+--- 192.168.100.1 ping statistics ---
+27 packets transmitted, 7 packets received, 74% packet loss
+round-trip min/avg/max = 0.345/0.555/0.643 ms
+root@OpenWrt:/# 
+
