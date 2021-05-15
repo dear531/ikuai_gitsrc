@@ -988,3 +988,119 @@ Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
     4   240 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:8800 flags:FIN,SYN,RST,ACK/SYN reject-with icmp-port-unreachable
     0     0 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:8801 flags:FIN,SYN,RST,ACK/SYN reject-with icmp-port-unreachable
 
+
+==== iptables -m icmp --icmp-type ====
+
+leo@HP:~$ sudo iptables -A INPUT -t filter -p icmp -m icmp --icmp-type echo-request -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   11   748 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4  1312 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 reject-with icmp-port-unreachable
+
+
+另一台主机地址：
+
+4: br-lan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether 52:54:00:20:04:67 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.225/24 brd 192.168.100.255 scope global br-lan
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:fe20:467/64 scope link 
+
+在另一台主机上ping：
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+^C
+--- 192.168.100.1 ping statistics ---
+5 packets transmitted, 0 packets received, 100% packet loss
+root@OpenWrt:/#
+
+查看结果：
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 39 packets, 4162 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   11   748 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4  1312 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    5   420 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 reject-with icmp-port-unreachable
+
+换个另外风格的同意义参数设置：
+
+leo@HP:~$ sudo iptables -A INPUT -t filter -p icmp -m icmp --icmp-type 8/0 -j REJECT
+leo@HP:~$ sudo iptables -D INPUT -t filter -p icmp -m icmp --icmp-type echo-request -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   11   748 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4  1312 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 code 0 reject-with icmp-port-unreachable
+
+结果仍然生效：
+
+root@OpenWrt:/# ping 192.168.100.1
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+^C
+--- 192.168.100.1 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
+root@OpenWrt:/#
+
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 5 packets, 739 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   11   748 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4  1312 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    3   252 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 code 0 reject-with icmp-port-unreachable
+
+
+删除并添加第三种风格同意义参数：
+
+leo@HP:~$ sudo iptables -D INPUT -t filter -p icmp -m icmp --icmp-type 8/0 -j REJECT
+leo@HP:~$ sudo iptables -A INPUT -t filter -p icmp -m icmp --icmp-type 8 -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 3 packets, 307 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   11   748 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4  1312 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 reject-with icmp-port-unreachable
+
+仍然有效：
+
+PING 192.168.100.1 (192.168.100.1): 56 data bytes
+^C
+--- 192.168.100.1 ping statistics ---
+2 packets transmitted, 0 packets received, 100% packet loss
+root@OpenWrt:/#
+
+leo@HP:~$ sudo iptables -L INPUT -t filter -vn
+Chain INPUT (policy ACCEPT 5 packets, 739 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   11   748 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    4  1312 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    2   168 REJECT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8 reject-with icmp-port-unreachable
+leo@HP:~$ 
+
+不动规则，反ping另一台主机：
+
+leo@HP:~$ ping 192.168.100.225
+PING 192.168.100.225 (192.168.100.225) 56(84) bytes of data.
+64 bytes from 192.168.100.225: icmp_seq=1 ttl=64 time=0.540 ms
+64 bytes from 192.168.100.225: icmp_seq=2 ttl=64 time=0.520 ms
+64 bytes from 192.168.100.225: icmp_seq=3 ttl=64 time=0.520 ms
+^C
+--- 192.168.100.225 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2025ms
+rtt min/avg/max/mdev = 0.520/0.526/0.540/0.028 ms
+leo@HP:~$ 
+
