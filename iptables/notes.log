@@ -953,3 +953,38 @@ PING 192.168.100.1 (192.168.100.1): 56 data bytes
 round-trip min/avg/max = 0.345/0.555/0.643 ms
 root@OpenWrt:/# 
 
+==== iptable -m tcp --tcp-flags ====
+sudo iptables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST SYN --dport 8800 -j REJECT
+leo@HP:~$ netcat -l 8801
+leo@HP:~$ netcat -vz 127.0.0.1 8801
+Connection to 127.0.0.1 8801 port [tcp/*] succeeded!
+leo@HP:~$ netcat -l 8800
+^C
+leo@HP:~$ netcat -vz 127.0.0.1 8800
+netcat: connect to 127.0.0.1 port 8800 (tcp) failed: Connection refused
+leo@HP:~$ netstat -apnt |grep 8800
+（并非所有进程都能被检测到，所有非本用户的进程信息将不会显示，如果想看到所有信息，则必须切换到 root 用户）
+tcp        0      0 0.0.0.0:8800            0.0.0.0:*               LISTEN      3529/netcat    
+
+leo@HP:~$ sudo iptables -L INPUT -t filter -v
+Chain INPUT (policy ACCEPT 127 packets, 8475 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 any     anywhere             anywhere             udp dpt:domain
+    0     0 ACCEPT     tcp  --  virbr0 any     anywhere             anywhere             tcp dpt:domain
+    0     0 ACCEPT     udp  --  virbr0 any     anywhere             anywhere             udp dpt:bootps
+    0     0 ACCEPT     tcp  --  virbr0 any     anywhere             anywhere             tcp dpt:bootps
+    4   240 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:8800 flags:FIN,SYN,RST,ACK/SYN reject-with icmp-port-unreachable
+leo@HP:~$ 
+
+--syn = --tcp-flags SYN,ACK,FIN,RST SYN
+leo@HP:~$ sudo iptables -A INPUT -p tcp  --syn --dport 8801 -j REJECT
+leo@HP:~$ sudo iptables -L INPUT -t filter -v
+Chain INPUT (policy ACCEPT 1 packets, 216 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 any     anywhere             anywhere             udp dpt:domain
+    0     0 ACCEPT     tcp  --  virbr0 any     anywhere             anywhere             tcp dpt:domain
+    0     0 ACCEPT     udp  --  virbr0 any     anywhere             anywhere             udp dpt:bootps
+    0     0 ACCEPT     tcp  --  virbr0 any     anywhere             anywhere             tcp dpt:bootps
+    4   240 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:8800 flags:FIN,SYN,RST,ACK/SYN reject-with icmp-port-unreachable
+    0     0 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:8801 flags:FIN,SYN,RST,ACK/SYN reject-with icmp-port-unreachable
+
