@@ -1152,3 +1152,179 @@ leo@HP:~$
 
 其中192.168.124.12的主机与我本机的链接并未断开，但通信命令也无法正常进行，被阻塞住，先存疑此处
 
+
+==== iptables create new chain ====
+
+预先通过web所在主机的两个ip进行测试，均可以访问到页面
+
+leo@HP:~$ curl 192.168.2.105
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="refresh" content="0; URL=cgi-bin/luci/" />
+</head>
+<body style="background-color: white">
+<a style="color: black; font-family: arial, helvetica, sans-serif;" href="cgi-bin/luci/">LuCI - Lua Configuration Interface</a>
+</body>
+</html>
+leo@HP:~$ curl 192.168.100.3
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="refresh" content="0; URL=cgi-bin/luci/" />
+</head>
+<body style="background-color: white">
+<a style="color: black; font-family: arial, helvetica, sans-serif;" href="cgi-bin/luci/">LuCI - Lua Configuration Interface</a>
+</body>
+</html>
+leo@HP:~$ netstat -apnt |grep 80
+（并非所有进程都能被检测到，所有非本用户的进程信息将不会显示，如果想看到所有信息，则必须切换到 root 用户）
+tcp        0      0 192.168.100.1:43108     192.168.100.3:80        TIME_WAIT   -                   
+tcp        0      0 192.168.2.102:54608     111.30.169.23:8080      ESTABLISHED 5641/qq             
+leo@HP:~$
+
+创建新链：
+
+leo@HP:~$ sudo iptables -N WEB80 -t filter
+leo@HP:~$ sudo iptables -t filter -L WEB80
+Chain WEB80 (0 references)
+target     prot opt source               destination         
+
+给新链调价规则：
+
+leo@HP:~$ sudo iptables -t filter -A WEB80 -s 192.168.100.0/24 -j ACCEPT
+leo@HP:~$ sudo iptables -t filter -A WEB80 -j REJECT
+leo@HP:~$ sudo iptables -t filter -L WEB80
+Chain WEB80 (0 references)
+target     prot opt source               destination         
+ACCEPT     all  --  192.168.100.0/24     anywhere            
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+
+将内置的链的执行规则目标，指向自定义链：
+leo@HP:~$ sudo iptables -t filter -A INPUT -p tcp --dport 80 -j WEB80
+leo@HP:~$ sudo iptables -t filter -A INPUT -p tcp --sport 80 -j WEB80
+leo@HP:~$ sudo iptables -t filter -L INPUT -vn
+Chain INPUT (policy ACCEPT 6 packets, 1487 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   29  1972 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+   12  3936 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 WEB80      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 WEB80      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:80
+
+
+发送通过规则的请求：
+
+leo@HP:~$ curl 192.168.100.3
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="refresh" content="0; URL=cgi-bin/luci/" />
+</head>
+<body style="background-color: white">
+<a style="color: black; font-family: arial, helvetica, sans-serif;" href="cgi-bin/luci/">LuCI - Lua Configuration Interface</a>
+</body>
+</html>
+leo@HP:~$
+
+匹配个数：
+
+leo@HP:~$ sudo iptables -t filter -L INPUT -vn
+Chain INPUT (policy ACCEPT 22 packets, 5106 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   29  1972 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+   12  3936 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 WEB80      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    8  1168 WEB80      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:80
+leo@HP:~$ sudo iptables -t filter -L WEB80 -nv
+Chain WEB80 (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    8  1168 ACCEPT     all  --  *      *       192.168.100.0/24     0.0.0.0/0           
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$
+
+发送拦截过则的请求：
+
+leo@HP:~$ curl 192.168.2.105
+^C
+
+拦截打的规则数量增加：
+
+leo@HP:~$ sudo iptables -t filter -L WEB80 -nv
+Chain WEB80 (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    8  1168 ACCEPT     all  --  *      *       192.168.100.0/24     0.0.0.0/0           
+    7   420 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+leo@HP:~$ 
+
+==== iptables -X user defined chain ====
+
+删除应该自定义联众没有任何规则，链没有任何引用：
+
+从不符合的规则开始删起，顺便看提示：
+
+直接删除提示有引用：
+
+leo@HP:~$ sudo iptables -t filter -X WEB80
+iptables: Too many links.
+
+删除引用：
+
+leo@HP:~$ sudo iptables -t filter -D INPUT -p tcp --sport 80 -j WEB80
+leo@HP:~$ sudo iptables -t filter -D INPUT -p tcp --dport 80 -j WEB80
+
+引用为零了，但有两条规则：
+
+leo@HP:~$ sudo iptables -t filter -L WEB80
+Chain WEB80 (0 references)
+target     prot opt source               destination         
+ACCEPT     all  --  192.168.100.0/24     anywhere            
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+
+直接删除自定义链，显示列表不空：
+
+leo@HP:~$ sudo iptables -t filter -X WEB80
+iptables: Directory not empty.
+
+直接清空列表，并查看，为空：
+
+leo@HP:~$ sudo iptables -t filter -F WEB80
+leo@HP:~$ sudo iptables -t filter -L WEB80
+Chain WEB80 (0 references)
+target     prot opt source               destination         
+
+再删除，则成功：
+
+leo@HP:~$ sudo iptables -t filter -X WEB80
+
+查看，不filter表中不存在引用自定义链的规则，该自定义链也已经不见被删掉了：
+
+leo@HP:~$ sudo iptables -t filter -L
+[sudo] leo 的密码： 
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     udp  --  anywhere             anywhere             udp dpt:domain
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:domain
+ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootps
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:bootps
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     all  --  anywhere             anywhere            
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootpc
+leo@HP:~$
+
