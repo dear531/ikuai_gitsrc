@@ -1415,3 +1415,41 @@ Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
    10   840 ACCEPT     all  --  nat0-eth0 *       10.0.0.0/8           0.0.0.0/0           
    10   840 ACCEPT     all  --  *      nat0-eth0  0.0.0.0/0            10.0.0.0/8          
 
+
+==== iptable -j LOg and -j REJECT ====
+
+leo@HP:~$ sudo iptables -t filter -A INPUT -p tcp --dport 8888 -j LOG
+leo@HP:~$ sudo iptables -t filter -A INPUT -p tcp --dport 8888 -j REJECT
+leo@HP:~$ sudo iptables -t filter -L INPUT -vn
+Chain INPUT (policy ACCEPT 7 packets, 995 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 LOG flags 0 level 4
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 reject-with icmp-port-unreachable
+leo@HP:~$ netcat -l 8888
+^C
+
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.124.8 8888 -vz
+netcat: connect to 192.168.124.8 port 8888 (tcp) failed: Connection refused
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ sudo cat /var/log/iptables.log 
+[sudo] leo 的密码： 
+May 18 23:18:08 HP kernel: [14122.226126] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=192.168.124.8 DST=192.168.124.8 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=43028 DF PROTO=TCP SPT=58754 DPT=8888 WINDOW=43690 RES=0x00 SYN URGP=0 
+May 18 23:18:09 HP kernel: [14123.239588] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=192.168.124.8 DST=192.168.124.8 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=43029 DF PROTO=TCP SPT=58754 DPT=8888 WINDOW=43690 RES=0x00 SYN URGP=0 
+May 18 23:18:23 HP kernel: [14136.314413] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=192.168.124.8 DST=192.168.124.8 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=12048 DF PROTO=TCP SPT=58756 DPT=8888 WINDOW=43690 RES=0x00 SYN URGP=0 
+May 18 23:18:24 HP kernel: [14137.319251] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=192.168.124.8 DST=192.168.124.8 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=12049 DF PROTO=TCP SPT=58756 DPT=8888 WINDOW=43690 RES=0x00 SYN URGP=0 
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$
+
+leo@HP:~$ sudo iptables -t filter -L INPUT -vn
+Chain INPUT (policy ACCEPT 285 packets, 90789 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+    4   240 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 LOG flags 0 level 4
+    4   240 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 reject-with icmp-port-unreachable
+leo@HP:~$ 
