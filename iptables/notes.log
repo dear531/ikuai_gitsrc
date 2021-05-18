@@ -1328,3 +1328,90 @@ target     prot opt source               destination
 ACCEPT     udp  --  anywhere             anywhere             udp dpt:bootpc
 leo@HP:~$
 
+==== iptables -t filter -A FORWARD for gate way ====
+
+mininet的网络情况：
+
+mininet> net
+h1 h1-eth0:s1-eth1
+h2 h2-eth0:s1-eth2
+nat0 nat0-eth0:s1-eth3
+s1 lo:  s1-eth1:h1-eth0 s1-eth2:h2-eth0 s1-eth3:nat0-eth0
+mininet> 
+
+查看iptables设置
+mininet> s1 iptables -t filter -L FORWARD
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+DROP       all  --  anywhere             loaclhost/8         
+ACCEPT     all  --  anywhere             anywhere            
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+REJECT     all  --  anywhere             anywhere             reject-with icmp-port-unreachable
+ACCEPT     all  --  loaclhost/8          anywhere            
+ACCEPT     all  --  anywhere             loaclhost/8         
+
+
+网络ping命令ping外网
+mininet> h1 ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=47 time=47.4 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=47 time=45.2 ms
+^C
+--- 8.8.8.8 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 45.277/46.357/47.438/1.101 ms
+
+设置规则
+mininet> s1 iptables -t filter -I FORWARD -j REJECT
+
+ping不通了：
+
+mininet> h1 ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+From 10.0.0.3 icmp_seq=1 Destination Port Unreachable
+From 10.0.0.3 icmp_seq=2 Destination Port Unreachable
+From 10.0.0.3 icmp_seq=3 Destination Port Unreachable
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2027ms
+
+查看iptables规则及匹配到包的情况，规则被丢弃了三个包，数量吻合：
+
+mininet> s1 iptables -t filter -L FORWARD -vn
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    3   252 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    0     0 DROP       all  --  nat0-eth0 *       0.0.0.0/0            10.0.0.0/8          
+    0     0 ACCEPT     all  --  virbr0 virbr0  0.0.0.0/0            0.0.0.0/0           
+    0     0 REJECT     all  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    0     0 REJECT     all  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    8   672 ACCEPT     all  --  nat0-eth0 *       10.0.0.0/8           0.0.0.0/0           
+    8   672 ACCEPT     all  --  *      nat0-eth0  0.0.0.0/0            10.0.0.0/8          
+
+删除规则：
+
+mininet> s1 iptables -t filter -D FORWARD -j REJECT
+
+再次ping外网：
+
+mininet> h1 ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=47 time=46.0 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=47 time=53.4 ms
+^C
+--- 8.8.8.8 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 46.020/49.729/53.439/3.716 ms
+
+再次查看规则，已经被删除：
+
+mininet> s1 iptables -t filter -L FORWARD -vn
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 DROP       all  --  nat0-eth0 *       0.0.0.0/0            10.0.0.0/8          
+    0     0 ACCEPT     all  --  virbr0 virbr0  0.0.0.0/0            0.0.0.0/0           
+    0     0 REJECT     all  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    0     0 REJECT     all  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+   10   840 ACCEPT     all  --  nat0-eth0 *       10.0.0.0/8           0.0.0.0/0           
+   10   840 ACCEPT     all  --  *      nat0-eth0  0.0.0.0/0            10.0.0.0/8          
+
