@@ -719,4 +719,15 @@ default via 192.168.124.1 dev wlo1 proto dhcp metric 600
 192.168.124.0/24 dev wlo1 proto kernel scope link src 192.168.124.8 metric 600 
 
 
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip addrlabel show
+prefix ::1/128 label 0 
+prefix ::/96 label 3 
+prefix ::ffff:0.0.0.0/96 label 4 
+prefix 2001::/32 label 6 
+prefix 2001:10::/28 label 7 
+prefix 3ffe::/16 label 12 
+prefix 2002::/16 label 2 
+prefix fec0::/10 label 11 
+prefix fc00::/7 label 5 
+prefix ::/0 label 1 
 
