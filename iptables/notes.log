@@ -1766,3 +1766,101 @@ leo@HP:~/source/ikuai_gitsrc_ssh/iptables$
 tcp        0      0 192.168.2.111:8800      192.168.2.102:48354     ESTABLISHED 1660/nc             
 [leo@localhost ~]$ 
 
+
+==== iptables -j MASQUERADE ====
+
+
+-s为需要伪装的ip地址段，-o为该地址段要转发出去的端口，即从-s段的ip伪装成-o所在的网卡地址发出去
+[leo@localhost ~]$ sudo iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o eth0 -j MASQUERADE
+[leo@localhost ~]$ sudo iptables -t nat -L POSTROUTING -vn --line
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 POSTROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2        0     0 POSTROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+3        0     0 POSTROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+4        0     0 MASQUERADE  all  --  *      eth0    192.168.10.0/24      0.0.0.0/0           
+[leo@localhost ~]$
+
+客户终端：
+
+环境：
+[leo@localhost ~]$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:42:5f:80 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.10.187/24 brd 192.168.10.255 scope global noprefixroute dynamic eth0
+       valid_lft 3282sec preferred_lft 3282sec
+    inet6 fe80::4f04:2f58:8813:ad95/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+[leo@localhost ~]$ 
+
+发起ping命令：
+[leo@localhost ~]$ ping 192.168.2.102 -c 4
+PING 192.168.2.102 (192.168.2.102) 56(84) bytes of data.
+64 bytes from 192.168.2.102: icmp_seq=1 ttl=63 time=0.602 ms
+64 bytes from 192.168.2.102: icmp_seq=2 ttl=63 time=1.24 ms
+64 bytes from 192.168.2.102: icmp_seq=3 ttl=63 time=1.18 ms
+64 bytes from 192.168.2.102: icmp_seq=4 ttl=63 time=1.03 ms
+
+--- 192.168.2.102 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3003ms
+rtt min/avg/max/mdev = 0.602/1.017/1.247/0.252 ms
+[leo@localhost ~]$ 
+
+路由器所在主机发出包的网卡及转发包的网卡抓包：分别没有伪装之前的，和被伪装之后的：
+
+[leo@localhost ~]$ sudo tcpdump -i eth0 icmp -n
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+17:46:19.346750 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 1, length 64
+17:46:19.346866 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 1, length 64
+17:46:20.347524 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 2, length 64
+17:46:20.347910 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 2, length 64
+17:46:21.349202 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 3, length 64
+17:46:21.349469 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 3, length 64
+17:46:22.350761 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 4, length 64
+17:46:22.351014 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 4, length 64
+^C
+8 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+[leo@localhost ~]$ sudo tcpdump -i eth1 icmp -n
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth1, link-type EN10MB (Ethernet), capture size 262144 bytes
+17:47:15.356286 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 1609, seq 1, length 64
+17:47:15.356530 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 1609, seq 1, length 64
+17:47:16.357496 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 1609, seq 2, length 64
+17:47:16.357932 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 1609, seq 2, length 64
+17:47:17.359222 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 1609, seq 3, length 64
+17:47:17.359608 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 1609, seq 3, length 64
+17:47:18.360770 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 1609, seq 4, length 64
+17:47:18.361141 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 1609, seq 4, length 64
+^C
+8 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+[leo@localhost ~]$
+
+ping命令接受端抓包，和被伪装后的一致：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ sudo tcpdump -i  br1 icmp -n
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on br1, link-type EN10MB (Ethernet), capture size 262144 bytes
+17:46:19.344925 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 1, length 64
+17:46:19.344965 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 1, length 64
+17:46:20.345796 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 2, length 64
+17:46:20.345913 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 2, length 64
+17:46:21.347404 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 3, length 64
+17:46:21.347507 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 3, length 64
+17:46:22.348966 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 1608, seq 4, length 64
+17:46:22.349063 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 1608, seq 4, length 64
+^C
+8 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$
