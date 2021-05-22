@@ -1609,3 +1609,91 @@ Chain POSTROUTING (policy ACCEPT 19 packets, 1349 bytes)
   268 19823 POSTROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
     7   832 SNAT       all  --  *      *       192.168.10.0/24      0.0.0.0/0            to:192.168.2.111
 [leo@localhost ~]$ 
+
+==== iptables -j DNAT =====
+
+没有添加规则之前服务器：
+[leo@localhost ~]$ nc -l 8800
+^C
+[leo@localhost ~]$
+
+客户端：
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 8800
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 8800 -vz
+netcat: connect to 192.168.2.111 port 8800 (tcp) failed: Connection refused
+
+添加规则：
+
+
+[leo@localhost ~]$ sudo iptables -A PREROUTING -t nat -d 192.168.2.111 -p tcp --dport 8800 -j DNAT --to-destination 192.168.10.187:8800
+[leo@localhost ~]$ sudo iptables -L PREROUTING -t nat -nv
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  202 46819 PREROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  202 46819 PREROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  202 46819 PREROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            192.168.2.111        tcp dpt:8800 to:192.168.10.187:8800
+
+再次尝试连接：
+
+先扫描端口
+服务器开启：
+
+[leo@localhost ~]$ nc -l 8800
+[leo@localhost ~]$ 
+
+客户端扫描：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 8800 -vz
+Connection to 192.168.2.111 8800 port [tcp/*] succeeded!
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ 
+
+链接后交互些文本内容：
+
+
+服务器：
+
+
+[leo@localhost ~]$ nc -l 8800
+are you 192.168.2.111
+yes,I am, and I am actually 192.168.10.187
+[leo@localhost ~]$ [leo@localhost ~]$
+
+客户端：
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 8800
+are you 192.168.2.111
+yes,I am, and I am actually 192.168.10.187
+^C
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$
+
+查看规则被匹配情况：
+
+[leo@localhost ~]$ sudo iptables -L PREROUTING -t nat -nv
+[sudo] password for leo: 
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  204 46939 PREROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  204 46939 PREROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  204 46939 PREROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    2   120 DNAT       tcp  --  *      *       0.0.0.0/0            192.168.2.111        tcp dpt:8800 to:192.168.10.187:8800
+[leo@localhost ~]$ 
+
+删除规则后再次重新验证：
+
+[leo@localhost ~]$ sudo iptables -D PREROUTING -t nat -d 192.168.2.111 -p tcp --dport 8800 -j DNAT --to-destination 192.168.10.187:8800
+[leo@localhost ~]$ sudo iptables -L PREROUTING -t nat -nv
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  204 46939 PREROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  204 46939 PREROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  204 46939 PREROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+[leo@localhost ~]$ 
+
+服务器：
+[leo@localhost ~]$ nc -l 8800
+
+客户端：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 8800 -vz
+netcat: connect to 192.168.2.111 port 8800 (tcp) failed: Connection refused
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ 
