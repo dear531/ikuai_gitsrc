@@ -1697,3 +1697,72 @@ Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
 leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 8800 -vz
 netcat: connect to 192.168.2.111 port 8800 (tcp) failed: Connection refused
 leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ 
+
+==== iptables -j REDIRECT ====
+
+服务器端：
+
+[leo@localhost ~]$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:05:e6:fa brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.111/24 brd 192.168.2.255 scope global noprefixroute dynamic eth0
+       valid_lft 76978sec preferred_lft 76978sec
+    inet6 fe80::89b9:ef67:e0d1:9e4d/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:87:0c:49 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.10.186/24 brd 192.168.10.255 scope global noprefixroute dynamic eth1
+       valid_lft 3341sec preferred_lft 3341sec
+    inet6 fe80::9627:51f1:948a:e04d/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+[leo@localhost ~]$ sudo iptables -A PREROUTING -t nat -p tcp --dport 7700 -j REDIRECT --to-ports 8800
+[leo@localhost ~]$ sudo iptables -L PREROUTING -t nat -vn
+Chain PREROUTING (policy ACCEPT 21 packets, 7450 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  273 69615 PREROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  273 69615 PREROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  273 69615 PREROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:7700 redir ports 8800
+
+[leo@localhost ~]$ nc -l 8800
+are you 7700?
+no, I am 8800!
+^C
+
+
+客户端：
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netcat 192.168.2.111 7700
+are you 7700?
+no, I am 8800!
+^C
+
+查看匹配情况：
+[leo@localhost ~]$ sudo iptables -L PREROUTING -t nat -vn
+Chain PREROUTING (policy ACCEPT 21 packets, 7450 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  274 69675 PREROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  274 69675 PREROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  274 69675 PREROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    1    60 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:7700 redir ports 8800
+[leo@localhost ~]$ 
+
+查看客户端进程链接状态：
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ netstat -apnt |grep 7700
+（并非所有进程都能被检测到，所有非本用户的进程信息将不会显示，如果想看到所有信息，则必须切换到 root 用户）
+tcp        0      0 192.168.2.102:48336     192.168.2.111:7700      ESTABLISHED 21280/netcat        
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ 
+
+查看服务器进程链接状态：
+[leo@localhost ~]$ netstat -aptn |grep 8800
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 192.168.2.111:8800      192.168.2.102:48354     ESTABLISHED 1660/nc             
+[leo@localhost ~]$ 
+
