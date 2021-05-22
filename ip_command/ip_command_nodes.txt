@@ -1,0 +1,722 @@
+ip command:
+-V
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip -V
+ip utility, iproute2-ss180129
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip -oneline addr show
+
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+3: wlo1    inet 192.168.124.8/24 brd 192.168.124.255 scope global dynamic noprefixroute wlo1\       valid_lft 51629sec preferred_lft 51629sec
+3: wlo1    inet6 fe80::7057:99d8:10b:e35b/64 scope link noprefixroute \       valid_lft forever preferred_lft forever
+4: br1    inet 192.168.2.102/24 brd 192.168.2.255 scope global br1\       valid_lft forever preferred_lft forever
+4: br1    inet6 fe80::121f:74ff:fef8:98ff/64 scope link \       valid_lft forever preferred_lft forever
+5: virbr1    inet 192.168.10.1/24 brd 192.168.10.255 scope global virbr1\       valid_lft forever preferred_lft forever
+7: virbr0    inet 192.168.100.1/24 brd 192.168.100.255 scope global virbr0\       valid_lft forever preferred_lft forever
+9: virbr2    inet 192.168.11.1/24 brd 192.168.11.255 scope global virbr2\       valid_lft forever preferred_lft forever
+
+-r 用主机名字代替ip地址
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip -r addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet localhost/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ip6-localhost/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s25: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel master br1 state UP group default qlen 1000
+    link/ether 10:1f:74:f8:98:ff brd ff:ff:ff:ff:ff:ff
+3: wlo1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 08:11:96:7d:08:f8 brd ff:ff:ff:ff:ff:ff
+    inet HP/24 brd 192.168.124.255 scope global dynamic noprefixroute wlo1
+       valid_lft 51550sec preferred_lft 51550sec
+    inet6 HP/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+4: br1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 10:1f:74:f8:98:ff brd ff:ff:ff:ff:ff:ff
+    inet HP/24 brd 192.168.2.255 scope global br1
+       valid_lft forever preferred_lft forever
+    inet6 HP/64 scope link 
+       valid_lft forever preferred_lft forever
+5: virbr1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:97:b0:8f brd ff:ff:ff:ff:ff:ff
+    inet HP/24 brd 192.168.10.255 scope global virbr1
+       valid_lft forever preferred_lft forever
+6: virbr1-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr1 state DOWN group default qlen 1000
+    link/ether 52:54:00:97:b0:8f brd ff:ff:ff:ff:ff:ff
+7: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:16:96:fe brd ff:ff:ff:ff:ff:ff
+    inet HP/24 brd 192.168.100.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+8: virbr0-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr0 state DOWN group default qlen 1000
+    link/ether 52:54:00:16:96:fe brd ff:ff:ff:ff:ff:ff
+9: virbr2: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:42:a9:24 brd ff:ff:ff:ff:ff:ff
+    inet HP/24 brd 192.168.11.255 scope global virbr2
+       valid_lft forever preferred_lft forever
+10: virbr2-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr2 state DOWN group default qlen 1000
+    link/ether 52:54:00:42:a9:24 brd ff:ff:ff:ff:ff:ff
+
+-br 输出简化的模式：
+
+ip -br address show
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s25          UP             
+wlo1             UP             192.168.124.8/24 fe80::7057:99d8:10b:e35b/64 
+br1              UP             192.168.2.102/24 fe80::121f:74ff:fef8:98ff/64 
+virbr1           DOWN           192.168.10.1/24 
+virbr1-nic       DOWN           
+virbr0           DOWN           192.168.100.1/24 
+virbr0-nic       DOWN           
+virbr2           DOWN           192.168.11.1/24 
+virbr2-nic       DOWN           
+
+
+显示链路层：
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip -br link
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+enp0s25          UP             10:1f:74:f8:98:ff <BROADCAST,MULTICAST,UP,LOWER_UP> 
+wlo1             UP             08:11:96:7d:08:f8 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+br1              UP             10:1f:74:f8:98:ff <BROADCAST,MULTICAST,UP,LOWER_UP> 
+virbr1           DOWN           52:54:00:97:b0:8f <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+virbr1-nic       DOWN           52:54:00:97:b0:8f <BROADCAST,MULTICAST> 
+virbr0           DOWN           52:54:00:16:96:fe <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+virbr0-nic       DOWN           52:54:00:16:96:fe <BROADCAST,MULTICAST> 
+virbr2           DOWN           52:54:00:42:a9:24 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+virbr2-nic       DOWN           52:54:00:42:a9:24 <BROADCAST,MULTICAST> 
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$
+
+显示多波地址：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip -br maddress
+1:	lo
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::fb
+	inet6 ff02::1
+	inet6 ff01::1
+2:	enp0s25
+	link  01:00:5e:00:00:01
+	inet  224.0.0.1
+	inet6 ff02::1
+	inet6 ff01::1
+3:	wlo1
+	link  01:00:5e:00:00:01 users 2
+	link  33:33:00:00:00:01 users 2
+	link  33:33:ff:0b:e3:5b users 2
+	link  33:33:00:00:00:fb users 2
+	link  01:00:5e:00:00:fb users 2
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::fb
+	inet6 ff02::1:ff0b:e35b
+	inet6 ff02::1
+	inet6 ff01::1
+4:	br1
+	link  33:33:00:00:00:01
+	link  01:00:5e:00:00:01
+	link  33:33:ff:f8:98:ff
+	link  33:33:00:00:00:fb
+	link  01:00:5e:00:00:fb
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::fb
+	inet6 ff02::1:fff8:98ff
+	inet6 ff02::1
+	inet6 ff01::1
+5:	virbr1
+	link  01:00:5e:00:00:01
+	link  01:00:5e:00:00:fb
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::1
+	inet6 ff01::1
+6:	virbr1-nic
+	inet6 ff02::1
+	inet6 ff01::1
+7:	virbr0
+	link  01:00:5e:00:00:01
+	link  01:00:5e:00:00:fb
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::1
+	inet6 ff01::1
+8:	virbr0-nic
+	inet6 ff02::1
+	inet6 ff01::1
+9:	virbr2
+	link  01:00:5e:00:00:01
+	link  01:00:5e:00:00:fb
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::1
+	inet6 ff01::1
+10:	virbr2-nic
+	inet6 ff02::1
+	inet6 ff01::1
+
+查看netlink信息：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip monitor
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 PROBE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 PROBE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+3: wlo1    inet 192.168.124.8/24 brd 192.168.124.255 scope global dynamic noprefixroute wlo1
+       valid_lft 49806sec preferred_lft 49806sec
+default via 192.168.124.1 dev wlo1 proto dhcp metric 600 
+Deleted default via 192.168.124.1 dev wlo1 proto dhcp metric 20600 
+192.168.124.1 dev wlo1 lladdr 04:d7:a5:5e:d2:f6 REACHABLE
+192.168.124.1 dev wlo1 lladdr 04:d7:a5:5e:d2:f6 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 PROBE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 PROBE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 PROBE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+192.168.124.1 dev wlo1 lladdr 04:d7:a5:5e:d2:f6 REACHABLE
+192.168.124.1 dev wlo1 lladdr 04:d7:a5:5e:d2:f6 STALE
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 STALE
+
+
+查看arp缓存：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ arp 
+地址                     类型    硬件地址            标志  Mask            接口
+192.168.100.230                  (incomplete)                              virbr0
+_gateway                 ether   c8:3a:35:3a:17:08   C                     br1
+192.168.2.111            ether   52:54:00:05:e6:fa   C                     br1
+192.168.2.100            ether   00:0e:c6:61:bc:af   C                     br1
+192.168.10.186                   (incomplete)                              virbr1
+192.168.100.3            ether   52:54:00:12:59:8b   C                     virbr0
+192.168.10.187                   (incomplete)                              virbr1
+192.168.124.4            ether   54:2b:8d:cd:fa:3b   C                     wlo1
+192.168.2.110            ether   52:54:00:42:5f:80   C                     br1
+_gateway                 ether   04:d7:a5:5e:d2:f6   C                     wlo1
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip -br neighbour
+192.168.100.230 dev virbr0  FAILED
+192.168.2.1 dev br1 lladdr c8:3a:35:3a:17:08 REACHABLE
+192.168.2.111 dev br1 lladdr 52:54:00:05:e6:fa STALE
+192.168.2.100 dev br1 lladdr 00:0e:c6:61:bc:af STALE
+192.168.10.186 dev virbr1  FAILED
+192.168.100.3 dev virbr0 lladdr 52:54:00:12:59:8b STALE
+192.168.10.187 dev virbr1  FAILED
+192.168.124.4 dev wlo1 lladdr 54:2b:8d:cd:fa:3b STALE
+192.168.2.110 dev br1 lladdr 52:54:00:42:5f:80 STALE
+192.168.124.1 dev wlo1 lladdr 04:d7:a5:5e:d2:f6 STALE
+fe80::c64:aaa1:d498:3d8b dev wlo1 lladdr 54:2b:8d:cd:fa:3b STALE
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$
+
+管理邻居缓存操作：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip ntable 
+inet arp_cache 
+    thresh1 4096 thresh2 8192 thresh3 16384 gc_int 30000 
+    refcnt 1 reachable 30432 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev s1 
+    refcnt 1 reachable 30384 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev ovs-system 
+    refcnt 1 reachable 30964 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev s1-eth2 
+    refcnt 1 reachable 31940 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev s1-eth1 
+    refcnt 1 reachable 20328 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev virbr2-nic 
+    refcnt 1 reachable 37484 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev virbr2 
+    refcnt 4 reachable 33252 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev virbr0-nic 
+    refcnt 1 reachable 41824 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev virbr0 
+    refcnt 6 reachable 28996 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev virbr1-nic 
+    refcnt 1 reachable 27356 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev virbr1 
+    refcnt 7 reachable 38476 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev br1 
+    refcnt 9 reachable 19340 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev wlo1 
+    refcnt 6 reachable 44136 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev enp0s25 
+    refcnt 1 reachable 23812 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet arp_cache 
+    dev lo 
+    refcnt 2 reachable 32808 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000 
+
+inet6 ndisc_cache 
+    thresh1 128 thresh2 512 thresh3 1024 gc_int 30000 
+    refcnt 1 reachable 32044 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    thresh1 128 thresh2 512 thresh3 1024 gc_int 30000 
+    refcnt 1 reachable 32044 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev s1 
+    refcnt 1 reachable 16288 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev ovs-system 
+    refcnt 1 reachable 35072 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev s1-eth2 
+    refcnt 5 reachable 35548 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev s1-eth1 
+    refcnt 5 reachable 42820 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev virbr2-nic 
+    refcnt 1 reachable 39512 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev virbr2 
+    refcnt 1 reachable 19576 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev virbr0-nic 
+    refcnt 1 reachable 30884 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev virbr0 
+    refcnt 1 reachable 40320 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev virbr1-nic 
+    refcnt 1 reachable 32408 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev virbr1 
+    refcnt 1 reachable 29392 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev br1 
+    refcnt 6 reachable 26584 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev wlo1 
+    refcnt 8 reachable 41580 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev enp0s25 
+    refcnt 1 reachable 27008 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+inet6 ndisc_cache 
+    dev lo 
+    refcnt 3 reachable 21104 base_reachable 30000 retrans 1000 
+    gc_stale 60000 delay_probe 5000 queue 101 
+    app_probes 0 ucast_probes 3 mcast_probes 3 
+    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0 
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$
+
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip tcp_metrics
+54.70.190.152 age 40601.840sec cwnd 10 rtt 210766us rttvar 210766us source 192.168.2.102
+54.186.51.210 age 38614.308sec cwnd 10 rtt 236911us rttvar 188391us source 192.168.2.102
+115.231.230.180 age 4579.644sec cwnd 10 rtt 48845us rttvar 48845us source 192.168.2.102
+120.253.253.98 age 27354.216sec cwnd 10 rtt 37301us rttvar 24328us source 192.168.2.102
+13.229.188.59 age 11634.396sec cwnd 10 rtt 102028us rttvar 102028us source 192.168.2.102
+117.18.237.29 age 21049.544sec cwnd 10 rtt 49452us rttvar 49452us source 192.168.2.102
+52.38.88.94 age 32296.104sec cwnd 10 rtt 211061us rttvar 211061us source 192.168.2.102
+112.34.111.123 age 6684.148sec source 192.168.2.102
+39.156.66.14 age 8457.544sec cwnd 10 rtt 12512us rttvar 12512us source 192.168.2.102
+120.192.82.196 age 40482.972sec cwnd 10 rtt 42288us rttvar 42288us source 192.168.2.102
+103.72.47.248 age 9413.032sec cwnd 10 rtt 16001us rttvar 8278us source 192.168.2.102
+54.169.224.98 age 38613.636sec cwnd 10 rtt 88214us rttvar 39875us source 192.168.2.102
+111.32.158.220 age 27385.096sec cwnd 10 rtt 20844us rttvar 15997us source 192.168.2.102
+222.35.78.40 age 27271.388sec cwnd 10 rtt 12103us rttvar 8990us source 192.168.2.102
+52.26.26.167 age 19255.604sec cwnd 10 rtt 208715us rttvar 208715us source 192.168.2.102
+103.15.180.227 age 40481.800sec cwnd 10 rtt 193058us rttvar 193058us source 192.168.2.102
+35.180.43.213 age 40492.428sec cwnd 10 rtt 306332us rttvar 195572us source 192.168.2.102
+140.113.17.5 age 40474.916sec cwnd 10 rtt 95715us rttvar 67863us source 192.168.2.102
+180.97.104.146 age 6682.752sec source 192.168.2.102
+103.72.47.245 age 5341.728sec cwnd 10 rtt 26864us rttvar 16055us source 192.168.2.102
+111.62.195.71 age 8275.012sec cwnd 10 rtt 13548us rttvar 13548us source 192.168.2.102
+39.156.68.163 age 34767.272sec cwnd 10 rtt 11227us rttvar 11227us source 192.168.2.102
+112.34.111.235 age 4739.700sec source 192.168.2.102
+183.201.241.36 age 27301.376sec cwnd 10 rtt 25595us rttvar 25595us source 192.168.2.102
+44.226.235.191 age 6634.136sec cwnd 10 rtt 211721us rttvar 211721us source 192.168.2.102
+103.235.46.39 age 4740.760sec source 192.168.2.102
+13.224.161.125 age 37898.628sec cwnd 10 rtt 54965us rttvar 38789us source 192.168.2.102
+120.114.150.21 age 40479.496sec cwnd 10 rtt 468771us rttvar 398277us source 192.168.2.102
+52.69.106.240 age 4396.180sec cwnd 10 rtt 257288us rttvar 140452us source 192.168.2.102
+52.74.223.119 age 9278.224sec cwnd 10 rtt 101498us rttvar 101498us source 192.168.2.102
+39.155.141.16 age 40469.932sec cwnd 10 rtt 10273us rttvar 8683us source 192.168.2.102
+36.155.229.147 age 13126.492sec source 192.168.2.102
+104.18.11.207 age 34296.728sec cwnd 10 rtt 205892us rttvar 153983us source 192.168.2.102
+52.40.44.71 age 20745.296sec cwnd 10 rtt 210642us rttvar 31599us source 192.168.2.102
+34.122.121.32 age 1394.208sec ssthresh 7 cwnd 8 rtt 322107us rttvar 94524us source 192.168.2.102
+34.122.121.32 age 1393.664sec ssthresh 7 cwnd 8 rtt 303448us rttvar 86908us source 192.168.124.8
+111.13.18.180 age 5100.468sec cwnd 10 rtt 16894us rttvar 13147us source 192.168.2.102
+42.62.98.167 age 20752.672sec source 192.168.2.102
+120.253.253.102 age 4565.636sec cwnd 10 rtt 41480us rttvar 22322us source 192.168.2.102
+111.63.209.11 age 27556.652sec source 192.168.2.102
+36.155.229.228 age 2267.364sec cwnd 10 rtt 27656us rttvar 27656us source 192.168.2.102
+3.22.185.178 age 35885.968sec cwnd 10 rtt 281287us rttvar 237375us source 192.168.2.102
+99.84.203.17 age 21048.388sec cwnd 10 rtt 206466us rttvar 160174us source 192.168.2.102
+140.143.49.61 age 4561.660sec cwnd 10 rtt 21333us rttvar 21333us source 192.168.2.102
+44.236.191.53 age 8384.756sec cwnd 10 rtt 207067us rttvar 162706us source 192.168.2.102
+91.189.92.40 age 40577.980sec source 192.168.2.102
+203.208.41.98 age 20993.552sec cwnd 10 rtt 38787us rttvar 30226us source 192.168.2.102
+111.63.59.48 age 6053.724sec cwnd 10 rtt 25920us rttvar 25920us source 192.168.2.102
+118.178.109.187 age 8274.984sec cwnd 10 rtt 39740us rttvar 24284us source 192.168.2.102
+120.201.46.135 age 4695.764sec source 192.168.2.102
+203.107.44.140 age 4696.696sec source 192.168.2.102
+34.216.180.102 age 40541.280sec cwnd 10 rtt 214539us rttvar 214539us source 192.168.2.102
+111.63.209.22 age 27386.104sec cwnd 10 rtt 23489us rttvar 21245us source 192.168.2.102
+111.13.210.226 age 7508.220sec cwnd 10 rtt 8519us rttvar 8519us source 192.168.2.102
+13.224.161.64 age 18500.680sec cwnd 10 rtt 51367us rttvar 51367us source 192.168.2.102
+120.221.14.8 age 19856.916sec cwnd 10 rtt 33641us rttvar 10632us source 192.168.2.102
+120.253.253.97 age 27176.352sec cwnd 10 rtt 39265us rttvar 39265us source 192.168.2.102
+111.63.53.221 age 34715.256sec cwnd 10 rtt 24897us rttvar 8710us source 192.168.2.102
+151.139.128.14 age 4621.056sec cwnd 10 rtt 1075527us rttvar 1104333us source 192.168.2.102
+39.156.66.96 age 21164.924sec source 192.168.2.102
+127.0.0.1 age 8446.028sec cwnd 10 rtt 24us rttvar 20us source 127.0.0.53
+91.189.91.47 age 11834.372sec source 192.168.2.102
+91.189.92.19 age 12497.680sec source 192.168.2.102
+120.253.253.41 age 20994.556sec cwnd 10 rtt 39532us rttvar 39532us source 192.168.2.102
+118.31.180.41 age 8274.984sec cwnd 10 rtt 39398us rttvar 39398us source 192.168.2.102
+113.10.176.100 age 40479.732sec cwnd 10 rtt 257089us rttvar 257089us source 192.168.2.102
+103.232.121.196 age 38461.992sec cwnd 10 rtt 487438us rttvar 413863us source 192.168.2.102
+111.30.169.23 age 2267.412sec source 192.168.2.102
+111.32.163.35 age 6108.672sec cwnd 10 rtt 42674us rttvar 23360us source 192.168.2.102
+34.215.46.102 age 36884.376sec cwnd 10 rtt 211078us rttvar 211078us source 192.168.2.102
+120.253.250.230 age 4500.644sec cwnd 10 rtt 36700us rttvar 28723us source 192.168.2.102
+44.238.190.78 age 21103.140sec cwnd 10 rtt 212711us rttvar 134699us source 192.168.2.102
+117.161.5.195 age 4689.648sec cwnd 10 rtt 27833us rttvar 27833us source 192.168.2.102
+39.156.66.206 age 27439.720sec source 192.168.2.102
+203.107.41.32 age 4696.040sec source 192.168.2.102
+140.143.52.226 age 27308.388sec cwnd 10 rtt 18329us rttvar 18329us source 192.168.2.102
+58.125.212.121 age 40476.900sec cwnd 10 rtt 90857us rttvar 90857us source 192.168.2.102
+44.235.189.138 age 30308.720sec source 192.168.2.102
+112.34.111.158 age 6190.904sec cwnd 10 rtt 61267us rttvar 68662us source 192.168.2.102
+44.235.28.153 age 4679.012sec cwnd 10 rtt 294515us rttvar 294515us source 192.168.2.102
+112.60.13.202 age 4720.092sec cwnd 10 rtt 51032us rttvar 51032us source 192.168.2.102
+116.62.93.118 age 8274.980sec cwnd 10 rtt 43625us rttvar 43625us source 192.168.2.102
+120.253.250.225 age 4514.632sec cwnd 10 rtt 41466us rttvar 24668us source 192.168.2.102
+39.96.132.69 age 20588.872sec cwnd 10 rtt 13986us rttvar 11524us source 192.168.2.102
+137.189.4.14 age 40475.940sec cwnd 10 rtt 53517us rttvar 42823us source 192.168.2.102
+218.203.117.249 age 8330.680sec cwnd 10 rtt 37640us rttvar 19277us source 192.168.2.102
+222.35.67.242 age 4579.676sec cwnd 10 rtt 15840us rttvar 12023us source 192.168.2.102
+223.111.108.40 age 37660.968sec cwnd 10 rtt 39055us rttvar 32786us source 192.168.2.102
+110.242.68.128 age 6682.884sec source 192.168.2.102
+14.215.89.32 age 36067.688sec cwnd 10 rtt 53084us rttvar 53084us source 192.168.2.102
+112.34.111.52 age 27558.556sec source 192.168.2.102
+103.235.46.45 age 4739.372sec source 192.168.2.102
+111.63.66.36 age 6053.716sec cwnd 10 rtt 26794us rttvar 26794us source 192.168.2.102
+140.110.240.80 age 40481.924sec cwnd 10 rtt 69303us rttvar 69303us source 192.168.2.102
+203.119.175.213 age 27385.096sec cwnd 10 rtt 21525us rttvar 21525us source 192.168.2.102
+119.188.176.49 age 4566.644sec cwnd 10 rtt 60292us rttvar 60292us source 192.168.2.102
+39.156.6.241 age 4726.580sec source 192.168.2.102
+50.112.175.102 age 19001.120sec cwnd 10 rtt 222733us rttvar 222733us source 192.168.2.102
+111.30.178.75 age 6840.352sec cwnd 10 rtt 30354us rttvar 30354us source 192.168.2.102
+112.34.113.93 age 6689.480sec source 192.168.2.102
+111.63.209.21 age 4568.656sec cwnd 10 rtt 35940us rttvar 35940us source 192.168.2.102
+99.84.203.95 age 27508.120sec cwnd 10 rtt 221132us rttvar 177433us source 192.168.2.102
+39.156.66.149 age 6690.520sec source 192.168.2.102
+36.155.249.17 age 6840.376sec source 192.168.2.102
+223.111.24.86 age 4610.584sec cwnd 10 rtt 37797us rttvar 35260us source 192.168.2.102
+103.72.47.244 age 5150.700sec cwnd 10 rtt 29262us rttvar 16791us source 192.168.2.102
+104.16.19.94 age 34296.732sec cwnd 10 rtt 187315us rttvar 187315us source 192.168.2.102
+120.221.245.104 age 20604.864sec cwnd 10 rtt 23642us rttvar 23642us source 192.168.2.102
+54.149.208.57 age 34807.116sec cwnd 10 rtt 211783us rttvar 211783us source 192.168.2.102
+120.253.253.38 age 4567.644sec cwnd 10 rtt 41914us rttvar 22316us source 192.168.2.102
+112.34.111.63 age 27576.560sec source 192.168.2.102
+47.95.108.6 age 4739.620sec source 192.168.2.102
+36.152.44.205 age 6190.624sec cwnd 10 rtt 28868us rttvar 28868us source 192.168.2.102
+183.201.224.42 age 20931.556sec cwnd 10 rtt 25962us rttvar 25962us source 192.168.2.102
+111.13.18.183 age 6890.236sec cwnd 10 rtt 16475us rttvar 10176us source 192.168.2.102
+117.161.24.250 age 4569.644sec cwnd 10 rtt 84853us rttvar 84853us source 192.168.2.102
+13.224.161.36 age 4624.644sec cwnd 10 rtt 48745us rttvar 48745us source 192.168.2.102
+222.35.78.49 age 6018.724sec cwnd 10 rtt 17817us rttvar 15798us source 192.168.2.102
+122.70.142.31 age 21049.580sec cwnd 10 rtt 24804us rttvar 24804us source 192.168.2.102
+112.29.199.83 age 8330.688sec cwnd 10 rtt 33762us rttvar 33762us source 192.168.2.102
+13.225.93.26 age 40042.504sec cwnd 10 rtt 100957us rttvar 100957us source 192.168.2.102
+34.209.200.8 age 30313.752sec cwnd 10 rtt 220127us rttvar 220127us source 192.168.2.102
+52.85.193.4 age 6582.964sec cwnd 10 rtt 202213us rttvar 157094us source 192.168.2.102
+120.253.253.33 age 1113.524sec cwnd 10 rtt 46868us rttvar 27966us source 192.168.2.102
+112.34.113.250 age 20761.060sec source 192.168.2.102
+210.71.189.53 age 40475.916sec cwnd 10 rtt 75709us rttvar 63893us source 192.168.2.102
+13.250.177.223 age 23270.556sec cwnd 10 rtt 101613us rttvar 101613us source 192.168.2.102
+120.201.46.134 age 4696.008sec source 192.168.2.102
+139.196.24.88 age 4666.176sec cwnd 10 rtt 36132us rttvar 36132us source 192.168.2.102
+13.225.93.111 age 40432.884sec cwnd 10 rtt 51906us rttvar 51906us source 192.168.2.102
+31.13.85.4 age 33959.352sec source 192.168.2.102
+54.188.240.244 age 4417.752sec cwnd 10 rtt 239816us rttvar 143138us source 192.168.2.102
+52.32.34.32 age 6974.184sec cwnd 10 rtt 248712us rttvar 66220us source 192.168.2.102
+112.34.111.121 age 6691.536sec source 192.168.2.102
+13.225.93.75 age 16498.004sec source 192.168.2.102
+34.98.75.36 age 18444.468sec cwnd 10 rtt 254903us rttvar 194919us source 192.168.2.102
+112.54.108.75 age 4580.672sec cwnd 10 rtt 32536us rttvar 32536us source 192.168.2.102
+160.116.15.22 age 35945.428sec cwnd 10 rtt 258868us rttvar 258868us source 192.168.2.102
+52.40.184.35 age 17338.668sec cwnd 10 rtt 219770us rttvar 219770us source 192.168.2.102
+39.107.11.112 age 17399.760sec source 192.168.2.102
+111.63.66.35 age 6053.720sec cwnd 10 rtt 32434us rttvar 32434us source 192.168.2.102
+91.189.92.18 age 40584.644sec source 192.168.2.102
+210.28.130.3 age 40468.912sec cwnd 10 rtt 35877us rttvar 29697us source 192.168.2.102
+13.224.161.74 age 36117.696sec cwnd 10 rtt 51969us rttvar 51969us source 192.168.2.102
+111.63.49.195 age 34661.256sec cwnd 10 rtt 22001us rttvar 22001us source 192.168.2.102
+111.31.3.35 age 4579.668sec cwnd 10 rtt 24621us rttvar 11274us source 192.168.2.102
+103.109.101.20 age 40480.952sec cwnd 10 rtt 47222us rttvar 47222us source 192.168.2.102
+122.70.142.37 age 20994.580sec cwnd 10 rtt 19339us rttvar 13705us source 192.168.2.102
+183.203.23.209 age 4611.660sec cwnd 10 rtt 56872us rttvar 31598us source 192.168.2.102
+54.148.210.55 age 203.536sec cwnd 10 rtt 210221us rttvar 74445us source 192.168.2.102
+112.34.111.199 age 6694.192sec source 192.168.2.102
+117.148.163.56 age 8445.504sec cwnd 10 rtt 34556us rttvar 34556us source 192.168.2.102
+111.31.16.77 age 21159.100sec cwnd 10 rtt 25014us rttvar 25014us source 192.168.2.102
+111.63.183.219 age 17229.620sec cwnd 10 rtt 26229us rttvar 26229us source 192.168.2.102
+47.95.182.167 age 27473.272sec cwnd 10 rtt 12990us rttvar 12990us source 192.168.2.102
+183.246.190.60 age 21095.556sec cwnd 10 rtt 41897us rttvar 41897us source 192.168.2.102
+47.93.94.253 age 4578.668sec cwnd 10 rtt 23192us rttvar 23192us source 192.168.2.102
+120.201.46.136 age 4695.660sec source 192.168.2.102
+104.16.125.175 age 26153.480sec cwnd 10 rtt 296025us rttvar 184640us source 192.168.2.102
+39.156.66.18 age 4740.800sec source 192.168.2.102
+120.253.253.100 age 4566.648sec cwnd 10 rtt 35530us rttvar 35530us source 192.168.2.102
+35.232.111.17 age 1697.272sec cwnd 10 rtt 353741us rttvar 130498us source 192.168.2.102
+35.232.111.17 age 1697.308sec cwnd 10 rtt 305246us rttvar 88164us source 192.168.124.8
+52.33.211.165 age 36171.476sec cwnd 10 rtt 213919us rttvar 213919us source 192.168.2.102
+13.225.93.79 age 27464.212sec cwnd 10 rtt 51945us rttvar 51945us source 192.168.2.102
+192.154.240.64 age 4686.728sec source 192.168.2.102
+111.62.25.113 age 27386.100sec cwnd 10 rtt 25828us rttvar 25828us source 192.168.2.102
+112.34.113.148 age 36163.916sec cwnd 10 rtt 15936us rttvar 15936us source 192.168.2.102
+39.156.66.103 age 4737.668sec cwnd 10 rtt 18679us rttvar 10835us source 192.168.2.102
+111.13.103.37 age 4568.660sec cwnd 10 rtt 20327us rttvar 20327us source 192.168.2.102
+13.233.140.107 age 34402.264sec cwnd 10 rtt 253965us rttvar 94021us source 192.168.2.102
+104.18.10.207 age 40420.736sec cwnd 10 rtt 204900us rttvar 204900us source 192.168.2.102
+163.17.38.18 age 40480.500sec cwnd 10 rtt 435153us rttvar 370894us source 192.168.2.102
+120.201.46.151 age 4695.652sec source 192.168.2.102
+111.47.224.188 age 8446.276sec source 192.168.2.102
+120.201.46.133 age 27333.340sec cwnd 10 rtt 125630us rttvar 92493us source 192.168.2.102
+111.63.67.201 age 6691.328sec source 192.168.2.102
+111.7.163.160 age 21047.572sec cwnd 10 rtt 23831us rttvar 23831us source 192.168.2.102
+182.92.187.217 age 4565.640sec cwnd 10 rtt 19284us rttvar 19284us source 192.168.2.102
+203.119.169.44 age 27385.104sec cwnd 10 rtt 21420us rttvar 21420us source 192.168.2.102
+223.111.194.191 age 8439.692sec cwnd 10 rtt 40462us rttvar 40462us source 192.168.2.102
+112.34.111.118 age 20761.068sec source 192.168.2.102
+127.0.0.53 age 8446.032sec cwnd 10 rtt 28us rttvar 25us source 127.0.0.1
+203.208.40.98 age 4513.644sec cwnd 10 rtt 39604us rttvar 30649us source 192.168.2.102
+111.19.241.236 age 40487.972sec cwnd 10 rtt 32237us rttvar 32237us source 192.168.2.102
+117.161.66.225 age 20659.864sec cwnd 10 rtt 36400us rttvar 16754us source 192.168.2.102
+103.45.160.230 age 21158.044sec cwnd 10 rtt 74679us rttvar 74679us source 192.168.2.102
+122.70.131.254 age 20993.580sec cwnd 10 rtt 16972us rttvar 16972us source 192.168.2.102
+43.229.112.35 age 40477.796sec cwnd 10 rtt 205198us rttvar 205198us source 192.168.2.102
+39.156.66.215 age 27443.920sec source 192.168.2.102
+42.200.151.138 age 40475.876sec cwnd 10 rtt 133415us rttvar 112960us source 192.168.2.102
+13.224.161.91 age 8330.672sec cwnd 10 rtt 50827us rttvar 50827us source 192.168.2.102
+222.35.73.1 age 6018.728sec cwnd 10 rtt 32260us rttvar 36186us source 192.168.2.102
+111.13.18.182 age 5447.948sec cwnd 10 rtt 12104us rttvar 12104us source 192.168.2.102
+111.13.186.33 age 6522.656sec cwnd 10 rtt 19985us rttvar 17886us source 192.168.2.102
+54.191.136.131 age 12124.736sec cwnd 10 rtt 210504us rttvar 210504us source 192.168.2.102
+192.168.10.187 age 19776.468sec source 192.168.10.1
+222.35.78.48 age 4524.652sec cwnd 10 rtt 77065us rttvar 84546us source 192.168.2.102
+44.236.18.0 age 35892.352sec cwnd 10 rtt 244137us rttvar 244137us source 192.168.2.102
+39.106.32.246 age 4568.660sec cwnd 10 rtt 64812us rttvar 63300us source 192.168.2.102
+59.110.175.195 age 4566.668sec cwnd 10 rtt 18582us rttvar 14259us source 192.168.2.102
+117.148.161.185 age 21103.372sec source 192.168.2.102
+111.13.153.41 age 4611.672sec cwnd 10 rtt 13581us rttvar 13581us source 192.168.2.102
+81.171.33.197 age 38666.292sec cwnd 10 rtt 304858us rttvar 304858us source 192.168.2.102
+99.84.203.62 age 19310.840sec cwnd 10 rtt 204383us rttvar 204383us source 192.168.2.102
+140.110.96.68 age 40474.924sec cwnd 10 rtt 77361us rttvar 65423us source 192.168.2.102
+115.126.83.2 age 40479.788sec cwnd 10 rtt 208226us rttvar 208226us source 192.168.2.102
+103.72.47.249 age 5600.272sec cwnd 10 rtt 36492us rttvar 20795us source 192.168.2.102
+13.224.161.10 age 18444.676sec cwnd 10 rtt 51735us rttvar 51735us source 192.168.2.102
+120.241.190.34 age 4726.568sec source 192.168.2.102
+91.189.92.39 age 11824.968sec source 192.168.2.102
+91.189.92.39 age 40685.144sec source 192.168.124.8
+54.190.95.165 age 40399.096sec cwnd 10 rtt 212288us rttvar 212288us source 192.168.2.102
+35.167.253.194 age 18171.320sec cwnd 10 rtt 210945us rttvar 165278us source 192.168.2.102
+112.34.113.91 age 6689.884sec source 192.168.2.102
+35.244.247.133 age 13433.860sec cwnd 10 rtt 254806us rttvar 193066us source 192.168.2.102
+202.202.1.140 age 40468.896sec cwnd 10 rtt 49764us rttvar 49764us source 192.168.2.102
+192.168.2.111 age 8522.824sec cwnd 10 rtt 2128us rttvar 1489us source 192.168.2.102
+47.95.243.106 age 27383.108sec cwnd 10 rtt 10981us rttvar 10981us source 192.168.2.102
+13.224.161.7 age 34291.628sec cwnd 10 rtt 52480us rttvar 41940us source 192.168.2.102
+183.246.190.83 age 19974.040sec source 192.168.2.102
+13.225.93.17 age 17284.592sec cwnd 10 rtt 65694us rttvar 65694us source 192.168.2.102
+120.253.253.36 age 8273.996sec cwnd 10 rtt 33795us rttvar 33795us source 192.168.2.102
+104.16.18.94 age 40593.232sec source 192.168.2.102
+106.75.101.85 age 4693.804sec source 192.168.2.102
+183.201.241.100 age 19802.932sec cwnd 10 rtt 23100us rttvar 23100us source 192.168.2.102
+111.13.18.181 age 6961.904sec cwnd 10 rtt 13251us rttvar 11150us source 192.168.2.102
+45.120.52.95 age 40481.948sec cwnd 10 rtt 58023us rttvar 58023us source 192.168.2.102
+34.107.221.82 age 2151.784sec cwnd 10 rtt 253784us rttvar 147935us source 192.168.2.102
+111.63.209.8 age 4566.656sec cwnd 10 rtt 35630us rttvar 20533us source 192.168.2.102
+117.161.26.221 age 27499.760sec source 192.168.2.102
+117.131.201.34 age 40115.164sec cwnd 10 rtt 20847us rttvar 20847us source 192.168.2.102
+222.35.67.244 age 21049.588sec cwnd 10 rtt 10633us rttvar 10633us source 192.168.2.102
+112.15.42.231 age 4666.400sec cwnd 10 rtt 43869us rttvar 43869us source 192.168.2.102
+192.0.77.48 age 37494.728sec cwnd 10 rtt 302664us rttvar 242635us source 192.168.2.102
+120.253.253.166 age 4567.644sec cwnd 10 rtt 37753us rttvar 37753us source 192.168.2.102
+111.48.50.48 age 27271.364sec cwnd 10 rtt 36911us rttvar 36911us source 192.168.2.102
+69.16.175.42 age 34410.172sec source 192.168.2.102
+111.6.172.48 age 6512.640sec cwnd 10 rtt 22764us rttvar 22764us source 192.168.2.102
+111.63.49.198 age 36061.728sec cwnd 10 rtt 18861us rttvar 18861us source 192.168.2.102
+221.180.212.237 age 19856.932sec cwnd 10 rtt 27375us rttvar 23375us source 192.168.2.102
+120.253.63.48 age 20993.564sec cwnd 10 rtt 30368us rttvar 30368us source 192.168.2.102
+111.19.241.239 age 36116.716sec cwnd 10 rtt 38382us rttvar 32193us source 192.168.2.102
+222.35.78.38 age 6018.732sec cwnd 10 rtt 38694us rttvar 23297us source 192.168.2.102
+111.63.67.130 age 6683.268sec source 192.168.2.102
+120.253.255.166 age 4567.648sec cwnd 10 rtt 61221us rttvar 56113us source 192.168.2.102
+39.156.66.95 age 27558.572sec source 192.168.2.102
+120.253.253.161 age 20994.556sec cwnd 10 rtt 37496us rttvar 37496us source 192.168.2.102
+101.78.134.82 age 40478.916sec cwnd 10 rtt 85383us rttvar 72139us source 192.168.2.102
+120.221.163.145 age 11604.316sec source 192.168.2.102
+44.231.216.202 age 40134.960sec cwnd 10 rtt 294488us rttvar 294488us source 192.168.2.102
+120.221.181.207 age 34766.252sec cwnd 10 rtt 25072us rttvar 25072us source 192.168.2.102
+117.161.72.70 age 11832.260sec cwnd 10 rtt 45280us rttvar 45280us source 192.168.2.102
+111.13.186.32 age 6082.736sec cwnd 10 rtt 14189us rttvar 10957us source 192.168.2.102
+111.30.178.34 age 2267.376sec cwnd 10 rtt 35338us rttvar 35338us source 192.168.2.102
+111.90.139.14 age 35542.612sec cwnd 10 rtt 98945us rttvar 98945us source 192.168.2.102
+192.168.10.186 age 19804.408sec source 192.168.10.1
+111.30.181.249 age 13126.512sec source 192.168.2.102
+222.35.78.33 age 6053.732sec cwnd 10 rtt 32116us rttvar 31790us source 192.168.2.102
+117.184.242.221 age 4726.540sec source 192.168.2.102
+35.224.170.84 age 197.292sec cwnd 10 rtt 314926us rttvar 87307us source 192.168.2.102
+35.224.170.84 age 197.280sec cwnd 10 rtt 305445us rttvar 90176us source 192.168.124.8
+111.30.181.215 age 6828.260sec cwnd 10 rtt 23263us rttvar 23263us source 192.168.2.102
+222.35.78.31 age 6041.732sec cwnd 10 rtt 14901us rttvar 10061us source 192.168.2.102
+120.253.255.161 age 8274.988sec cwnd 10 rtt 100892us rttvar 101423us source 192.168.2.102
+101.201.173.208 age 4566.668sec cwnd 10 rtt 17396us rttvar 13916us source 192.168.2.102
+120.119.118.1 age 34406.836sec cwnd 10 rtt 1504072us rttvar 842041us source 192.168.2.102
+123.206.5.173 age 21164.956sec source 192.168.2.102
+13.225.93.115 age 40099.144sec cwnd 10 rtt 103875us rttvar 103875us source 192.168.2.102
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ip route
+default via 192.168.2.1 dev br1 
+default via 192.168.124.1 dev wlo1 proto dhcp metric 600 
+169.254.0.0/16 dev br1 scope link metric 1000 
+192.168.2.0/24 dev br1 proto kernel scope link src 192.168.2.102 
+192.168.10.0/24 dev virbr1 proto kernel scope link src 192.168.10.1 linkdown 
+192.168.11.0/24 dev virbr2 proto kernel scope link src 192.168.11.1 linkdown 
+192.168.100.0/24 dev virbr0 proto kernel scope link src 192.168.100.1 linkdown 
+192.168.124.0/24 dev wlo1 proto kernel scope link src 192.168.124.8 metric 600 
+
+
+
