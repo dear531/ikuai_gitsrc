@@ -1453,3 +1453,159 @@ Chain INPUT (policy ACCEPT 285 packets, 90789 bytes)
     4   240 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 LOG flags 0 level 4
     4   240 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 reject-with icmp-port-unreachable
 leo@HP:~$ 
+
+==== iptables -j SNAT ====
+
+充当路由主机情况，192.168.10.0网段充当局域网，192.168.2.0网段冲淡互联网，实施上他是路由器的内网
+
+[leo@localhost ~]$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:05:e6:fa brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.111/24 brd 192.168.2.255 scope global noprefixroute dynamic eth0
+       valid_lft 81541sec preferred_lft 81541sec
+    inet6 fe80::89b9:ef67:e0d1:9e4d/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:87:0c:49 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.10.186/24 brd 192.168.10.255 scope global noprefixroute dynamic eth1
+       valid_lft 3044sec preferred_lft 3044sec
+    inet6 fe80::9627:51f1:948a:e04d/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+默认路由走2网段，10网段为私有网段
+
+[leo@localhost ~]$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.2.1     0.0.0.0         UG    100    0        0 eth0
+192.168.2.0     0.0.0.0         255.255.255.0   U     100    0        0 eth0
+192.168.10.0    0.0.0.0         255.255.255.0   U     101    0        0 eth1
+[leo@localhost ~]$ 
+
+
+路由情况：
+
+[leo@localhost ~]$ traceroute 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+ 1  gateway (192.168.2.1)  0.635 ms  0.708 ms  0.592 ms
+ 2  192.168.124.1 (192.168.124.1)  4.179 ms  5.648 ms  5.629 ms
+ 3  192.168.1.1 (192.168.1.1)  8.356 ms  8.290 ms  8.242 ms
+ 4  100.111.192.1 (100.111.192.1)  18.157 ms  18.131 ms  18.301 ms
+ 5  221.179.159.109 (221.179.159.109)  18.266 ms 211.136.60.81 (211.136.60.81)  18.239 ms  18.470 ms
+ 6  * * *
+ 7  211.136.63.113 (211.136.63.113)  10.332 ms  20.750 ms  21.251 ms
+ 8  111.24.14.53 (111.24.14.53)  20.635 ms  26.953 ms  26.776 ms
+ 9  111.24.2.242 (111.24.2.242)  34.385 ms * 111.24.2.238 (111.24.2.238)  34.191 ms
+10  221.176.27.254 (221.176.27.254)  28.769 ms  28.745 ms  28.915 ms
+11  * 221.183.46.249 (221.183.46.249)  28.795 ms  22.926 ms
+12  221.183.55.101 (221.183.55.101)  27.017 ms  26.901 ms 221.183.55.105 (221.183.55.105)  20.844 ms
+13  223.120.22.30 (223.120.22.30)  47.762 ms  47.927 ms 223.120.22.22 (223.120.22.22)  50.670 ms
+14  223.120.2.101 (223.120.2.101)  57.276 ms  57.103 ms 223.120.2.5 (223.120.2.5)  50.560 ms
+15  223.120.2.118 (223.120.2.118)  47.290 ms 223.120.2.42 (223.120.2.42)  53.583 ms  49.510 ms
+16  223.120.2.118 (223.120.2.118)  49.357 ms 223.119.17.154 (223.119.17.154)  54.064 ms  50.255 ms
+17  10.252.202.30 (10.252.202.30)  48.353 ms loaclhost (10.252.85.158)  47.676 ms loaclhost (10.252.201.222)  49.970 ms
+18  loaclhost (10.252.202.62)  51.737 ms dns.google (8.8.8.8)  53.045 ms  52.968 ms
+[leo@localhost ~]$ 
+
+[leo@localhost ~]$ sudo iptables -A POSTROUTING -t nat -s 192.168.10.0/24 -j SNAT --to-source 192.168.2.111
+
+[leo@localhost ~]$ sudo iptables -L POSTROUTING -t nat
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination         
+POSTROUTING_direct  all  --  anywhere             anywhere            
+POSTROUTING_ZONES_SOURCE  all  --  anywhere             anywhere            
+POSTROUTING_ZONES  all  --  anywhere             anywhere            
+SNAT       all  --  192.168.10.0/24      anywhere             to:192.168.2.111
+[leo@localhost ~]$ cat /proc/sys/net/ipv4/ip_forward
+1
+
+内网主机环境：
+
+[leo@localhost ~]$ ip addr 
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:42:5f:80 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.10.187/24 brd 192.168.10.255 scope global noprefixroute dynamic eth0
+       valid_lft 3478sec preferred_lft 3478sec
+    inet6 fe80::4f04:2f58:8813:ad95/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+将网关指向充当路由器的主机：
+[leo@localhost ~]$ sudo route add default gw 192.168.10.168 dev eth0
+[leo@localhost ~]$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.10.186  0.0.0.0         UG    0      0        0 eth0
+192.168.10.0    0.0.0.0         255.255.255.0   U     100    0        0 eth0
+[leo@localhost ~]$
+
+
+在客户机上发四个ping包：
+
+[leo@localhost ~]$ ping 192.168.2.102 -c 4
+PING 192.168.2.102 (192.168.2.102) 56(84) bytes of data.
+64 bytes from 192.168.2.102: icmp_seq=1 ttl=63 time=0.414 ms
+64 bytes from 192.168.2.102: icmp_seq=2 ttl=63 time=1.01 ms
+64 bytes from 192.168.2.102: icmp_seq=3 ttl=63 time=0.990 ms
+64 bytes from 192.168.2.102: icmp_seq=4 ttl=63 time=1.03 ms
+
+--- 192.168.2.102 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3003ms
+rtt min/avg/max/mdev = 0.414/0.863/1.033/0.259 ms
+[leo@localhost ~]$ 
+
+在路由器上看打的ip地址为192.168.10.187 > 192.168.2.102
+
+[leo@localhost ~]$ sudo tcpdump -i eth1 icmp
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth1, link-type EN10MB (Ethernet), capture size 262144 bytes
+13:12:58.622241 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 9469, seq 1, length 64
+13:12:58.622447 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 9469, seq 1, length 64
+13:12:59.623203 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 9469, seq 2, length 64
+13:12:59.623557 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 9469, seq 2, length 64
+13:13:00.624758 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 9469, seq 3, length 64
+13:13:00.625124 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 9469, seq 3, length 64
+13:13:01.626193 IP 192.168.10.187 > 192.168.2.102: ICMP echo request, id 9469, seq 4, length 64
+13:13:01.626577 IP 192.168.2.102 > 192.168.10.187: ICMP echo reply, id 9469, seq 4, length 64
+^C
+8 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+[leo@localhost ~]$ 
+
+
+在路由上同一网段的主机上抓包则是隐藏了路由内部私有网络，只能看到路由的地址snat的效果：
+
+leo@HP:~/source/ikuai_gitsrc_ssh/iptables$ sudo tcpdump -i br1 icmp -n
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on br1, link-type EN10MB (Ethernet), capture size 262144 bytes
+13:12:58.650300 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 9469, seq 1, length 64
+13:12:58.650334 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 9469, seq 1, length 64
+13:12:59.651330 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 9469, seq 2, length 64
+13:12:59.651421 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 9469, seq 2, length 64
+13:13:00.652912 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 9469, seq 3, length 64
+13:13:00.652982 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 9469, seq 3, length 64
+13:13:01.654323 IP 192.168.2.111 > 192.168.2.102: ICMP echo request, id 9469, seq 4, length 64
+13:13:01.654411 IP 192.168.2.102 > 192.168.2.111: ICMP echo reply, id 9469, seq 4, length 64
+
+查看路由上snat规则显示的规则匹配数量：
+
+[leo@localhost ~]$ sudo iptables -L POSTROUTING -t nat -vn
+Chain POSTROUTING (policy ACCEPT 19 packets, 1349 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+  268 19823 POSTROUTING_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  268 19823 POSTROUTING_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  268 19823 POSTROUTING_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    7   832 SNAT       all  --  *      *       192.168.10.0/24      0.0.0.0/0            to:192.168.2.111
+[leo@localhost ~]$ 
