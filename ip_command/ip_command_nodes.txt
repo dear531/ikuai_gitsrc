@@ -786,3 +786,32 @@ leo@HP:~/source/ikuai_gitsrc_ssh$ ip address show master virbr0
 8: virbr0-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr0 state DOWN group default qlen 1000
     link/ether 52:54:00:16:96:fe brd ff:ff:ff:ff:ff:ff
 leo@HP:~/source/ikuai_gitsrc_ssh$
+
+==== ip addr show type bridge ====
+leo@HP:~/source/ikuai_gitsrc_ssh$ ip addr show type bridge 
+4: br1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 10:1f:74:f8:98:ff brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.102/24 brd 192.168.2.255 scope global br1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::121f:74ff:fef8:98ff/64 scope link 
+       valid_lft forever preferred_lft forever
+5: virbr1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:97:b0:8f brd ff:ff:ff:ff:ff:ff
+    inet 192.168.10.1/24 brd 192.168.10.255 scope global virbr1
+       valid_lft forever preferred_lft forever
+7: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:16:96:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.1/24 brd 192.168.100.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+9: virbr2: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:42:a9:24 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.11.1/24 brd 192.168.11.255 scope global virbr2
+       valid_lft forever preferred_lft forever
+leo@HP:~/source/ikuai_gitsrc_ssh$
+
+leo@HP:~/source/ikuai_gitsrc_ssh$ ip -br addr show type bridge 
+br1              UP             192.168.2.102/24 fe80::121f:74ff:fef8:98ff/64 
+virbr1           DOWN           192.168.10.1/24 
+virbr0           DOWN           192.168.100.1/24 
+virbr2           DOWN           192.168.11.1/24 
+
