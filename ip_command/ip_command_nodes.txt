@@ -779,3 +779,10 @@ leo@HP:~$
     inet6 fe80::4f04:2f58:8813:ad95/64 scope link noprefixroute 
        valid_lft forever preferred_lft forever
 [leo@localhost ~]$ 
+
+==== ip address show master ====
+
+leo@HP:~/source/ikuai_gitsrc_ssh$ ip address show master virbr0
+8: virbr0-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr0 state DOWN group default qlen 1000
+    link/ether 52:54:00:16:96:fe brd ff:ff:ff:ff:ff:ff
+leo@HP:~/source/ikuai_gitsrc_ssh$
