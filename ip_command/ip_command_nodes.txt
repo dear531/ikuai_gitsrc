@@ -731,3 +731,34 @@ prefix fec0::/10 label 11
 prefix fc00::/7 label 5 
 prefix ::/0 label 1 
 
+==== ip addr show scope ====
+
+leo@HP:~$ ip  -br address show scope global
+enp0s25          UP             
+wlo1             UP             192.168.124.8/24 
+br1              UP             192.168.2.102/24 
+virbr2           DOWN           192.168.11.1/24 
+virbr2-nic       DOWN           
+virbr0           DOWN           192.168.100.1/24 
+virbr0-nic       DOWN           
+virbr1           DOWN           192.168.10.1/24 
+virbr1-nic       DOWN           
+leo@HP:~$ ip  -br address show scope site
+enp0s25          UP             
+virbr2-nic       DOWN           
+virbr0-nic       DOWN           
+virbr1-nic       DOWN           
+leo@HP:~$ ip  -br address show scope link
+enp0s25          UP             
+wlo1             UP             fe80::7057:99d8:10b:e35b/64 
+br1              UP             fe80::121f:74ff:fef8:98ff/64 
+virbr2-nic       DOWN           
+virbr0-nic       DOWN           
+virbr1-nic       DOWN           
+leo@HP:~$ ip  -br address show scope host
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s25          UP             
+virbr2-nic       DOWN           
+virbr0-nic       DOWN           
+virbr1-nic       DOWN           
+
