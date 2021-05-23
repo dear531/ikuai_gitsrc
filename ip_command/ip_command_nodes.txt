@@ -762,3 +762,10 @@ virbr2-nic       DOWN
 virbr0-nic       DOWN           
 virbr1-nic       DOWN           
 
+==== ip address show to ====
+
+leo@HP:~$ ip address show to 192.168.2.102
+4: br1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    inet 192.168.2.102/24 brd 192.168.2.255 scope global br1
+       valid_lft forever preferred_lft forever
+leo@HP:~$ 
