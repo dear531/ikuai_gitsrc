@@ -815,3 +815,20 @@ virbr1           DOWN           192.168.10.1/24
 virbr0           DOWN           192.168.100.1/24 
 virbr2           DOWN           192.168.11.1/24 
 
+leo@HP:~$ ip address show type bridge_slave
+2: enp0s25: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel master br1 state UP group default qlen 1000
+    link/ether 10:1f:74:f8:98:ff brd ff:ff:ff:ff:ff:ff
+6: virbr0-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr0 state DOWN group default qlen 1000
+    link/ether 52:54:00:16:96:fe brd ff:ff:ff:ff:ff:ff
+8: virbr2-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr2 state DOWN group default qlen 1000
+    link/ether 52:54:00:42:a9:24 brd ff:ff:ff:ff:ff:ff
+10: virbr1-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr1 state DOWN group default qlen 1000
+    link/ether 52:54:00:97:b0:8f brd ff:ff:ff:ff:ff:ff
+leo@HP:~$ brctl show
+bridge name	bridge id		STP enabled	interfaces
+br1		8000.101f74f898ff	yes		enp0s25
+virbr0		8000.5254001696fe	yes		virbr0-nic
+virbr1		8000.52540097b08f	yes		virbr1-nic
+virbr2		8000.52540042a924	yes		virbr2-nic
+leo@HP:~$ 
+
