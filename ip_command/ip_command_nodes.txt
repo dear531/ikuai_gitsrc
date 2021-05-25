@@ -919,3 +919,32 @@ leo@HP:~$ ip address show permanent
 10: virbr1-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel master virbr1 state DOWN group default qlen 1000
     link/ether 52:54:00:97:b0:8f brd ff:ff:ff:ff:ff:ff
 leo@HP:~$
+
+==== ip addrlabel ====
+
+leo@HP:~/source/ikuai_gitsrc_ssh$ sudo ip addrlabel add prefix ff00:: label 13
+leo@HP:~/source/ikuai_gitsrc_ssh$ ip addrlabel show
+prefix ff00::/128 label 13 
+prefix ::1/128 label 0 
+prefix ::/96 label 3 
+prefix ::ffff:0.0.0.0/96 label 4 
+prefix 2001::/32 label 6 
+prefix 2001:10::/28 label 7 
+prefix 3ffe::/16 label 12 
+prefix 2002::/16 label 2 
+prefix fec0::/10 label 11 
+prefix fc00::/7 label 5 
+prefix ::/0 label 1 
+leo@HP:~/source/ikuai_gitsrc_ssh$ sudo ip addrlabel del prefix ff00:: label 13
+leo@HP:~/source/ikuai_gitsrc_ssh$ ip addrlabel show
+prefix ::1/128 label 0 
+prefix ::/96 label 3 
+prefix ::ffff:0.0.0.0/96 label 4 
+prefix 2001::/32 label 6 
+prefix 2001:10::/28 label 7 
+prefix 3ffe::/16 label 12 
+prefix 2002::/16 label 2 
+prefix fec0::/10 label 11 
+prefix fc00::/7 label 5 
+prefix ::/0 label 1 
+
