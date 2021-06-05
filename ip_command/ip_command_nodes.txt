@@ -983,3 +983,74 @@ root@OpenWrt:/# ip addr show
     inet6 fe80::5054:ff:fe3d:ebf9/64 scope link 
        valid_lft forever preferred_lft forever
 
+==== ifconfig display ====
+
+root@OpenWrt:/# ifconfig
+br-lan    Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          inet addr:192.168.124.28  Bcast:192.168.124.255  Mask:255.255.255.0
+          inet6 addr: fe80::5054:ff:fe3d:ebf9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:238 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:81 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:35588 (34.7 KiB)  TX bytes:9698 (9.4 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:262 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:89 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:41568 (40.5 KiB)  TX bytes:12300 (12.0 KiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:100 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:100 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:8720 (8.5 KiB)  TX bytes:8720 (8.5 KiB)
+
+root@OpenWrt:/# ifconfig -a
+br-lan    Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          inet addr:192.168.124.28  Bcast:192.168.124.255  Mask:255.255.255.0
+          inet6 addr: fe80::5054:ff:fe3d:ebf9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:240 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:81 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:35672 (34.8 KiB)  TX bytes:9698 (9.4 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:264 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:89 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:41680 (40.7 KiB)  TX bytes:12300 (12.0 KiB)
+
+eth1      Link encap:Ethernet  HWaddr 52:54:00:E1:15:1F  
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:100 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:100 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:8720 (8.5 KiB)  TX bytes:8720 (8.5 KiB)
+
+root@OpenWrt:/# ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:270 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:90 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:42211 (41.2 KiB)  TX bytes:12342 (12.0 KiB)
+
+root@OpenWrt:/# 
+
