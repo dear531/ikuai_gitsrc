@@ -1165,3 +1165,52 @@ PING 192.168.10.1 (192.168.10.1): 56 data bytes
 2 packets transmitted, 2 packets received, 0% packet loss
 round-trip min/avg/max = 0.554/0.602/0.651 ms
 root@OpenWrt:/# 
+
+==== delete address of alias interface ====
+root@OpenWrt:/# ifconfig eth1:0 
+eth1:0    Link encap:Ethernet  HWaddr 52:54:00:E1:15:1F  
+          inet addr:192.168.10.129  Bcast:192.168.10.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+
+root@OpenWrt:/# ifconfig eth1:0 0.0.0.0
+ifconfig: SIOCSIFFLAGS: Address not available
+root@OpenWrt:/# ifconfig eth1:0 
+eth1:0    Link encap:Ethernet  HWaddr 52:54:00:E1:15:1F  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+
+root@OpenWrt:/# ifconfig -a
+br-lan    Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          inet addr:192.168.124.28  Bcast:192.168.124.255  Mask:255.255.255.0
+          inet6 addr: fe80::5054:ff:fe3d:ebf9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:13787 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:982 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:2349639 (2.2 MiB)  TX bytes:63269 (61.7 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:13876 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:990 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:2549205 (2.4 MiB)  TX bytes:65871 (64.3 KiB)
+
+eth1      Link encap:Ethernet  HWaddr 52:54:00:E1:15:1F  
+          inet addr:192.168.111.222  Bcast:192.168.111.255  Mask:255.255.255.0
+          inet6 addr: fe80::5054:ff:fee1:151f/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:2762 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:14 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:145849 (142.4 KiB)  TX bytes:1288 (1.2 KiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:188 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:188 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:14168 (13.8 KiB)  TX bytes:14168 (13.8 KiB)
+
+
