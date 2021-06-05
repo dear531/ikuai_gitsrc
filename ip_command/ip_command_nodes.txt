@@ -1125,3 +1125,43 @@ vnet1     1500        7      0      0 0           330      0      0      0 BMRU
 wlo1      1500    23357      0      0 0          9757      0      0      0 BMRU
 leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ 
 
+==== ifconifg -v ====
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ifconfig -v br1
+br1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.124.18  netmask 255.255.255.0  broadcast 192.168.124.255
+        inet6 fe80::121f:74ff:fef8:98ff  prefixlen 64  scopeid 0x20<link>
+        ether 10:1f:74:f8:98:ff  txqueuelen 1000  (以太网)
+        RX packets 65593  bytes 98848979 (98.8 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 33711  bytes 3024210 (3.0 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+=== ifonfig alias address ====
+
+root@OpenWrt:/# ifconfig eth1:0 192.168.10.129
+root@OpenWrt:/# ifoncifg eth1:0
+/bin/ash: ifoncifg: not found
+root@OpenWrt:/# ifconfig eth1:0
+eth1:0    Link encap:Ethernet  HWaddr 52:54:00:E1:15:1F  
+          inet addr:192.168.10.129  Bcast:192.168.10.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+
+
+root@OpenWrt:/# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.124.1   0.0.0.0         UG    0      0        0 br-lan
+192.168.10.0    0.0.0.0         255.255.255.0   U     0      0        0 eth1
+192.168.111.0   0.0.0.0         255.255.255.0   U     0      0        0 eth1
+192.168.124.0   0.0.0.0         255.255.255.0   U     0      0        0 br-lan
+root@OpenWrt:/# ping 192.168.10.1
+PING 192.168.10.1 (192.168.10.1): 56 data bytes
+64 bytes from 192.168.10.1: seq=0 ttl=64 time=0.554 ms
+64 bytes from 192.168.10.1: seq=1 ttl=64 time=0.651 ms
+^C
+--- 192.168.10.1 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.554/0.602/0.651 ms
+root@OpenWrt:/# 
