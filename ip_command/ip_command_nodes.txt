@@ -1054,3 +1054,74 @@ eth0      Link encap:Ethernet  HWaddr 52:54:00:3D:EB:F9
 
 root@OpenWrt:/# 
 
+root@OpenWrt:/# ifconfig eth1 168.192.111.222
+[  429.557589] 8021q: adding VLAN 0 to HW filter on device eth1
+
+=== iconfig -s and netstat -i,  route -r and netstat -r ====
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ netstat -r
+内核 IP 路由表
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+default         moshujia.cn     0.0.0.0         UG        0 0          0 br1
+default         moshujia.cn     0.0.0.0         UG        0 0          0 wlo1
+link-local      0.0.0.0         255.255.0.0     U         0 0          0 br1
+192.168.10.0    0.0.0.0         255.255.255.0   U         0 0          0 virbr1
+192.168.11.0    0.0.0.0         255.255.255.0   U         0 0          0 virbr2
+192.168.100.0   0.0.0.0         255.255.255.0   U         0 0          0 virbr0
+192.168.124.0   0.0.0.0         255.255.255.0   U         0 0          0 br1
+192.168.124.0   0.0.0.0         255.255.255.0   U         0 0          0 wlo1
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ route -n
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+0.0.0.0         192.168.124.1   0.0.0.0         UG    0      0        0 br1
+0.0.0.0         192.168.124.1   0.0.0.0         UG    600    0        0 wlo1
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 br1
+192.168.10.0    0.0.0.0         255.255.255.0   U     0      0        0 virbr1
+192.168.11.0    0.0.0.0         255.255.255.0   U     0      0        0 virbr2
+192.168.100.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr0
+192.168.124.0   0.0.0.0         255.255.255.0   U     0      0        0 br1
+192.168.124.0   0.0.0.0         255.255.255.0   U     600    0        0 wlo1
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ route -i
+route: 不适用的选项 -- i
+用法： route [-nNvee] [-FC] [<AF>]           显示核心路由表
+       route [-v] [-FC] {add|del|flush} ...  为AF修改路由表。
+
+       route {-h|--help} [<AF>]              Detailed usage syntax for specified AF.
+       route {-V|--version}                  显示版本和作者信息并退出。
+
+        -v, --verbose            显示详细信息
+        -n, --numeric            不解析名称
+        -e, --extend             显示更多信息
+        -F, --fib                display Forwarding Information Base (default)
+        -C, --cache              display routing cache instead of FIB
+
+  <AF>=Use -4, -6, '-A <af>' or '--<af>'; default: inet
+  列出所有支持的协议：
+    inet (DARPA Internet) inet6 (IPv6) ax25 (AMPR AX.25) 
+    netrom (AMPR NET/ROM) ipx (Novell IPX) ddp (Appletalk DDP) 
+    x25 (CCITT X.25) 
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ netstat -i
+Kernel Interface table
+Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+br1       1500    64604      0      0 0         33544      0      0      0 BMRU
+enp0s25   1500    78828      0      4 0         35572      0      0      0 BMRU
+lo       65536     1982      0      0 0          1982      0      0      0 LRU
+virbr0    1500        0      0      0 0             0      0      0      0 BMU
+virbr1    1500        7      0      0 0             0      0      0      0 BMRU
+virbr2    1500        0      0      0 0             0      0      0      0 BMU
+vnet0     1500      210      0      0 0          1518      0      0      0 BMRU
+vnet1     1500        7      0      0 0           328      0      0      0 BMRU
+wlo1      1500    23342      0      0 0          9757      0      0      0 BMRU
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ifconfig -s
+Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+br1       1500    64619      0      0 0         33544      0      0      0 BMRU
+enp0s25   1500    78843      0      4 0         35574      0      0      0 BMRU
+lo       65536     1982      0      0 0          1982      0      0      0 LRU
+virbr0    1500        0      0      0 0             0      0      0      0 BMU
+virbr1    1500        7      0      0 0             0      0      0      0 BMRU
+virbr2    1500        0      0      0 0             0      0      0      0 BMU
+vnet0     1500      210      0      0 0          1535      0      0      0 BMRU
+vnet1     1500        7      0      0 0           330      0      0      0 BMRU
+wlo1      1500    23357      0      0 0          9757      0      0      0 BMRU
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ 
+
