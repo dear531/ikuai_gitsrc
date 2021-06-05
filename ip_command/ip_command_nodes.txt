@@ -1243,3 +1243,113 @@ PING 192.168.10.1 (192.168.10.1): 56 data bytes
 3 packets transmitted, 0 packets received, 100% packet loss
 root@OpenWrt:/# 
 
+==== ifconfig interface [-]arp ====
+
+在虚拟机上禁止用ifconfig禁止arp
+
+root@OpenWrt:/# ifconfig eth1 -arp
+
+ping网关，不通
+root@OpenWrt:/# ping 192.168.10.1
+PING 192.168.10.1 (192.168.10.1): 56 data bytes
+^C
+--- 192.168.10.1 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
+
+开启arp
+root@OpenWrt:/# ifconfig eth1 arp
+
+再ping网关，通了
+root@OpenWrt:/# ping 192.168.10.1
+PING 192.168.10.1 (192.168.10.1): 56 data bytes
+64 bytes from 192.168.10.1: seq=0 ttl=64 time=0.224 ms
+64 bytes from 192.168.10.1: seq=1 ttl=64 time=0.173 ms
+^C
+--- 192.168.10.1 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.173/0.198/0.224 ms
+
+
+在网关所在机器上ping虚拟机，关闭和开启的过程中，关闭时不通，开启时通了
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ ping 192.168.10.129
+PING 192.168.10.129 (192.168.10.129) 56(84) bytes of data.
+From 192.168.10.1 icmp_seq=10 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=11 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=12 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=13 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=14 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=15 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=16 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=17 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=18 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=19 Destination Host Unreachable
+From 192.168.10.1 icmp_seq=20 Destination Host Unreachable
+64 bytes from 192.168.10.129: icmp_seq=24 ttl=64 time=0.684 ms
+64 bytes from 192.168.10.129: icmp_seq=25 ttl=64 time=0.176 ms
+64 bytes from 192.168.10.129: icmp_seq=26 ttl=64 time=0.365 ms
+64 bytes from 192.168.10.129: icmp_seq=27 ttl=64 time=0.189 ms
+64 bytes from 192.168.10.129: icmp_seq=28 ttl=64 time=0.408 ms
+64 bytes from 192.168.10.129: icmp_seq=29 ttl=64 time=0.143 ms
+64 bytes from 192.168.10.129: icmp_seq=30 ttl=64 time=0.399 ms
+^C
+--- 192.168.10.129 ping statistics ---
+30 packets transmitted, 7 received, +11 errors, 76% packet loss, time 29672ms
+rtt min/avg/max/mdev = 0.143/0.337/0.684/0.176 ms, pipe 4
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$
+
+在网关所在机器上抓包：
+
+虚拟机关闭arp时抓包时，只能看见发出的arp询问请求，没有主机应答
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ sudo tcpdump -i virbr1 arp
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on virbr1, link-type EN10MB (Ethernet), capture size 262144 bytes
+16:20:09.608163 ARP, Request who-has 192.168.10.129 tell HP, length 28
+16:20:10.632162 ARP, Request who-has 192.168.10.129 tell HP, length 28
+16:20:11.656156 ARP, Request who-has 192.168.10.129 tell HP, length 28
+16:20:13.612293 ARP, Request who-has 192.168.10.129 tell HP, length 28
+16:20:14.632186 ARP, Request who-has 192.168.10.129 tell HP, length 28
+^C
+5 packets captured
+5 packets received by filter
+0 packets dropped by kernel
+
+虚拟机开启arp时，询问得到了应答
+
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ sudo tcpdump -i virbr1 arp
+[sudo] leo 的密码： 
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on virbr1, link-type EN10MB (Ethernet), capture size 262144 bytes
+16:18:55.848644 ARP, Request who-has HP tell 192.168.10.129, length 28
+16:18:55.848659 ARP, Reply HP is-at 52:54:00:97:b0:8f (oui Unknown), length 28
+16:19:01.000107 ARP, Request who-has 192.168.10.129 tell HP, length 28
+16:19:01.000285 ARP, Reply 192.168.10.129 is-at 52:54:00:e1:15:1f (oui Unknown), length 28
+^C
+4 packets captured
+4 packets received by filter
+0 packets dropped by kernel
+
+网关所在系统上查看arp列表
+
+关闭arp时，arp列表不显示129所对一个的mac地址：
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ arp
+地址                     类型    硬件地址            标志  Mask            接口
+192.168.124.5            ether   3c:7d:0a:c5:8b:ca   C                     br1
+192.168.124.25           ether   76:05:a5:88:d7:60   C                     wlo1
+192.168.124.5            ether   3c:7d:0a:c5:8b:ca   C                     wlo1
+moshujia.cn              ether   04:d7:a5:5e:d2:f6   C                     br1
+moshujia.cn              ether   04:d7:a5:5e:d2:f6   C                     wlo1
+192.168.10.129                   (incomplete)                              virbr1
+192.168.124.25           ether   74:05:a5:89:d7:5e   C                     br1
+
+开启arp时，网关的arp列表显示129对应的mac地址：
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ arp
+地址                     类型    硬件地址            标志  Mask            接口
+192.168.124.5            ether   3c:7d:0a:c5:8b:ca   C                     br1
+192.168.124.25           ether   76:05:a5:88:d7:60   C                     wlo1
+192.168.124.5            ether   3c:7d:0a:c5:8b:ca   C                     wlo1
+moshujia.cn              ether   04:d7:a5:5e:d2:f6   C                     br1
+moshujia.cn              ether   04:d7:a5:5e:d2:f6   C                     wlo1
+192.168.10.129           ether   52:54:00:e1:15:1f   C                     virbr1
+192.168.124.25           ether   74:05:a5:89:d7:5e   C                     br1
+leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ 
