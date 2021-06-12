@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 	}
 
 out:
-	if (0 >= fd) {
+	if (0 <= fd) {
 		close(fd);
 		fd = -1;
 	}
