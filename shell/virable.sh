@@ -73,3 +73,11 @@ echo "p = $p"
 ##变量p加1
 let "p += 1"
 echo "p = $p"
+
+unset p;
+echo "unset p ;p = $p"
+
+declare -i p
+
+echo "declare -i p;p = $p"
+
