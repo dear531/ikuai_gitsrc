@@ -8,3 +8,14 @@ echo $?
 
 test "$a" != "$b"
 echo $?
+
+## incrrect expression
+[ "$a"=="$b" ]
+echo $?
+
+## incrrect expression
+[ "$a"="$b" ]
+echo $?
+
+[ "$a" == "$b" ]
+echo $?
