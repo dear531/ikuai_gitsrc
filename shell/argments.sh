@@ -10,6 +10,7 @@ done
 	echo "222"
 
 for ((i = 0; i <= $#; i++)); do
+	eval echo \${${i}}
 	eval echo \$${i}
 done
 
