@@ -1353,3 +1353,93 @@ moshujia.cn              ether   04:d7:a5:5e:d2:f6   C                     wlo1
 192.168.10.129           ether   52:54:00:e1:15:1f   C                     virbr1
 192.168.124.25           ether   74:05:a5:89:d7:5e   C                     br1
 leo@HP:~/source/ikuai_gitsrc_ssh/ip_command$ 
+
+===============ifconfig -s===============
+leocheung@leocheung-CW65S:~$ ifconfig -s
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+br1        1500 0     80466      0      0 0         63723      0      0      0 BMRU
+docker0    1500 0         0      0      0 0             0      0      0      0 BMU
+enp4s0f1   1500 0     96013      0   3417 0         81429      0      0      0 BMRU
+lo        65536 0    223193      0      0 0        223193      0      0      0 LRU
+virbr1     1500 0      5644      0      0 0          5934      0      0      0 BMRU
+vmnet1     1500 0         0      0      0 0           736      0      0      0 BMRU
+vmnet8     1500 0         0      0      0 0           735      0      0      0 BMRU
+vnet0      1500 0      5544      0    176 0          8685      0      0      0 BMRU
+vnet1      1500 0     13021      0    176 0         20645      0      0      0 BMRU
+wlp3s0     1500 0      6767      0      0 0          1026      0      0      0 BMRU
+leocheung@leocheung-CW65S:~$ netstat -i
+Kernel Interface table
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+br1        1500 0     80484      0      0 0         63739      0      0      0 BMRU
+docker0    1500 0         0      0      0 0             0      0      0      0 BMU
+enp4s0f1   1500 0     96039      0   3418 0         81467      0      0      0 BMRU
+lo        65536 0    223365      0      0 0        223365      0      0      0 LRU
+virbr1     1500 0      5649      0      0 0          5943      0      0      0 BMRU
+vmnet1     1500 0         0      0      0 0           740      0      0      0 BMRU
+vmnet8     1500 0         0      0      0 0           739      0      0      0 BMRU
+vnet0      1500 0      5549      0    176 0          8698      0      0      0 BMRU
+vnet1      1500 0     13039      0    176 0         20661      0      0      0 BMRU
+wlp3s0     1500 0      6767      0      0 0          1030      0      0      0 BMRU
+leocheung@leocheung-CW65S:~$ cd source/
+
+===============ifconfig interface for alias ===============
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ sudo ifconfig enp4s0f1:0 192.168.100.201
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ ip -o addr show
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+2: enp4s0f1    inet 192.168.100.201/24 brd 192.168.100.255 scope global enp4s0f1:0\       valid_lft forever preferred_lft forever
+3: wlp3s0    inet 192.168.1.23/24 brd 192.168.1.255 scope global dynamic wlp3s0\       valid_lft 3989sec preferred_lft 3989sec
+3: wlp3s0    inet6 fe80::dc8e:8fe1:257c:7337/64 scope link \       valid_lft forever preferred_lft forever
+4: br1    inet 192.168.3.135/24 brd 192.168.3.255 scope global br1\       valid_lft forever preferred_lft forever
+4: br1    inet6 fe80::82fa:5bff:fe2e:cb48/64 scope link \       valid_lft forever preferred_lft forever
+5: docker0    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0\       valid_lft forever preferred_lft forever
+6: vmnet1    inet 192.168.2.1/24 brd 192.168.2.255 scope global vmnet1\       valid_lft forever preferred_lft forever
+6: vmnet1    inet6 fe80::250:56ff:fec0:1/64 scope link \       valid_lft forever preferred_lft forever
+7: vmnet8    inet 172.16.203.1/24 brd 172.16.203.255 scope global vmnet8\       valid_lft forever preferred_lft forever
+7: vmnet8    inet6 fe80::250:56ff:fec0:8/64 scope link \       valid_lft forever preferred_lft forever
+8: virbr1    inet 192.168.100.1/24 brd 192.168.100.255 scope global virbr1\       valid_lft forever preferred_lft forever
+13: vnet0    inet6 fe80::fc54:ff:fe5e:9d16/64 scope link \       valid_lft forever preferred_lft forever
+14: vnet1    inet6 fe80::fc54:ff:fe60:571d/64 scope link \       valid_lft forever preferred_lft forever
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ route -n
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+0.0.0.0         192.168.3.253   0.0.0.0         UG    0      0        0 br1
+0.0.0.0         192.168.1.1     0.0.0.0         UG    600    0        0 wlp3s0
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 wlp3s0
+172.16.203.0    0.0.0.0         255.255.255.0   U     0      0        0 vmnet8
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.1.0     0.0.0.0         255.255.255.0   U     600    0        0 wlp3s0
+192.168.2.0     0.0.0.0         255.255.255.0   U     0      0        0 vmnet1
+192.168.3.0     0.0.0.0         255.255.255.0   U     0      0        0 br1
+192.168.100.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr1
+192.168.100.0   0.0.0.0         255.255.255.0   U     0      0        0 enp4s0f1
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ sudo ifconfig enp4s0f1:0 down
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ ip -o addr show
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+3: wlp3s0    inet 192.168.1.23/24 brd 192.168.1.255 scope global dynamic wlp3s0\       valid_lft 3978sec preferred_lft 3978sec
+3: wlp3s0    inet6 fe80::dc8e:8fe1:257c:7337/64 scope link \       valid_lft forever preferred_lft forever
+4: br1    inet 192.168.3.135/24 brd 192.168.3.255 scope global br1\       valid_lft forever preferred_lft forever
+4: br1    inet6 fe80::82fa:5bff:fe2e:cb48/64 scope link \       valid_lft forever preferred_lft forever
+5: docker0    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0\       valid_lft forever preferred_lft forever
+6: vmnet1    inet 192.168.2.1/24 brd 192.168.2.255 scope global vmnet1\       valid_lft forever preferred_lft forever
+6: vmnet1    inet6 fe80::250:56ff:fec0:1/64 scope link \       valid_lft forever preferred_lft forever
+7: vmnet8    inet 172.16.203.1/24 brd 172.16.203.255 scope global vmnet8\       valid_lft forever preferred_lft forever
+7: vmnet8    inet6 fe80::250:56ff:fec0:8/64 scope link \       valid_lft forever preferred_lft forever
+8: virbr1    inet 192.168.100.1/24 brd 192.168.100.255 scope global virbr1\       valid_lft forever preferred_lft forever
+13: vnet0    inet6 fe80::fc54:ff:fe5e:9d16/64 scope link \       valid_lft forever preferred_lft forever
+14: vnet1    inet6 fe80::fc54:ff:fe60:571d/64 scope link \       valid_lft forever preferred_lft forever
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ route -n
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+0.0.0.0         192.168.3.253   0.0.0.0         UG    0      0        0 br1
+0.0.0.0         192.168.1.1     0.0.0.0         UG    600    0        0 wlp3s0
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 wlp3s0
+172.16.203.0    0.0.0.0         255.255.255.0   U     0      0        0 vmnet8
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.1.0     0.0.0.0         255.255.255.0   U     600    0        0 wlp3s0
+192.168.2.0     0.0.0.0         255.255.255.0   U     0      0        0 vmnet1
+192.168.3.0     0.0.0.0         255.255.255.0   U     0      0        0 br1
+192.168.100.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr1
+
