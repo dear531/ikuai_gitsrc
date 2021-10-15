@@ -1443,3 +1443,37 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ route -n
 192.168.3.0     0.0.0.0         255.255.255.0   U     0      0        0 br1
 192.168.100.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr1
 
+
+=========== ifconfig enp4s0f1 [-]promisc 混则模式设置=============
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/man_7_packet$ sudo ifconfig enp4s0f1 promisc
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/man_7_packet$ ifconfig enp4s0f1
+enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  跃点数:1
+          接收数据包:173917 错误:0 丢弃:13770 过载:0 帧数:0
+          发送数据包:144150 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:73751833 (73.7 MB)  发送字节:18528936 (18.5 MB)
+
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/man_7_packet$ sudo ifconfig enp4s0f1 -promisc
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/man_7_packet$ ifconfig enp4s0f1
+enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1
+          接收数据包:173923 错误:0 丢弃:13775 过载:0 帧数:0
+          发送数据包:144153 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:73752456 (73.7 MB)  发送字节:18529092 (18.5 MB)
+
+---设置之后，用查看命令可以看见PROMISC字段，取消设置之后可以看见该字段没有了
+
+=========== ifconfig enp4s0f1 [-]allmulti 设置和取消接受多播=============
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ sudo ifconfig enp4s0f1 allmulti
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ ifconfig enp4s0f1
+enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          UP BROADCAST RUNNING ALLMULTI MULTICAST  MTU:1500  跃点数:1
+          接收数据包:178236 错误:0 丢弃:14257 过载:0 帧数:0
+          发送数据包:147232 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:75767967 (75.7 MB)  发送字节:18989883 (18.9 MB)
+
+
