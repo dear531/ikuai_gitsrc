@@ -1477,3 +1477,23 @@ enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48
           接收字节:75767967 (75.7 MB)  发送字节:18989883 (18.9 MB)
 
 
+
+=========== ifconfig interface mtu $value 设置最大传输单元=============
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ sudo ifconfig enp4s0f1 mtu 1400
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ ifconfig enp4s0f1
+enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          UP BROADCAST RUNNING ALLMULTI MULTICAST  MTU:1400  跃点数:1
+          接收数据包:200125 错误:0 丢弃:15645 过载:0 帧数:0
+          发送数据包:163084 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:88072540 (88.0 MB)  发送字节:21225388 (21.2 MB)
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ sudo ifconfig enp4s0f1 mtu 1500
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/ip_command$ ifconfig enp4s0f1
+enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          UP BROADCAST RUNNING ALLMULTI MULTICAST  MTU:1500  跃点数:1
+          接收数据包:200143 错误:0 丢弃:15647 过载:0 帧数:0
+          发送数据包:163097 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:88074060 (88.0 MB)  发送字节:21226146 (21.2 MB)
+
