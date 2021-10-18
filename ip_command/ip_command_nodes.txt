@@ -1497,3 +1497,14 @@ enp4s0f1  Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48
           碰撞:0 发送队列长度:1000 
           接收字节:88074060 (88.0 MB)  发送字节:21226146 (21.2 MB)
 
+
+==============ifconfig interface mtu num================
+leocheung@leocheung-CW65S:~$ ifconfig -s enp4s0f1
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+enp4s0f1   1000 0    437681      0  12294 0        289564      0      0      0 BMRU
+leocheung@leocheung-CW65S:~$ sudo ifconfig enp4s0f1 mtu 500
+leocheung@leocheung-CW65S:~$ ifconfig -s enp4s0f1
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+enp4s0f1    500 0    437685      0  12296 0        289566      0      0      0 BMRU
+leocheung@leocheung-CW65S:~$ 
+
