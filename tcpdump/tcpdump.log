@@ -1206,3 +1206,38 @@ zhangly@HP:~/source/ikuai_gitsrc/tcpdump$ ls -lrt
 -rw-rw-r-- 1 zhangly zhangly 85135 4月  10 19:30 tcpdump.log
 -rw-r--r-- 1 zhangly zhangly   272 4月  10 19:45 tmp.cap
 
+
+===== get ip pcap package that length is 500 =====
+
+其中：ip报文头的从第三个字节开始，长度为两个字节，这么段数据标识ip全部长度，tcpdump工具会把数据从网络字节序转成主机字节序，tcpdump语法如下：
+
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/coreutils/tests$ sudo tcpdump -i br1 'tcp and ip[2:2] =500'
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on br1, link-type EN10MB (Ethernet), capture size 262144 bytes
+
+
+15:23:25.693870 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 3976697542:3976698002, ack 289140476, win 556, length 460
+15:23:25.693906 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 460:920, ack 1, win 556, length 460
+15:23:25.693950 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 920:1380, ack 1, win 556, length 460
+15:23:25.693993 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 1380:1840, ack 1, win 556, length 460
+15:23:25.694039 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 1840:2300, ack 1, win 556, length 460
+15:23:25.694078 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 2300:2760, ack 1, win 556, length 460
+15:23:25.694121 IP 123.125.132.33.https > 192.168.3.141.56468: Flags [.], seq 2760:3220, ack 1, win 556, length 460
+15:23:25.876813 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 3672963602:3672964062, ack 3376784661, win 556, length 460
+15:23:25.877176 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 460:920, ack 1, win 556, length 460
+15:23:25.877569 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 920:1380, ack 1, win 556, length 460
+15:23:25.877895 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 1380:1840, ack 1, win 556, length 460
+15:23:25.878250 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 1840:2300, ack 1, win 556, length 460
+15:23:25.878295 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 2300:2760, ack 1, win 556, length 460
+15:23:25.878336 IP 221.195.34.38.https > 192.168.3.141.41138: Flags [.], seq 2760:3220, ack 1, win 556, length 460
+^C
+14 packets captured
+16 packets received by filter
+2 packets dropped by kernel
+
+sudo tcpdump -i br1 'tcp and ip[2:2] =500' -w tcpdump.ip.length500.20211019.pcap
+tcpdump: listening on br1, link-type EN10MB (Ethernet), capture size 262144 bytes
+^C5 packets captured
+5 packets received by filter
+0 packets dropped by kernel
+
