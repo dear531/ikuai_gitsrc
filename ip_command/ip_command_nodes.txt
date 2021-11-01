@@ -1508,3 +1508,28 @@ Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
 enp4s0f1    500 0    437685      0  12296 0        289566      0      0      0 BMRU
 leocheung@leocheung-CW65S:~$ 
 
+
+============= netmask addr =============================
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/ikuai_gitsrc/ip_command$ sudo ifconfig br1 netmask 255.128.0.0
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/ikuai_gitsrc/ip_command$ ifconfig br1
+br1       Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          inet 地址:192.168.3.139  广播:192.255.255.255  掩码:255.128.0.0
+          inet6 地址: fe80::82fa:5bff:fe2e:cb48/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1
+          接收数据包:127828 错误:0 丢弃:0 过载:0 帧数:0
+          发送数据包:113788 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:35819321 (35.8 MB)  发送字节:12754659 (12.7 MB)
+
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/ikuai_gitsrc/ip_command$ sudo ifconfig br1 netmask 255.255.255.0
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/ikuai_gitsrc/ip_command$ ifconfig br1
+br1       Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          inet 地址:192.168.3.139  广播:192.168.3.255  掩码:255.255.255.0
+          inet6 地址: fe80::82fa:5bff:fe2e:cb48/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1
+          接收数据包:127882 错误:0 丢弃:0 过载:0 帧数:0
+          发送数据包:113805 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:35825285 (35.8 MB)  发送字节:12757100 (12.7 MB)
+
+
