@@ -1,0 +1,4 @@
+127.0.0.1 - - [30/Nov/2021:16:54:00 +0800] "GET / HTTP/1.1" 200 23 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0"
+127.0.0.1 - - [30/Nov/2021:16:54:00 +0800] "GET /favicon.ico HTTP/1.1" 200 23 "http://localhost:8080/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0"
+127.0.0.1 - - [30/Nov/2021:17:39:12 +0800] "GET / HTTP/1.1" 200 23 "-" "curl/7.47.0"
+127.0.0.1 - - [30/Nov/2021:18:48:01 +0800] "GET / HTTP/1.1" 200 23 "-" "curl/7.47.0"
