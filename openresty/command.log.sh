@@ -199,3 +199,67 @@ leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/resty-cli/bin$ restydo
     context: *rewrite_by_lua*, access_by_lua*, content_by_lua**
 
     Just as ngx.print but also emit a trailing newline.
+
+==== 帮助命令 opm ====
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ opm search http
+openresty/lua-resty-upstream-healthcheck          Lua health-checker for Nginx upstream servers
+openresty/lua-resty-upload                        Streaming reader and parser for HTTP file uploading based on ngx_lua cosocket
+openresty/lua-resty-core                          New FFI-based Lua API for the ngx_lua module
+dailymotion/lua-nginx-guard-jwt                   Verification of the JWT Token with mapping of the token claims values to the HTTP Headers of Query.
+040Lab/lua-resty-openidc                          A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality
+upyun/lua-resty-checkups                          Manage Nginx upstreams in pure Lua
+zmartzone/lua-resty-openidc                       A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality
+jobteaser/lua-resty-aws-signature                 AWS signature V4 headers generator
+ledgetech/lua-resty-http                          Lua HTTP client cosocket driver for OpenResty/ngx_lua
+ledgetech/lua-resty-http                          Lua HTTP client cosocket driver for OpenResty/ngx_lua
+flex-runtime/lua-resty-cookie                     This library parses HTTP Cookie header for Nginx and returns each field in the cookie
+bungle/lua-resty-reqargs                          HTTP Request Arguments and File Uploads Helper
+bungle/lua-resty-session                          Session Library for OpenResty - Flexible and Secure
+antonheryanto/lua-resty-post                      Openresty utility for parsing HTTP POST data
+mashirozx/lua-resty-tencent-cos-signature         Tencent QCloud COS Openresty request signature authorization headers generator
+ktalebian/lua-resty-cookie                        This library parses HTTP Cookie header for Nginx and returns each field in the cookie
+ktalebian/twilio-lua-resty-cookie                 This library parses HTTP Cookie header for Nginx and returns each field in the cookie
+GUI/lua-resty-aws-signature                       AWS signature V4 headers generator
+pintsized/lua-resty-http                          Lua HTTP client cosocket driver for OpenResty/ngx_lua
+brianloss/lua-resty-openidc                       A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality
+DevonStrawn/lua-resty-route                       URL Routing Library for OpenResty Supporting Pluggable Matching Engines
+knight42/lua-resty-http-digest                    HTTP Digest Access Authentication in Lua for OpenResty
+zandbelt/lua-resty-openidc                        A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality
+gnois/losty                                       Functional style web framework for OpenResty
+slact/durpina                                     Dynamic Upstream Reversy Proxying wIth Nice API
+toruneko/lua-resty-upstream                       pure lua nginx upstream management for OpenResty/LuaJIT
+shayanh/lua-resty-checkups                        Manage Nginx upstreams in pure Lua
+mycsj/lua-resty-rx-test                           Yet Another HTTP library for OpenResty
+nmdguerreiro/lua-resty-opencage-geocoder          Lua client for the Opencage forward/reverse geocoding API
+knyar/nginx-lua-prometheus                        Prometheus metric library for Nginx
+tokers/lua-resty-requests                         Yet Another HTTP library for OpenResty
+un-def/httoolsp                                   A collection of HTTP-related pure Lua helper functions
+BoTranVan/nginx-module-vts                        New FFI-based Lua API for the ngx_lua module
+KSDaemon/wiola                                    LUA WAMP router
+firesnow/lua-resty-checkups                       Manage Nginx upstreams in pure ngx_lua
+fffonion/lua-resty-shdict-server                  A HTTP and Redis protocol compatible interface for debugging ngx.shared API
+fffonion/lua-resty-acme                           Automatic Let's Encrypt certificate serving and Lua implementation of ACME procotol
+fffonion/lua-resty-multiplexer                    Transparent port service multiplexer for stream subsystem
+jie123108/lua-resty-stats                         A statistical module for nginx base on ngx_lua, Statistical key and values are configurable, can use the nginx core's variables and this module's variables. The statistical result store in mongodb.(github.com/jie123108/lua-resty-stats)
+hamishforbes/ledge                                An RFC compliant and ESI capable HTTP cache for Nginx / OpenResty, backed by Redis
+hamishforbes/lua-resty-upstream                   Upstream connection load balancing and failover module
+hamishforbes/lua-resty-consul                     Library to interface with the consul HTTP API
+lilien1010/lua-resty-s3uploader                   an http s3 client for openresty
+duhoobo/lua-resty-smtp                            A http to smtp bridge library for the ngx_lua module
+duhoobo/lua-resty-auth                            A Lua resty module for HTTP Authentication (both basic and digest scheme supported, referring to RFC 2617)
+starjun/openstar                                  using openresty build WAF...
+p0pr0ck5/lua-resty-waf                            High-performance WAF built on the OpenResty stack
+p0pr0ck5/lua-resty-influx                         OpenResty client writer for InfluxDB
+p0pr0ck5/lua-resty-cookie                         Lua library for HTTP cookie manipulations for OpenResty/ngx_lua
+agentzh/lua-resty-http                            Lua HTTP client cosocket driver for OpenResty/ngx_lua
+
+
+============ websocket lib =====
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ opm search lua-resty-websocket
+openresty/lua-resty-websocket                     Lua WebSocket implementation for the ngx_lua module
+openresty/lua-resty-websocket                     Lua WebSocket implementation for the ngx_lua module
+d80x86/lua-resty-tofu                             (alpha) a modern framework
+KSDaemon/wiola                                    LUA WAMP router
+
+
+===========================
