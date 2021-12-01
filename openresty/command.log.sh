@@ -60,3 +60,25 @@ openresty -p `pwd` -c ./conf/nginx.conf -s stop 停止
 lsof -i:端口号 查看服务状态
 
 
+============= 配置openresty调用lua文件代码 ===========
+$ vim lua/hello.lua
+$ vim conf/nginx.conf
+
+重启
+sudo kill -HUP `cat logs/nginx.pid`
+或是启动
+openresty -p `pwd` -c ./conf/nginx.con
+
+cat logs/nginx.pid
+查看nginx的pid文件，pid并没有发生变化
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl localhost:8080 -i
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Wed, 01 Dec 2021 02:51:11 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+hello, world by lua file
+
