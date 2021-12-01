@@ -1,1 +1,1 @@
-ngx.say("hello, world by lua file")
+ngx.say("hello, world by lua file and no cache2")

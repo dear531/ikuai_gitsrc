@@ -82,3 +82,29 @@ Connection: keep-alive
 
 hello, world by lua file
 
+==== 调试关闭缓存设置，商用去掉该选项使其缓存，要不然会影响性能 ====
+
+conf/nginx.conf
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ kill -HUP `cat logs/nginx.pid`
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl localhost:8080 -i
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Wed, 01 Dec 2021 03:08:22 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+hello, world by lua file and no cache
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ vim lua/hello.lua 
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl localhost:8080 -i
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Wed, 01 Dec 2021 03:08:42 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+hello, world by lua file and no cache2
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
