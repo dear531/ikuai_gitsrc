@@ -263,3 +263,30 @@ KSDaemon/wiola                                    LUA WAMP router
 
 
 ===========================
+
+=============lua调用c库函数==============
+
+可以看到lua和luajit的不同
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ lua lua/c_lib_printf.lua 
+lua: lua/c_lib_printf.lua:1: module 'ffi' not found:
+	no field package.preload['ffi']
+	no file './ffi.lua'
+	no file '/usr/local/share/lua/5.1/ffi.lua'
+	no file '/usr/local/share/lua/5.1/ffi/init.lua'
+	no file '/usr/local/lib/lua/5.1/ffi.lua'
+	no file '/usr/local/lib/lua/5.1/ffi/init.lua'
+	no file '/usr/share/lua/5.1/ffi.lua'
+	no file '/usr/share/lua/5.1/ffi/init.lua'
+	no file './ffi.so'
+	no file '/usr/local/lib/lua/5.1/ffi.so'
+	no file '/usr/lib/x86_64-linux-gnu/lua/5.1/ffi.so'
+	no file '/usr/lib/lua/5.1/ffi.so'
+	no file '/usr/local/lib/lua/5.1/loadall.so'
+stack traceback:
+	[C]: in function 'require'
+	lua/c_lib_printf.lua:1: in main chunk
+	[C]: ?
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ luajit lua/c_lib_printf.lua 
+Hello world!
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
