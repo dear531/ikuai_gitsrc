@@ -108,3 +108,94 @@ Connection: keep-alive
 hello, world by lua file and no cache2
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
 
+===== 安装restydoc命令，查看帮助 =====
+
+$ sudo aptitude search resty
+i   openresty                                                                                     - core server of OpenResty for production use                                                             
+p   openresty-asan                                                                                - The AddressSanitizer (ASAN) version of OpenResty                                                        
+p   openresty-asan-dbgsym                                                                         - Debug symbols for the openresty-asan package                                                            
+p   openresty-dbgsym                                                                              - Debug symbols of OpenResty packages                                                                     
+p   openresty-debug                                                                               - debug version of OpenResty core server                                                                  
+p   openresty-debug-dbgsym                                                                        - Debug symbols of OpenResty packages - debug version                                                     
+p   openresty-openssl                                                                             - OpenSSL library for use by OpenResty ONLY                                                               
+p   openresty-openssl-dbgsym                                                                      - Debug symbols for OpenResty's OpenSSL library                                                           
+p   openresty-openssl-debug                                                                       - Debug version of the OpenSSL library for OpenResty                                                      
+p   openresty-openssl-debug-dbgsym                                                                - Debug symbols for OpenResty's OpenSSL library - debug version                                           
+p   openresty-openssl-debug-dev                                                                   - Development files for OpenResty's OpenSSL library - debug version                                       
+p   openresty-openssl-dev                                                                         - Development files for OpenResty's OpenSSL library                                                       
+i A openresty-openssl111                                                                          - OpenSSL 1.1.1 library for use by OpenResty ONLY                                                         
+p   openresty-openssl111-asan                                                                     - Clang AddressSanitizer Debug version of the OpenSSL library for OpenResty                               
+p   openresty-openssl111-asan-dbgsym                                                              - Debug symbols for the openresty-openssl111-asan package                                                 
+p   openresty-openssl111-asan-dev                                                                 - Clang AddressSanitizer version of development files for OpenResty's OpenSSL library                     
+p   openresty-openssl111-dbgsym                                                                   - Debug symbols for OpenResty's OpenSSL 1.1.1 library                                                     
+p   openresty-openssl111-debug                                                                    - Debug version of the OpenSSL 1.1.1 library for OpenResty                                                
+p   openresty-openssl111-debug-dbgsym                                                             - Debug symbols for OpenResty's OpenSSL 1.1.1 library - debug version                                     
+p   openresty-openssl111-debug-dev                                                                - Development files for OpenResty's OpenSSL 1.1.1 library - debug version                                 
+p   openresty-openssl111-dev                                                                      - Development files for OpenResty's OpenSSL 1.1.1 library                                                 
+i A openresty-opm                                                                                 - OpenResty Package Manager (OPM)                                                                         
+i A openresty-pcre                                                                                - Perl-compatible regular expression library for use by OpenResty ONLY                                    
+p   openresty-pcre-asan                                                                           - Clang AddressSanitizer version of the Perl-compatible regular expression library for OpenResty          
+p   openresty-pcre-asan-dbgsym                                                                    - Debug symbols for the openresty-pcre-asan package                                                       
+p   openresty-pcre-asan-dev                                                                       - Development files for openresty-pcre-asan                                                               
+p   openresty-pcre-dbgsym                                                                         - Debug symbols for Perl-compatible regular expression library for use by OpenResty ONLY                  
+p   openresty-pcre-dev                                                                            - Development files for Perl-compatible regular expression library for use by OpenResty ONLY              
+i A openresty-resty                                                                               - resty command-line utility for OpenResty                                                                
+p   openresty-restydoc                                                                            - OpenResty documentation tool, restydoc                                                                  
+p   openresty-valgrind                                                                            - valgrind debug version of OpenResty core server                                                         
+p   openresty-valgrind-dbgsym                                                                     - Debug symbols of OpenResty packages - valgrind debug version                                            
+i A openresty-zlib                                                                                - The zlib compression library for use by Openresty ONLY                                                  
+p   openresty-zlib-asan                                                                           - Gcc AddressSanitizer version for the zlib compression library for OpenResty                             
+p   openresty-zlib-asan-dbgsym                                                                    - Debug symbols for the openresty-zlib-asan package                                                       
+p   openresty-zlib-asan-dev                                                                       - Development files for OpenResty's zlib library                                                          
+p   openresty-zlib-dbgsym                                                                         - Debug symbols for OpenResty's zlib library                                                              
+p   openresty-zlib-dev                                                                            - Provides C header and static library for OpenResty's zlib library     
+
+
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/resty-cli/bin$ sudo apt-get install openresty-restydoc
+正在读取软件包列表... 完成
+正在分析软件包的依赖关系树       
+正在读取状态信息... 完成       
+下列【新】软件包将被安装：
+  openresty-restydoc
+升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 89 个软件包未被升级。
+需要下载 511 kB 的归档。
+解压缩后会消耗 3,075 kB 的额外空间。
+获取:1 http://openresty.org/package/ubuntu xenial/main amd64 openresty-restydoc amd64 1.19.9.1-1~xenial1 [511 kB]
+已下载 511 kB，耗时 1秒 (434 kB/s)         
+正在选中未选择的软件包 openresty-restydoc。
+(正在读取数据库 ... 系统当前共安装有 318446 个文件和目录。)
+正准备解包 .../openresty-restydoc_1.19.9.1-1~xenial1_amd64.deb  ...
+正在解包 openresty-restydoc (1.19.9.1-1~xenial1) ...
+正在设置 openresty-restydoc (1.19.9.1-1~xenial1) ...
+
+
+==== 命令使用 ====
+
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/resty-cli/bin$ restydoc -h
+Usage:
+    /usr/bin/restydoc [options] [module]
+
+Options:
+    -h              Print this help.
+
+    -r DIR          Specify the root directory of docs. Default
+                    to the OpenResty installation tree containing
+                    the current restydoc tool.
+
+    -s SECTION      Specify the section name to be searched
+
+For bug reporting instructions, please see:
+
+    <https://openresty.org/en/community.html>
+
+Copyright (C) Yichun Zhang (agentzh). All rights reserved.
+
+
+
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/resty-cli/bin$ restydoc -s ngx.say |cat 
+  ngx.say
+    syntax: *ok, err = ngx.say(...)*
+
+    context: *rewrite_by_lua*, access_by_lua*, content_by_lua**
+
+    Just as ngx.print but also emit a trailing newline.
