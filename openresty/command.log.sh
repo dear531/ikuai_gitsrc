@@ -329,3 +329,9 @@ func
 ----------
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
 
+
+========元素为空时设置表为数组=========
+resty lua/cjson.empty_array_mt.lua 
+[]
+[123]
+
