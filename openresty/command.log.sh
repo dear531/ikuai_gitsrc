@@ -321,3 +321,11 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty lua/setmatetabl
 2
 0
 
+====== key 弱引用 =======
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty lua/setmatetable_mode_k.lua 
+red
+func
+----------
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
