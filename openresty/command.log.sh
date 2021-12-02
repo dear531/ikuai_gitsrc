@@ -315,3 +315,9 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -j v lua/NYI.lu
 [TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
 [TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
 
+
+====== 弱引用设置 ============
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty lua/setmatetable_mode_v.lua 
+2
+0
+
