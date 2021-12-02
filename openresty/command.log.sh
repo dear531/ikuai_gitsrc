@@ -290,3 +290,28 @@ stack traceback:
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ luajit lua/c_lib_printf.lua 
 Hello world!
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
+======= 能被JIT和不能被JIT的实例 ===================
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -j v lua/JIT.lua 
+[TRACE   1 regex.lua:1081 loop]
+[TRACE   2 (1/10) regex.lua:1116 -> 1]
+[TRACE   3 (1/21) regex.lua:1084 -> 1]
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -j v lua/NYI.lua 
+[TRACE   1 NYI.lua:4 loop]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:9 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
+[TRACE --- NYI.lua:8 -- NYI: bytecode 72 at NYI.lua:10]
+
