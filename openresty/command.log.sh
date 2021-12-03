@@ -346,3 +346,11 @@ Connection: keep-alive
 
 79
 
+====== 共享内存函数 =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ vim conf/nginx.conf
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ kill -HUP `cat logs/nginx.pid`
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl 127.0.0.1:8080/demo
+8
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
