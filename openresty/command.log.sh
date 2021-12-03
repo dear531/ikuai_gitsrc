@@ -335,3 +335,14 @@ resty lua/cjson.empty_array_mt.lua
 []
 [123]
 
+======= ngx.ctx 变量模块使用 =====
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl -i 127.0.0.1:8080/test
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Fri, 03 Dec 2021 04:24:56 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+79
+
