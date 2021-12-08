@@ -446,3 +446,15 @@ Connection: keep-alive
 openresty.com
 {"key":"value"}
 
+==== timer count =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl -i 127.0.0.1:8080/timer_counter
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Wed, 08 Dec 2021 10:43:46 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+1
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
