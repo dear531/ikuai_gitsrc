@@ -458,3 +458,13 @@ Connection: keep-alive
 
 1
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
+
+====== get proccess type of function ======
+
+resty -e 'local process = require "ngx.process"
+ngx.say("process type:", process.type())'
+
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/openresty/lua-nginx-module$ resty -e 'local process = require "ngx.process"
+> ngx.say("process type:", process.type())'
+process type:single
+leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/openresty/lua-nginx-module$ 
