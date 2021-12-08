@@ -354,3 +354,18 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl 127.0.0.1:8080/d
 8
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
 
+或者直接用resty命令：
+
+$ resty --shdict 'dogs 10m' -e 'local dogs = ngx.shared.dogs
+ dogs:set("Jim", 8)
+ local v = dogs:get("Jim")
+ ngx.say(v)
+ '
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty --shdict 'dogs 10m' -e 'local dogs = ngx.shared.dogs
+>  dogs:set("Jim", 8)
+>  local v = dogs:get("Jim")
+>  ngx.say(v)
+>  '
+8
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
