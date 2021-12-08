@@ -433,3 +433,16 @@ resty -e 'local sock = ngx.socket.tcp()
 >         ngx.say("response is: ", data)'
 response is: HTTP/1.1 200 OK
 
+===== test cjson =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl -i 127.0.0.1:8080/ngx_ctx_host -H "host:openresty.com"
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Wed, 08 Dec 2021 10:09:27 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+openresty.com
+{"key":"value"}
+
