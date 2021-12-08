@@ -369,3 +369,22 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty --shdict 'dogs 
 >  '
 8
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
+===== test ngx.ctx =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ vim conf/nginx.conf
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ fg
+vim conf/nginx.conf
+
+[1]+  已停止               vim conf/nginx.conf
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ openresty -p `pwd` -c ./conf/nginx.conf 
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl -i 127.0.0.1:8080/ngx_ctx_host -H 'host:openresty.org'
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Wed, 08 Dec 2021 07:02:11 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+test.com
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
