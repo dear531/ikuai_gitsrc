@@ -485,3 +485,28 @@ leocheu+  9241  9240  0 11:41 ?        00:00:00 nginx: worker process
 leocheu+  9242  9240  0 11:41 ?        00:00:00 nginx: privileged agent process
 leocheu+  9247  4408  0 11:41 pts/19   00:00:00 grep --color=auto nginx
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
+
+====== timer kill hup for privileged agent process ======
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ openresty -p `pwd ` -c ./conf/nginx.conf -s quit
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ openresty -p `pwd ` -c ./conf/nginx.conf 
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ tail -f logs/error.log 
+2021/12/09 12:19:03 [error] 10402#10402: *51 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:08 [error] 10405#10405: *54 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:13 [error] 10408#10408: *57 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:18 [error] 10411#10411: *60 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:23 [error] 10415#10415: *63 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:28 [error] 10418#10418: *66 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:33 [error] 10426#10426: *69 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:38 [error] 10430#10430: *72 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:43 [error] 10433#10433: *75 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:48 [error] 10440#10440: *78 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+
+
+
+
+2021/12/09 12:19:53 [error] 10443#10443: *81 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/09 12:19:58 [error] 10450#10450: *84 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+^C
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
