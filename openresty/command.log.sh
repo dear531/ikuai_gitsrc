@@ -510,3 +510,20 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ tail -f logs/error.lo
 ^C
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
 
+
+===== non block pipe =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'local shell = require "resty.shell"
+local ok, stdout, stderr, reason, status =
+    shell.run([[echo "hello, world"]])
+    ngx.say(stdout)
+'
+hello, world
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'local ngx_pipe = require "ngx.pipe"
+local proc = ngx_pipe.spawn({"echo", "hello world"})
+local data, err = proc:stdout_read_line()
+ngx.say(data)
+'
+hello world
+
