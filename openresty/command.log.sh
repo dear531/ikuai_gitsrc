@@ -543,3 +543,19 @@ ngx.say(ngx.now())'
 1639030038.363
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
 
+
+===== incomplete Memcached Server with shared dict =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'local memcached = require "resty.memcached"
+    local memc, err = memcached:new()
+    memc:set_timeout(1000) -- 1 sec
+    local ok, err = memc:connect("127.0.0.1", 11212)
+    local ok, err = memc:set("dog", "32")
+    if not ok then
+        ngx.say("failed to set dog: ", err)
+        return
+    end
+    local res, flags, err = memc:get("dog")
+    ngx.say("dog: ", res)'
+dog: 
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
