@@ -527,3 +527,19 @@ ngx.say(data)
 '
 hello world
 
+
+==== non block sleep and get time =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'ngx.say(ngx.now())
+os.execute("sleep 1")
+ngx.say(ngx.now()) 
+'
+1639030033.598
+1639030033.598
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'ngx.say(ngx.now())
+ngx.sleep(1)
+ngx.say(ngx.now())'
+1639030037.362
+1639030038.363
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ 
+
