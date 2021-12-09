@@ -468,3 +468,20 @@ leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/openresty/lua-nginx-mo
 > ngx.say("process type:", process.type())'
 process type:single
 leocheung@leocheung-CW65S:/media/leocheung/sdb500g/source/openresty/lua-nginx-module$ 
+
+==== create privileged agent process =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ vim conf/nginx.conf
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ openresty -p `pwd ` -c ./conf/nginx.conf -s stop
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ openresty -p `pwd ` -c ./conf/nginx.conf 
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ ps -ef |grep nginx
+root      4752     1  0 10:00 ?        00:00:00 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+www-data  4753  4752  0 10:00 ?        00:00:00 nginx: worker process
+www-data  4754  4752  0 10:00 ?        00:00:00 nginx: worker process
+www-data  4755  4752  0 10:00 ?        00:00:00 nginx: worker process
+www-data  4756  4752  0 10:00 ?        00:00:00 nginx: worker process
+leocheu+  9240  3107  0 11:41 ?        00:00:00 nginx: master process openresty -p /home/leocheung/source/ikuai_gitsrc/openresty -c ./conf/nginx.conf
+leocheu+  9241  9240  0 11:41 ?        00:00:00 nginx: worker process
+leocheu+  9242  9240  0 11:41 ?        00:00:00 nginx: privileged agent process
+leocheu+  9247  4408  0 11:41 pts/19   00:00:00 grep --color=auto nginx
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
