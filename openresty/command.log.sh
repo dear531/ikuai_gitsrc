@@ -559,3 +559,27 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'local memca
     ngx.say("dog: ", res)'
 dog: 
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
+
+===== install for openresty install ====
+leocheung@leocheung-CW65S:~/source/openresty/test-nginx$ sudo apt-get install cpanminus
+leocheung@leocheung-CW65S:~/source/openresty/test-nginx$ sudo cpanm --notest Test::Nginx IPC::Run > build.log 2>&1 || (cat build.log && exit 1)
+git clone https://github.com/openresty/test-nginx.git
+
+leocheung@leocheung-CW65S:~/source/openresty/test-nginx$ prove -Itest-nginx/lib -r t
+t/apply_moves.t .......... ok   
+t/check_response_body.t .. ok   
+t/get_req_from_block.t ... ok   
+t/parse_request.t ........ ok   
+t/pod-coverage.t ......... skipped: we know we have poor POD coverage :P
+t/pod.t .................. skipped: Test::Pod required for testing POD
+t/resp_body_filters.t .... ok     
+t/syntax.t ............... lib/Test/Nginx/LWP.pm syntax OK
+t/syntax.t ............... 1/5 lib/Test/Nginx/Socket.pm syntax OK
+lib/Test/Nginx/Socket/Lua.pm syntax OK
+lib/Test/Nginx/Socket/Lua/Stream.pm syntax OK
+lib/Test/Nginx/Socket/Lua/Dgram.pm syntax OK
+t/syntax.t ............... ok   
+All tests successful.
+Files=8, Tests=42,  1 wallclock secs ( 0.05 usr  0.00 sys +  0.96 cusr  0.12 csys =  1.13 CPU)
+Result: PASS
+
