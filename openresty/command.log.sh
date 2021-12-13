@@ -600,3 +600,27 @@ nginx.org
 err:no resolver defined to resolve "nginx.org"
 hello spawn
 leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
+
+
+====== show no wait for ngx.thread ======
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl -i 127.0.0.1:8080/thread003
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Mon, 13 Dec 2021 04:21:19 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ tail -f logs/error.log 
+2021/12/13 12:19:40 [error] 11310#11310: *54 [lua] init_worker_by_lua:11: this is privileged agent timer, context: ngx.timer
+2021/12/13 12:19:40 [notice] 11318#11318: signal process started
+2021/12/13 12:19:44 [error] 11325#11325: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: first, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
+2021/12/13 12:19:44 [error] 11325#11325: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: second, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
+2021/12/13 12:20:47 [notice] 11335#11335: signal process started
+2021/12/13 12:20:52 [error] 11339#11339: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: first, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
+2021/12/13 12:20:52 [error] 11339#11339: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: second, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
+2021/12/13 12:21:15 [notice] 11346#11346: signal process started
+2021/12/13 12:21:19 [error] 11350#11350: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: first, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
+2021/12/13 12:21:19 [error] 11350#11350: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: second, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
+
+
