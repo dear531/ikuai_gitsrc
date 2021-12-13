@@ -583,3 +583,20 @@ All tests successful.
 Files=8, Tests=42,  1 wallclock secs ( 0.05 usr  0.00 sys +  0.96 cusr  0.12 csys =  1.13 CPU)
 Result: PASS
 
+
+===== ngx.thread =====
+
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ curl -i 127.0.0.1:8080/spawn
+HTTP/1.1 200 OK
+Server: openresty/1.19.3.1
+Date: Mon, 13 Dec 2021 03:59:25 GMT
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+lua.org
+err:no resolver defined to resolve "lua.org"
+nginx.org
+err:no resolver defined to resolve "nginx.org"
+hello spawn
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
