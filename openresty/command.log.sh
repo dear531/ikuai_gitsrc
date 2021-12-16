@@ -624,3 +624,7 @@ leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ tail -f logs/error.lo
 2021/12/13 12:21:19 [error] 11350#11350: *3 [lua] content_by_lua(nginx.conf:130):3: thread name: second, now start, client: 127.0.0.1, server: , request: "GET /thread003 HTTP/1.1", host: "127.0.0.1:8080"
 
 
+
+==== ngx.sleep() ====
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$ resty -e 'ngx.sleep(10)'
+leocheung@leocheung-CW65S:~/source/ikuai_gitsrc/openresty$
