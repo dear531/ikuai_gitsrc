@@ -1533,3 +1533,53 @@ br1       Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48
           接收字节:35825285 (35.8 MB)  发送字节:12757100 (12.7 MB)
 
 
+leocheung@leocheung-CW65S:~/tmp$ ifconfig br1
+br1       Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          inet 地址:192.168.3.130  广播:192.168.3.255  掩码:255.255.255.0
+          inet6 地址: fe80::82fa:5bff:fe2e:cb48/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1
+          接收数据包:32617462 错误:0 丢弃:0 过载:0 帧数:0
+          发送数据包:16659268 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:47399976676 (47.3 GB)  发送字节:1239257562 (1.2 GB)
+
+leocheung@leocheung-CW65S:~/tmp$ sudo ifconfig br1 add 2001:0:0:12::1/64
+leocheung@leocheung-CW65S:~/tmp$ ifconfig br1
+br1       Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          inet 地址:192.168.3.130  广播:192.168.3.255  掩码:255.255.255.0
+          inet6 地址: fe80::82fa:5bff:fe2e:cb48/64 Scope:Link
+          inet6 地址: 2001:0:0:12::1/64 Scope:Global
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1
+          接收数据包:32617528 错误:0 丢弃:0 过载:0 帧数:0
+          发送数据包:16659356 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:47399982874 (47.3 GB)  发送字节:1239265649 (1.2 GB)
+
+leocheung@leocheung-CW65S:~/tmp$ sudo ifconfig br1 del 2001:0:0:12::1/64
+leocheung@leocheung-CW65S:~/tmp$ ifconfig br1
+br1       Link encap:以太网  硬件地址 80:fa:5b:2e:cb:48  
+          inet 地址:192.168.3.130  广播:192.168.3.255  掩码:255.255.255.0
+          inet6 地址: fe80::82fa:5bff:fe2e:cb48/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  跃点数:1
+          接收数据包:32617670 错误:0 丢弃:0 过载:0 帧数:0
+          发送数据包:16659554 错误:0 丢弃:0 过载:0 载波:0
+          碰撞:0 发送队列长度:1000 
+          接收字节:47399997298 (47.3 GB)  发送字节:1239285588 (1.2 GB)
+
+leocheung@leocheung-CW65S:~/tmp$ ping6 2001:0:0:12::1
+connect: Network is unreachable
+leocheung@leocheung-CW65S:~/tmp$ sudo ifconfig br1 add 2001:0:0:12::1/64
+leocheung@leocheung-CW65S:~/tmp$ ping6 2001:0:0:12::1
+PING 2001:0:0:12::1(2001:0:0:12::1) 56 data bytes
+64 bytes from 2001:0:0:12::1: icmp_seq=1 ttl=64 time=0.023 ms
+64 bytes from 2001:0:0:12::1: icmp_seq=2 ttl=64 time=0.070 ms
+64 bytes from 2001:0:0:12::1: icmp_seq=3 ttl=64 time=0.067 ms
+^C
+--- 2001:0:0:12::1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2053ms
+rtt min/avg/max/mdev = 0.023/0.053/0.070/0.022 ms
+leocheung@leocheung-CW65S:~/tmp$ sudo ifconfig br1 del 2001:0:0:12::1/64
+leocheung@leocheung-CW65S:~/tmp$ ping6 2001:0:0:12::1
+connect: Network is unreachable
+leocheung@leocheung-CW65S:~/tmp$ 
+
