@@ -1,2 +1,2 @@
 all:pthreads.c
-	$(CC) $^ -lpthread
+	$(CC) $^ -lpthread -g
