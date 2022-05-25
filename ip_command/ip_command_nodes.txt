@@ -1583,3 +1583,48 @@ leocheung@leocheung-CW65S:~/tmp$ ping6 2001:0:0:12::1
 connect: Network is unreachable
 leocheung@leocheung-CW65S:~/tmp$ 
 
+===== ifconfig tunnel =====
+
+leo@HPZBook15:~$ sudo ifconfig sit0 up
+leo@HPZBook15:~$ ifconfig sit0
+sit0: flags=193<UP,RUNNING,NOARP>  mtu 1480
+        inet6 ::192.168.1.200  prefixlen 96  scopeid 0x80<compat,global>
+        inet6 ::192.168.102.1  prefixlen 96  scopeid 0x80<compat,global>
+        inet6 ::127.0.0.1  prefixlen 96  scopeid 0x90<compat,host>
+        inet6 ::192.168.101.1  prefixlen 96  scopeid 0x80<compat,global>
+        inet6 ::192.168.122.1  prefixlen 96  scopeid 0x80<compat,global>
+        sit  txqueuelen 1000  (IPv6-in-IPv4)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+leo@HPZBook15:~$ sudo ifconfig sit0 add 2002:80b0:b807::1/16
+leo@HPZBook15:~$ sudo route -A inet6 add 2000::/3 gw ::192.88.99.1 dev sit0
+leo@HPZBook15:~$ ifconfig  sit0
+sit0: flags=193<UP,RUNNING,NOARP>  mtu 1480
+        inet6 ::192.168.1.200  prefixlen 96  scopeid 0x80<compat,global>
+        inet6 ::192.168.102.1  prefixlen 96  scopeid 0x80<compat,global>
+        inet6 2002:80b0:b807::1  prefixlen 16  scopeid 0x0<global>
+        inet6 ::127.0.0.1  prefixlen 96  scopeid 0x90<compat,host>
+        inet6 ::192.168.101.1  prefixlen 96  scopeid 0x80<compat,global>
+        inet6 ::192.168.122.1  prefixlen 96  scopeid 0x80<compat,global>
+        sit  txqueuelen 1000  (IPv6-in-IPv4)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 18  bytes 5492 (5.4 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+leo@HPZBook15:~$ ping6 2002:80b0:b807::1
+PING 2002:80b0:b807::1(2002:80b0:b807::1) 56 data bytes
+64 字节，来自 2002:80b0:b807::1: icmp_seq=1 ttl=64 时间=0.096 毫秒
+64 字节，来自 2002:80b0:b807::1: icmp_seq=2 ttl=64 时间=0.116 毫秒
+64 字节，来自 2002:80b0:b807::1: icmp_seq=3 ttl=64 时间=0.118 毫秒
+64 字节，来自 2002:80b0:b807::1: icmp_seq=4 ttl=64 时间=0.110 毫秒
+64 字节，来自 2002:80b0:b807::1: icmp_seq=5 ttl=64 时间=0.128 毫秒
+
+--- 2002:80b0:b807::1 ping 统计 ---
+已发送 5 个包， 已接收 5 个包, 0% 包丢失, 耗时 4101 毫秒
+rtt min/avg/max/mdev = 0.096/0.113/0.128/0.010 ms
+leo@HPZBook15:~$
+
