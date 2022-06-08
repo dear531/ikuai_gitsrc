@@ -1628,3 +1628,14 @@ PING 2002:80b0:b807::1(2002:80b0:b807::1) 56 data bytes
 rtt min/avg/max/mdev = 0.096/0.113/0.128/0.010 ms
 leo@HPZBook15:~$
 
+
+==== iconfig pointopoint ====
+/* 设置成功了，但不知道怎么用，也不知道干啥用 */
+root@iKuai:/$ifconfig lan1 pointopoint 192.168.101.5
+root@iKuai:/$ip -o addr show lan1
+16: lan1    inet 192.168.101.12 peer 192.168.101.5/24 brd 192.168.101.255 scope global lan1\       valid_lft forever preferred_lft forever
+root@iKuai:/$ifconfig lan1 -pointopoint 192.168.101.5
+root@iKuai:/$ip -o addr show lan1
+16: lan1    inet 192.168.101.5/24 brd 192.168.101.255 scope global lan1\       valid_lft forever preferred_lft forever
+root@iKuai:/$
+
