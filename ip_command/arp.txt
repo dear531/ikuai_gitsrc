@@ -1,0 +1,15 @@
+leo@vu2004:~$ arp -n
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.101.1            ether   52:54:00:fc:a5:c9   C                     enp8s0
+192.168.122.1            ether   52:54:00:3f:a2:e8   C                     enp1s0
+192.168.102.1            ether   52:54:00:58:a8:ce   C                     enp2s0
+leo@vu2004:~$ arp -an
+? (192.168.101.1) at 52:54:00:fc:a5:c9 [ether] on enp8s0
+? (192.168.122.1) at 52:54:00:3f:a2:e8 [ether] on enp1s0
+? (192.168.102.1) at 52:54:00:58:a8:ce [ether] on enp2s0
+leo@vu2004:~$ arp -a
+bogon (192.168.101.1) at 52:54:00:fc:a5:c9 [ether] on enp8s0
+localhost (192.168.122.1) at 52:54:00:3f:a2:e8 [ether] on enp1s0
+localhost (192.168.102.1) at 52:54:00:58:a8:ce [ether] on enp2s0
+leo@vu2004:~$
+
