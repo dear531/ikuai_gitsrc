@@ -59,3 +59,13 @@ P published entries
 
 Each complete entry in the ARP cache will be marked with the C flag.
 Permanent entries are marked with M and published entries have the P flag.
+
+=== arp -Ds ===
+leo@vu2004:~$ sudo /usr/sbin/arp -i enp8s0 -Ds 10.0.0.2 enp1s0 pub
+[sudo] password for leo:
+leo@vu2004:~$ arp -e
+Address                  HWtype  HWaddress           Flags Mask            Iface
+bogon                    ether   52:54:00:fc:a5:c9   CM                    enp8s0
+localhost                ether   52:54:00:3f:a2:e8   C                     enp1s0
+bogon                    ether   52:54:00:58:a8:ce   C                     enp2s0
+bogon                    *       <from_interface>    MP                    enp8s0
