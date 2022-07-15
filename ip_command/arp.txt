@@ -69,3 +69,10 @@ bogon                    ether   52:54:00:fc:a5:c9   CM                    enp8s
 localhost                ether   52:54:00:3f:a2:e8   C                     enp1s0
 bogon                    ether   52:54:00:58:a8:ce   C                     enp2s0
 bogon                    *       <from_interface>    MP                    enp8s0
+
+
+EXAMPLES
+/usr/sbin/arp -i eth0 -Ds 10.0.0.2 eth1 pub
+
+This will answer ARP requests for 10.0.0.2 on eth0 with the MAC address for eth1.
+
