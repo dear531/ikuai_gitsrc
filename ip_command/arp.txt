@@ -76,3 +76,20 @@ EXAMPLES
 
 This will answer ARP requests for 10.0.0.2 on eth0 with the MAC address for eth1.
 
+=== arp -d ===
+leo@vu2004:~$ arp -en
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.101.1            ether   52:54:00:fc:a5:c9   CM                    enp8s0
+192.168.122.1            ether   52:54:00:3f:a2:e8   C                     enp1s0
+192.168.102.1            ether   52:54:00:58:a8:ce   C                     enp2s0
+10.0.0.2                 *       <from_interface>    MP                    enp8s0
+leo@vu2004:~$ sudo arp -i enp8s0 -d 192.168.101.1
+[sudo] password for leo:
+leo@vu2004:~$ arp -en
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.101.1            ether   52:54:00:fc:a5:c9   C                     enp8s0
+192.168.122.1            ether   52:54:00:3f:a2:e8   C                     enp1s0
+192.168.102.1            ether   52:54:00:58:a8:ce   C                     enp2s0
+10.0.0.2                 *       <from_interface>    MP                    enp8s0
+leo@vu2004:~$
+
