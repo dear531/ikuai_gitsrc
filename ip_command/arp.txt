@@ -32,3 +32,11 @@ localhost                ether   74:05:a5:89:d7:5e   C                     enp0s
 记录: 5 跳过: 0 找到: 5
 leo@HPZBook15:~/source/ikuai_gitsrc/ip_command$
 
+
+=== arp -e for linux systel ===
+leo@vu2004:~$ arp -e
+Address                  HWtype  HWaddress           Flags Mask            Iface
+bogon                    ether   52:54:00:fc:a5:c9   C                     enp8s0
+localhost                ether   52:54:00:3f:a2:e8   C                     enp1s0
+bogon                    ether   52:54:00:58:a8:ce   C                     enp2s0
+
