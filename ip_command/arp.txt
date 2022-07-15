@@ -40,3 +40,9 @@ bogon                    ether   52:54:00:fc:a5:c9   C                     enp8s
 localhost                ether   52:54:00:3f:a2:e8   C                     enp1s0
 bogon                    ether   52:54:00:58:a8:ce   C                     enp2s0
 
+
+=== arp -i for interface ====
+leo@vu2004:~$ arp -i enp8s0
+Address                  HWtype  HWaddress           Flags Mask            Iface
+bogon                    ether   52:54:00:fc:a5:c9   C                     enp8s0
+
