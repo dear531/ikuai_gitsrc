@@ -1,3 +1,4 @@
+=== arp -n ===
 leo@vu2004:~$ arp -n
 Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.101.1            ether   52:54:00:fc:a5:c9   C                     enp8s0
@@ -12,4 +13,22 @@ bogon (192.168.101.1) at 52:54:00:fc:a5:c9 [ether] on enp8s0
 localhost (192.168.122.1) at 52:54:00:3f:a2:e8 [ether] on enp1s0
 localhost (192.168.102.1) at 52:54:00:58:a8:ce [ether] on enp2s0
 leo@vu2004:~$
+
+=== arp -v ====
+leo@HPZBook15:~/source/ikuai_gitsrc/ip_command$ arp
+地址                     类型    硬件地址            标志  Mask            接口
+localhost                ether   52:54:00:2b:80:69   C                     virbr2
+bogon                    ether   52:54:00:10:49:a5   C                     virbr0
+bogon                    ether   52:54:00:58:0e:f1   C                     virbr1
+bogon                    ether   f4:6d:2f:f2:ea:48   C                     enp0s25
+localhost                ether   74:05:a5:89:d7:5e   C                     enp0s25
+leo@HPZBook15:~/source/ikuai_gitsrc/ip_command$ arp -v
+地址                     类型    硬件地址            标志  Mask            接口
+localhost                ether   52:54:00:2b:80:69   C                     virbr2
+bogon                    ether   52:54:00:10:49:a5   C                     virbr0
+bogon                    ether   52:54:00:58:0e:f1   C                     virbr1
+bogon                    ether   f4:6d:2f:f2:ea:48   C                     enp0s25
+localhost                ether   74:05:a5:89:d7:5e   C                     enp0s25
+记录: 5 跳过: 0 找到: 5
+leo@HPZBook15:~/source/ikuai_gitsrc/ip_command$
 
