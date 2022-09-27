@@ -70,3 +70,44 @@ Chain INPUT (policy ACCEPT 40 packets, 2640 bytes)
     8   424 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 TIME from 06:03:25 to 06:07:25 UTC reject-with icmp-port-unreachable
 leo@vu2004:~$
 
+
+==== connlimit ====
+
+链接数量限制
+
+leo@vu2004:~$ sudo iptables -R INPUT 1 -m connlimit --connlimit-above 5 -p tcp --dport 53 -j REJECT
+
+链接少时能链接上
+leo@vu2004:~$ nc -vz 127.0.0.53 53
+Connection to 127.0.0.53 53 port [tcp/domain] succeeded!
+leo@vu2004:~$ nc -vz 127.0.0.53 53
+Connection to 127.0.0.53 53 port [tcp/domain] succeeded!
+leo@vu2004:~$ nc 127.0.0.53 53 &
+[6] 3580
+leo@vu2004:~$ nc 127.0.0.53 53 &
+[7] 3581
+
+[6]+  Stopped                 nc 127.0.0.53 53
+leo@vu2004:~$ nc 127.0.0.53 53 &
+[8] 3582
+[7]   Exit 1                  nc 127.0.0.53 53
+
+链接多时被拒绝
+leo@vu2004:~$ nc -vz 127.0.0.53 53
+nc: connect to 127.0.0.53 port 53 (tcp) failed: Connection refused
+[8]   Exit 1                  nc 127.0.0.53 53
+leo@vu2004:~$ nc -vz 127.0.0.53 53
+nc: connect to 127.0.0.53 port 53 (tcp) failed: Connection refused
+leo@vu2004:~$ nc -vz 127.0.0.53 53
+nc: connect to 127.0.0.53 port 53 (tcp) failed: Connection refused
+leo@vu2004:~$
+
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 260 packets, 16940 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   16   972 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            #conn src/32 > 5 tcp dpt:53 reject-with icmp-port-unreachable
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 417 packets, 27821 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   32  1944 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            #conn src/32 > 5 tcp dpt:53 reject-with icmp-port-unreachable
+leo@vu2004:~$
