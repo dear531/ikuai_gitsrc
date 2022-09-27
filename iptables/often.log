@@ -2,6 +2,10 @@
 
 -m string --string helloword --algo kmp
 
+-m sring
+--string pattern # 指定要匹配的字符串
+--algo {bm|kmp} # 匹配的查询算法
+
 leo@vu2004:~$ sudo iptables -A INPUT -p tcp -m string --string helloword --algo kmp -j REJECT
 leo@vu2004:~$ 
 leo@vu2004:~$ sudo iptables -vnL INPUT
@@ -35,3 +39,34 @@ Chain INPUT (policy ACCEPT 187 packets, 12747 bytes)
  pkts bytes target     prot opt in     out     source               destination
     9   578 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "helloword" ALGO name kmp TO 65535 reject-with icmp-port-unreachable
 leo@vu2004:~$ 
+
+==== time 设置处理规则的时间 =====
+
+leo@vu2004:~$ sudo iptables -R INPUT 1 -p tcp --dport 8888 -m time --timestart 06:03:25 --timestop 06:07:25 -j REJECT
+leo@vu2004:~$ nc -l 8888
+leo@vu2004:~$
+
+
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ nc -vz 192.168.122.63 8888
+nc: connect to 192.168.122.63 port 8888 (tcp) failed: Connection refused
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ nc -vz 192.168.122.63 8888
+Connection to 192.168.122.63 8888 port [tcp/*] succeeded!
+
+leo@vu2004:~$ date
+Tue 27 Sep 2022 06:05:36 AM UTC
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 7 packets, 488 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 TIME from 06:03:25 to 06:05:25 UTC reject-with icmp-port-unreachable
+leo@vu2004:~$ date
+Tue 27 Sep 2022 06:07:38 AM UTC
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 28 packets, 1928 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    8   424 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 TIME from 06:03:25 to 06:07:25 UTC reject-with icmp-port-unreachable
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 40 packets, 2640 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    8   424 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8888 TIME from 06:03:25 to 06:07:25 UTC reject-with icmp-port-unreachable
+leo@vu2004:~$
+
