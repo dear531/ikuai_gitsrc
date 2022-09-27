@@ -1,0 +1,37 @@
+=== 过滤包中含有的关键字 ====
+
+-m string --string helloword --algo kmp
+
+leo@vu2004:~$ sudo iptables -A INPUT -p tcp -m string --string helloword --algo kmp -j REJECT
+leo@vu2004:~$ 
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 53 packets, 3692 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "helloword" ALGO name kmp TO 65535 reject-with icmp-port-unreachable
+leo@vu2004:~$ nc -l 8888
+hellowordout
+hello
+helloin
+
+leo@HPZBook15:~$ nc 192.168.122.63 8888
+hellowordout
+hello
+helloin
+hellowordin
+haoin
+
+leo@HPZBook15:~$
+
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 173 packets, 11859 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    1    66 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "helloword" ALGO name kmp TO 65535 reject-with icmp-port-unreachable
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 180 packets, 12303 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    7   450 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "helloword" ALGO name kmp TO 65535 reject-with icmp-port-unreachable
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 187 packets, 12747 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    9   578 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "helloword" ALGO name kmp TO 65535 reject-with icmp-port-unreachable
+leo@vu2004:~$ 
