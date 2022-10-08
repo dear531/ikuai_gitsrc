@@ -144,3 +144,30 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 wan1
 root@iKuai:/$
 
+==== mss ====
+root@iKuai:/$route -ee
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+default         192.168.122.1   0.0.0.0         UG        0 0          0 wan1
+192.168.101.0   *               255.255.255.0   U         0 0          0 lan1
+192.168.102.0   *               255.255.255.0   U         0 0          0 lan2
+192.168.122.0   *               255.255.255.0   U         0 0          0 wan1
+root@iKuai:/$route add -net 192.168.103.0/24 mss 1500 dev lan1
+root@iKuai:/$route -een
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         192.168.122.1   0.0.0.0         UG        0 0          0 wan1
+192.168.101.0   0.0.0.0         255.255.255.0   U         0 0          0 lan1
+192.168.102.0   0.0.0.0         255.255.255.0   U         0 0          0 lan2
+192.168.103.0   0.0.0.0         255.255.255.0   U      1500 0          0 lan1
+192.168.122.0   0.0.0.0         255.255.255.0   U         0 0          0 wan1
+root@iKuai:/$route del -net 192.168.103.0/24 mss 1500 dev lan1
+root@iKuai:/$route -een
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         192.168.122.1   0.0.0.0         UG        0 0          0 wan1
+192.168.101.0   0.0.0.0         255.255.255.0   U         0 0          0 lan1
+192.168.102.0   0.0.0.0         255.255.255.0   U         0 0          0 lan2
+192.168.122.0   0.0.0.0         255.255.255.0   U         0 0          0 wan1
+root@iKuai:/$
+
