@@ -197,3 +197,43 @@ Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
 192.168.102.0   0.0.0.0         255.255.255.0   U         0 0          0 lan2
 192.168.122.0   0.0.0.0         255.255.255.0   U         0 0          0 wan1
 root@iKuai:/$
+
+==== reject ====
+
+root@iKuai:/$route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
+192.168.101.0   0.0.0.0         255.255.255.0   U     0      0        0 lan1
+192.168.102.0   0.0.0.0         255.255.255.0   U     0      0        0 lan2
+192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 wan1
+root@iKuai:/$route add -net 192.168.101.0/24 reject
+root@iKuai:/$ping 192.168.101.1
+ping: connect: No route to host
+root@iKuai:/$route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
+192.168.101.0   0.0.0.0         255.255.255.0   !     0      0        0 *
+192.168.101.0   0.0.0.0         255.255.255.0   U     0      0        0 lan1
+192.168.102.0   0.0.0.0         255.255.255.0   U     0      0        0 lan2
+192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 wan1
+root@iKuai:/$ping 192.168.101.1
+ping: connect: No route to host
+root@iKuai:/$route del -net 192.168.101.0/24 reject
+root@iKuai:/$route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
+192.168.101.0   0.0.0.0         255.255.255.0   U     0      0        0 lan1
+192.168.102.0   0.0.0.0         255.255.255.0   U     0      0        0 lan2
+192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 wan1
+root@iKuai:/$ping 192.168.101.1
+PING 192.168.101.1 (192.168.101.1) 56(84) bytes of data.
+64 bytes from 192.168.101.1: icmp_seq=1 ttl=64 time=0.201 ms
+64 bytes from 192.168.101.1: icmp_seq=2 ttl=64 time=0.409 ms
+^C
+--- 192.168.101.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.201/0.305/0.409/0.104 ms
+
