@@ -75,3 +75,28 @@ default         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
 192.168.102.0   *               255.255.255.0   U     0      0        0 lan2
 192.168.122.0   *               255.255.255.0   U     0      0        0 wan1
 
+root@iKuai:/$route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
+192.168.101.0   0.0.0.0         255.255.255.0   U     0      0        0 lan1
+192.168.102.0   0.0.0.0         255.255.255.0   U     0      0        0 lan2
+192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 wan1
+root@iKuai:/$route add -host 192.168.103.2  dev lan1
+root@iKuai:/$route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
+192.168.101.0   *               255.255.255.0   U     0      0        0 lan1
+192.168.102.0   *               255.255.255.0   U     0      0        0 lan2
+192.168.103.2   *               255.255.255.255 UH    0      0        0 lan1
+192.168.122.0   *               255.255.255.0   U     0      0        0 wan1
+root@iKuai:/$route del -host 192.168.103.2  dev lan1
+root@iKuai:/$route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         192.168.122.1   0.0.0.0         UG    1      0        0 wan1
+192.168.101.0   *               255.255.255.0   U     0      0        0 lan1
+192.168.102.0   *               255.255.255.0   U     0      0        0 lan2
+192.168.122.0   *               255.255.255.0   U     0      0        0 wan1
+
