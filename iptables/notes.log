@@ -1864,3 +1864,63 @@ listening on br1, link-type EN10MB (Ethernet), capture size 262144 bytes
 8 packets received by filter
 0 packets dropped by kernel
 leo@HP:~/source/ikuai_gitsrc_ssh/iptables$
+
+==== SNAT 将主机设置成路由 ====
+==== 1.开启转发 ====
+echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf
+sysctl -p
+
+==== 2.查看做路由的主机的ip ====
+leo@vu2004:~/source$ ip -o addr show
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+2: enp1s0    inet 192.168.122.63/24 brd 192.168.122.255 scope global dynamic enp1s0\       valid_lft 3212sec preferred_lft 3212sec
+2: enp1s0    inet6 fe80::5054:ff:fe10:49a5/64 scope link \       valid_lft forever preferred_lft forever
+3: enp2s0    inet 192.168.102.188/24 brd 192.168.102.255 scope global enp2s0\       valid_lft forever preferred_lft forever
+3: enp2s0    inet6 fe80::5054:ff:fe58:ef1/64 scope link \       valid_lft forever preferred_lft forever
+4: enp8s0    inet 192.168.101.207/24 brd 192.168.101.255 scope global dynamic enp8s0\       valid_lft 3331sec preferred_lft 3331sec
+4: enp8s0    inet6 fe80::5054:ff:fe2b:8069/64 scope link \       valid_lft forever preferred_lft forever
+leo@vu2004:~/source$
+
+==== 3.将192.168.102.0/24网段的源ip，在执行走默认路由口从enp1s0发出的时候，执行snat，将原地址改成192.168.122.63 ====
+sudo iptables -t nat -A POSTROUTING -s 192.168.102.0/24 -o enp1s0 -j SNAT --to-source 192.168.122.63
+
+==== 4.下联在enp2s0 网段为192.168.102.0/24 的主机ip地址 ====
+root@iKuai:/root$ip -o addr show
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet 192.0.0.0/32 scope global lo\       valid_lft forever preferred_lft forever
+15: lan1    inet 192.168.101.12/24 brd 192.168.101.255 scope global lan1\       valid_lft forever preferred_lft forever
+16: wan1    inet 192.168.102.237/24 brd 192.168.102.255 scope global wan1\       valid_lft forever preferred_lft forever
+
+==== 5.ping外网 情形 ====
+root@iKuai:/root$ping hao123.com -c 4
+PING 39.156.68.154 (39.156.68.154) 56(84) bytes of data.
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=1 ttl=48 time=11.1 ms
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=2 ttl=48 time=11.0 ms
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=3 ttl=48 time=10.7 ms
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=4 ttl=48 time=10.6 ms
+
+--- 39.156.68.154 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3006ms
+rtt min/avg/max/mdev = 10.592/10.863/11.100/0.210 ms
+
+==== DNAT 将以上已经设置好路由的主机，进行内网穿透 ====
+注意一定是要在已经进行了路由设置上的主机做以下命令，如若不然要进行针对内网穿透规则的反向snat，才能将反向数据返回
+
+==== 1.设置iptables dnat规则 将从进入主机节点的192.168.122.63的ip地址的，协议是tcp，端口是3333的数据报，dnat成ip端口为192.168.102.237:4444 ====
+sudo iptables -t nat -R PREROUTING 1 -d 192.168.122.63 -p tcp -m tcp --dport 3333 -j DNAT --to-destination 192.168.102.237:4444
+
+==== 2.在其他主机上连接路由主机的端口，192.168.122.63:3333 ====
+192.168.122.1(client)  tcp -> 192.168.122.63:3333(route) -> 192.168.102.237:4444(server)
+
+server :
+root@iKuai:/root$nc -l -p 4444
+fdsa
+root@iKuai:/root$
+
+client:
+leo@HPZBook15:~$ nc 192.168.102.237 4444
+fdsa
+
+leo@HPZBook15:~$
+
