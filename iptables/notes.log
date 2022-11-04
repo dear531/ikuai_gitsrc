@@ -1924,3 +1924,45 @@ fdsa
 
 leo@HPZBook15:~$
 
+
+==== -j LOG ====
+=== 执行规则 ===
+sudo iptables -t nat -I PREROUTING 1 -d 192.168.122.63 -p tcp -m tcp --dport 3333 -j  LOG --log-level debug
+
+=== 跟路由主机网段的主机方位规则的ip及端口 ===
+leo@HPZBook15:~$ nc 192.168.122.63 3333
+fdsa
+
+
+=== 模拟链接之后，看iptables的匹配包的个数 ====
+leo@vu2004:~/tmp$ sudo iptables -t nat -L PREROUTING -vn
+Chain PREROUTING (policy ACCEPT 16 packets, 960 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    2   120 LOG        tcp  --  *      *       0.0.0.0/0            192.168.122.63       tcp dpt:3333 LOG flags 0 level 7
+    2   120 DNAT       tcp  --  *      *       0.0.0.0/0            192.168.122.63       tcp dpt:3333 to:192.168.102.237:4444
+
+
+==== 查看日志的情况，日志文件及用dmesg查看的内容 ====
+leo@vu2004:~/tmp$ sudo tail -f /var/log/syslog
+Nov  4 06:33:20 vu2004 systemd[1]: apt-daily-upgrade.service: Succeeded.
+Nov  4 06:33:20 vu2004 systemd[1]: Finished Daily apt upgrade and clean activities.
+Nov  4 06:33:33 vu2004 systemd[1]: Starting Daily apt download activities...
+Nov  4 06:33:52 vu2004 systemd[1]: apt-daily.service: Succeeded.
+Nov  4 06:33:52 vu2004 systemd[1]: Finished Daily apt download activities.
+Nov  4 06:38:42 vu2004 PackageKit: daemon quit
+Nov  4 06:38:42 vu2004 systemd[1]: packagekit.service: Succeeded.
+Nov  4 06:43:47 vu2004 systemd-networkd[722]: enp8s0: DHCP: No gateway received from DHCP server.
+Nov  4 06:49:24 vu2004 kernel: [21724.995704] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=59851 DF PROTO=TCP SPT=40010 DPT=3333 WINDOW=64240 RES=0x00 SYN URGP=0
+Nov  4 06:49:30 vu2004 kernel: [21730.595400] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=18434 DF PROTO=TCP SPT=57418 DPT=3333 WINDOW=64240 RES=0x00 SYN URGP=0
+
+
+
+
+
+Nov  4 06:52:32 vu2004 kernel: [21912.673521] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=34320 DF PROTO=TCP SPT=46616 DPT=3333 WINDOW=64240 RES=0x00 SYN URGP=0
+Nov  4 06:52:43 vu2004 kernel: [21924.158302] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=2409 DF PROTO=TCP SPT=44860 DPT=3333 WINDOW=64240 RES=0x00 SYN URGP=0
+
+leo@vu2004:~/tmp$ dmesg
+[21912.673521] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=34320 DF PROTO=TCP SPT=46616 DPT=3333 WINDOW=64240 RES=0x00 SYN URGP=0
+[21924.158302] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=2409 DF PROTO=TCP SPT=44860 DPT=3333 WINDOW=64240 RES=0x00 SYN URGP=0
+
