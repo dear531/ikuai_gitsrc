@@ -1904,6 +1904,31 @@ PING 39.156.68.154 (39.156.68.154) 56(84) bytes of data.
 4 packets transmitted, 4 received, 0% packet loss, time 3006ms
 rtt min/avg/max/mdev = 10.592/10.863/11.100/0.210 ms
 
+5.从路由的lan口的设备ping外网的一次，获得数据如下：
+root@iKuai:/root$ping hao123.com -c 1
+PING 39.156.68.154 (39.156.68.154) 56(84) bytes of data.
+64 bytes from 39.156.68.154 (39.156.68.154): icmp_seq=1 ttl=48 time=25.6 ms
+
+--- 39.156.68.154 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 25.553/25.553/25.553/0.000 ms
+root@iKuai:/root$
+
+eo@vu2004:~/tmp$ sudo tcpdump -i any icmp -n
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on any, link-type LINUX_SLL (Linux cooked v1), capture size 262144 bytes
+11:15:46.076548 IP 192.168.102.237 > 39.156.68.154: ICMP echo request, id 50587, seq 1, length 64
+11:15:46.076589 IP 192.168.122.63 > 39.156.68.154: ICMP echo request, id 50587, seq 1, length 64
+11:15:46.101708 IP 39.156.68.154 > 192.168.122.63: ICMP echo reply, id 50587, seq 1, length 64
+11:15:46.101749 IP 39.156.68.154 > 192.168.102.237: ICMP echo reply, id 50587, seq 1, length 64
+^C
+4 packets captured
+4 packets received by filter
+0 packets dropped by kernel
+leo@vu2004:~/tmp$ 
+
+从lan口抓到一个包，又从路由对外的上网的口上也抓到了包，也就是snat前后的都有了 
+
 ==== DNAT 将以上已经设置好路由的主机，进行内网穿透 ====
 注意一定是要在已经进行了路由设置上的主机做以下命令，如若不然要进行针对内网穿透规则的反向snat，才能将反向数据返回
 
