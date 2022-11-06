@@ -2010,3 +2010,42 @@ leo@vu2004:~/tmp$ dmesg
 [27353.777037] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=96 TOS=0x10 PREC=0x00 TTL=64 ID=12748 DF PROTO=TCP SPT=48694 DPT=22 WINDOW=1897 RES=0x00 ACK PSH URGP=0
 [27353.778910] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=12749 DF PROTO=TCP SPT=48694 DPT=22 WINDOW=1897 RES=0x00 ACK URGP=0
 leo@vu2004:~/tmp$ 
+
+==== -g, --goto chain, like -j exceclude not return ====
+
+=== 增加个自定义的链 ====
+sudo iptables -N filter2 -t filter
+
+==== 在新链上增加新规则 ====
+sudo iptables -A filter2 -t filter -p tcp -m limit --limit 2 --limit-burst 2 -j LOG --log-level debug
+sudo iptables -A filter2 -j RETURN
+
+==== 将INPUT链上增加两条跳转到自定义链上的规则，一条用于真正的跳转，另一条用于验证执行第一条之后，后续的规则是否还能执行====
+leo@vu2004:~/tmp$ sudo iptables -A INPUT -p tcp -g filter2
+leo@vu2004:~/tmp$ sudo iptables -A INPUT -p tcp -g filter2
+
+
+==== 增加后查看执行结果，没有跳转回原来的链 ====
+
+leo@vu2004:~/tmp$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 101 packets, 7052 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+  405 28440 filter2    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]
+    0     0 filter2    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]
+leo@vu2004:~/tmp$ sudo iptables -vnL INPUT
+
+leo@vu2004:~/source$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 101 packets, 7052 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+  111  7824 filter2    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]
+    0     0 filter2    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           [goto]
+leo@vu2004:~/source$ sudo iptables -vnL filter2
+Chain filter2 (2 references)
+ pkts bytes target     prot opt in     out     source               destination
+   36  2844 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 2/sec burst 2 LOG flags 0 level 7
+  132  9168 RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0
+
+leo@vu2004:~/source$ sudo tail -f /var/log/syslog
+Nov  6 15:46:58 vu2004 kernel: [45652.490614] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=88 TOS=0x10 PREC=0x00 TTL=64 ID=2297 DF PROTO=TCP SPT=32850 DPT=22 WINDOW=501 RES=0x00 ACK PSH URGP=0
+Nov  6 15:46:59 vu2004 kernel: [45653.135645] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=2299 DF PROTO=TCP SPT=32850 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
+
