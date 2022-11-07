@@ -2079,3 +2079,38 @@ leo@vu2004:~$ sudo tail -f /var/log/syslog
 Nov  7 03:05:39 vu2004 kernel: [ 3288.397935] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC= DF PROTO=TCP SPT=43038 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
 Nov  7 03:06:02 vu2004 kernel: [ 3311.863263] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC= DF PROTO=TCP SPT=45828 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
 leo@vu2004:~$ 
+
+==== addrtype ====
+
+==== 地址属性规则 ====
+=== 插入规则，获取本地地址的包 ===
+leo@vu2004:~$ sudo iptables -A INPUT -m addrtype --src-type LOCAL -j LOG --log-level debug
+==== 查看规则，没有被匹配规则的包 ====
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 19 packets, 1312 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match src-type LOCAL LOG flags 0 level 7
+
+==== 向本地发起几个ping包，制造几个匹配规则的包 =====
+leo@vu2004:~$ ping 127.0.0.1
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.198 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.111 ms
+
+--- 127.0.0.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1028ms
+rtt min/avg/max/mdev = 0.111/0.154/0.198/0.043 ms
+
+==== 再次查看规则，已经有生效的包了====
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 124 packets, 8572 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    4   336 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match src-type LOCAL LOG flags 0 level 7
+==== 查看产生的日志 =====
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov  7 03:48:56 vu2004 kernel: [ 5885.673913] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=84 TOS=0x00 PREC=0x00 TTL=64 ID=39835 DF PROTO=ICMP TYPE=8 CODE=0 ID=1 SEQ=1
+Nov  7 03:48:56 vu2004 kernel: [ 5885.673944] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=84 TOS=0x00 PREC=0x00 TTL=64 ID=39836 PROTO=ICMP TYPE=0 CODE=0 ID=1 SEQ=1
+Nov  7 03:48:57 vu2004 kernel: [ 5886.702131] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=84 TOS=0x00 PREC=0x00 TTL=64 ID=39914 DF PROTO=ICMP TYPE=8 CODE=0 ID=1 SEQ=2
+Nov  7 03:48:57 vu2004 kernel: [ 5886.702165] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=84 TOS=0x00 PREC=0x00 TTL=64 ID=39915 PROTO=ICMP TYPE=0 CODE=0 ID=1 SEQ=2
+leo@vu2004:~$
+
