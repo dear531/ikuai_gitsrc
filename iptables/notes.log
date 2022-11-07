@@ -2049,3 +2049,33 @@ leo@vu2004:~/source$ sudo tail -f /var/log/syslog
 Nov  6 15:46:58 vu2004 kernel: [45652.490614] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=88 TOS=0x10 PREC=0x00 TTL=64 ID=2297 DF PROTO=TCP SPT=32850 DPT=22 WINDOW=501 RES=0x00 ACK PSH URGP=0
 Nov  6 15:46:59 vu2004 kernel: [45653.135645] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=2299 DF PROTO=TCP SPT=32850 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
 
+
+=== -m tcp -p tcp --tcp-flags ====
+
+=== 插入规则，只抓syn的，与--syn同等条件的表达式 ====
+1.设置规则
+leo@vu2004:~$ sudo iptables -A INPUT -m tcp -p tcp --tcp-flags SYN,ACK,FIN,RST SYN -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 75 packets, 5232 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x17/0x02 LOG flags 0 level 7
+leo@vu2004:~$ 
+
+2. 发个nc链接工具，发个22端口的
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ nc -zv 192.168.122.63 22
+Connection to 192.168.122.63 22 port [tcp/ssh] succeeded!
+
+3.查看结果
+
+=== 查看iptables的结果，不加-n会显示标志位的关键字 ====
+leo@vu2004:~$ sudo iptables -vL INPUT
+Chain INPUT (policy ACCEPT 258 packets, 17732 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    2   120 LOG        tcp  --  any    any     anywhere             anywhere             tcp flags:FIN,SYN,RST,ACK/SYN LOG level debug
+leo@vu2004:~$
+
+4.查看日志生效内容
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov  7 03:05:39 vu2004 kernel: [ 3288.397935] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC= DF PROTO=TCP SPT=43038 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
+Nov  7 03:06:02 vu2004 kernel: [ 3311.863263] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC= DF PROTO=TCP SPT=45828 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
+leo@vu2004:~$ 
