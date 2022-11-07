@@ -2184,3 +2184,32 @@ leo@vu2004:~$ sudo iptables -C INPUT -p tcp -m limit --limit 2 --limit-burst 2 -
 leo@vu2004:~$ echo $?
 0
 leo@vu2004:~$
+
+==== -m conntypes ====
+
+leo@vu2004:~$ sudo iptables -A OUTPUT -m connbytes ! --connbytes 10 --connbytes-dir both --connbytes-mode packets -p tcp -m limit --limit 2 --limit-burst 2 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 53 packets, 5252 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ! connbytes 10 connbytes mode packets connbytes direction both limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ nc -l -p 4444
+fdsa
+fdsa
+fds
+leo@vu2004:~$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 92 packets, 8872 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    6   296 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ! connbytes 10 connbytes mode packets connbytes direction both limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo tail  -f /var/log/syslog
+Nov  7 10:12:24 vu2004 kernel: [28893.507038] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=52716 DF PROTO=TCP SPT=41448 DPT=4444 WINDOW=502 RES=0x00 ACK FIN URGP=0
+Nov  7 10:12:24 vu2004 kernel: [28893.509681] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=1205 DF PROTO=TCP SPT=4444 DPT=41448 WINDOW=510 RES=0x00 ACK FIN URGP=0
+Nov  7 10:12:24 vu2004 kernel: [28893.510052] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=52717 DF PROTO=TCP SPT=41448 DPT=4444 WINDOW=502 RES=0x00 ACK URGP=0
+Nov  7 10:17:01 vu2004 CRON[22544]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Nov  7 10:18:10 vu2004 kernel: [29239.829355] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=40 TOS=0x00 PREC=0x00 TTL=64 ID=0 DF PROTO=TCP SPT=4444 DPT=33286 WINDOW=0 RES=0x00 ACK RST URGP=0
+Nov  7 10:18:22 vu2004 kernel: [29251.902775] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=40 TOS=0x00 PREC=0x00 TTL=64 ID=0 DF PROTO=TCP SPT=4444 DPT=47792 WINDOW=0 RES=0x00 ACK RST URGP=0
+Nov  7 10:18:49 vu2004 kernel: [29278.634337] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=0 DF PROTO=TCP SPT=4444 DPT=53438 WINDOW=65160 RES=0x00 ACK SYN URGP=0
+Nov  7 10:18:50 vu2004 kernel: [29279.652171] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=58306 DF PROTO=TCP SPT=4444 DPT=53438 WINDOW=510 RES=0x00 ACK URGP=0
+Nov  7 10:18:51 vu2004 kernel: [29280.360703] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=58307 DF PROTO=TCP SPT=4444 DPT=53438 WINDOW=510 RES=0x00 ACK URGP=0
+Nov  7 10:18:51 vu2004 kernel: [29280.963091] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=58308 DF PROTO=TCP SPT=4444 DPT=53438 WINDOW=510 RES=0x00 ACK URGP=0
+leo@vu2004:~$
+
