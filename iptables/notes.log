@@ -2131,3 +2131,56 @@ Nov  7 07:34:20 vu2004 kernel: [19409.752185] IN= OUT=enp1s0 SRC=192.168.122.63 
 Nov  7 07:34:20 vu2004 kernel: [19409.752200] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=200 TOS=0x10 PREC=0x00 TTL=64 ID=9907 DF PROTO=TCP SPT=22 DPT=43048 WINDOW=501 RES=0x00 ACK PSH URGP=0
 Nov  7 07:34:21 vu2004 kernel: [19410.582536] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=144 TOS=0x10 PREC=0x00 TTL=64 ID=9908 DF PROTO=TCP SPT=22 DPT=43048 WINDOW=501 RES=0x00 ACK PSH URGP=0
 Nov  7 07:34:21 vu2004 kernel: [19410.582548] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=144 TOS=0x10 PREC=0x00 TTL=64 ID=9908 DF PROTO=TCP SPT=22 DPT=43048 WINDOW=501 RES=0x00 ACK PSH URGP=0
+
+=== -m comment 给iptables加自己的注释 ===
+添加规则
+
+leo@vu2004:~$ sudo iptables -A INPUT -p tcp -m limit --limit 2 --limit-burst 2 -m comment --comment "comment_test_flag_1" -j LOG --log-level debug
+
+检查规则是否存在
+
+加所有规则，包括规则的注释选项，检查是存在的
+leo@vu2004:~$ sudo iptables -C INPUT -p tcp -m limit --limit 2 --limit-burst 2 -m comment --comment "comment_test_flag_1" -j LOG --log-level debug
+leo@vu2004:~$ echo $?
+0
+
+去掉注释选项，只检查其他的，检查规则是匹配不上的
+leo@vu2004:~$ sudo iptables -C INPUT -p tcp -m limit --limit 2 --limit-burst 2  -j LOG --log-level debug
+iptables: No chain/target/match by that name.
+leo@vu2004:~$ echo $?
+1
+
+查看规则的匹配包的情况，及注释规则的显示，注释以/* xxx */的形式显示出来
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 256 packets, 18500 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   64  5252 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 2/sec burst 2 /* comment_test_flag_1 */ LOG flags 0 level 7
+leo@vu2004:~$
+
+日志查看
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov  7 08:58:50 vu2004 kernel: [24479.504704] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=88 TOS=0x10 PREC=0x00 TTL=64 ID=23215 DF PROTO=TCP SPT=43048 DPT=22 WINDOW=1699 RES=0x00 ACK PSH URGP=0
+Nov  7 08:58:50 vu2004 kernel: [24479.505561] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=23216 DF PROTO=TCP SPT=43048 DPT=22 WINDOW=1699 RES=0x00 ACK URGP=0
+
+以下为注释命令与位置相关的证明
+
+可以看见，放置在不同的位置的comment模块命令，形成的命令不同，检查命令也会因为放置位置不同返回不同的结果，完全匹配的可以检查过
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 576 packets, 41164 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+  156 12620 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 2/sec burst 2 /* comment_test_flag_1 */ LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -C INPUT -p tcp -m comment --comment "comment_test_flag_1" -m limit --limit 2 --limit-burst 2  -j LOG --log-level debug
+iptables: No chain/target/match by that name.
+leo@vu2004:~$ sudo iptables -A INPUT -p tcp -m comment --comment "comment_test_flag_1" -m limit --limit 2 --limit-burst 2  -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 9 packets, 612 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+  203 16460 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 2/sec burst 2 /* comment_test_flag_1 */ LOG flags 0 level 7
+    6   420 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* comment_test_flag_1 */ limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -D INPUT -p tcp -m comment --comment "comment_test_flag_1" -m limit --limit 2 --limit-burst 2  -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -C INPUT -p tcp -m comment --comment "comment_test_flag_1" -m limit --limit 2 --limit-burst 2  -j LOG --log-level debug
+iptables: No chain/target/match by that name.
+leo@vu2004:~$ sudo iptables -C INPUT -p tcp -m limit --limit 2 --limit-burst 2 -m comment --comment "comment_test_flag_1" -j LOG --log-level debug
+leo@vu2004:~$ echo $?
+0
+leo@vu2004:~$
