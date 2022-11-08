@@ -2291,3 +2291,25 @@ leo@vu2004:~/source/linux-source-5.4.0$ dmesg
 [18292.420236] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=34362 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
 [18293.936595] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=96 TOS=0x10 PREC=0x00 TTL=64 ID=34363 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK PSH URGP=0
 [18293.938286] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=34364 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
+
+==== -m conntrack ====
+==== 链接跟踪状态 ====
+leo@vu2004:~$ sudo iptables -A INPUT -m conntrack --ctstatus CONFIRMED -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 10 packets, 696 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    9   636 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstatus CONFIRMED tcp dpt:22 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 17 packets, 1132 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   16  1072 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstatus CONFIRMED tcp dpt:22 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 24 packets, 1568 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   23  1508 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstatus CONFIRMED tcp dpt:22 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 31 packets, 2004 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   30  1944 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstatus CONFIRMED tcp dpt:22 LOG flags 0 level 7
+leo@vu2004:~$
+
