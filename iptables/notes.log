@@ -2362,3 +2362,31 @@ Nov  8 08:54:21 vu2004 kernel: [25469.378718] IN=enp1s0 OUT= MAC=52:54:00:10:49:
 Nov  8 08:54:22 vu2004 kernel: [25470.144404] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=88 TOS=0x10 PREC=0x00 TTL=64 ID=46047 DF PROTO=TCP SPT=50884 DPT=22 WINDOW=906 RES=0x00 ACK PSH URGP=0
 leo@vu2004:~$
 
+=== -m hashlimit ====
+=== 限速 ===
+leo@vu2004:~$ sudo iptables -R INPUT 1 -m hashlimit --hashlimit-upto 1 --hashlimit-burst 1/minite --hashlimit-name foo1 -p tcp --dport 4444 -j ACCEPT
+sudo iptables -A INPUT  -p tcp --dport 4444 -j DROP
+leo@vu2004:~$ nc -l -p 4444
+fdsa
+fds
+fdsa
+fdsa
+fdsa
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 162 packets, 11108 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   12   731 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            limit: up to 1/sec burst 1 tcp dpt:4444
+   52  3190 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444
+leo@vu2004:~$
+leo@vu2004:~$ cat /proc/net/ipt_hashlimit/foo1
+0 0.0.0.0:0->0.0.0.0:0 549755813888 137438953000000 137438953000000
+
+第一个字段是expire倒计时时间(单位是秒), 比如这里设置180000毫秒, 即180s, 如果180s内没有再次触发这个规则, 则会一直减到0 (见上面关于expire解释); 如果触发则再次变为180.
+
+第二个字段是 srcip:port->dstip:port, 这里mode只设置了srcip
+
+第三个字段是当前剩余的令牌数
+
+第四个字段是令牌桶最大容量, 是一个定值
+
+第五个字段是一次触发使用的令牌数, 也是令牌产生速率, 也是一个定值
