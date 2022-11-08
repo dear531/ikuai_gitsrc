@@ -2313,3 +2313,26 @@ Chain INPUT (policy ACCEPT 31 packets, 2004 bytes)
    30  1944 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstatus CONFIRMED tcp dpt:22 LOG flags 0 level 7
 leo@vu2004:~$
 
+==== -m cpu ====
+
+==== 将所有的核都挂一遍规则，可以看到，链接在编号3号核心上处理的 ====
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 0 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 1 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 2 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 4 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 3 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 5 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 6 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -A INPUT -m cpu --cpu 7 -p tcp --dport 22 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 29 packets, 2012 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 0 tcp dpt:22 LOG flags 0 level 7
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 1 tcp dpt:22 LOG flags 0 level 7
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 2 tcp dpt:22 LOG flags 0 level 7
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 4 tcp dpt:22 LOG flags 0 level 7
+  288 21656 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 3 tcp dpt:22 LOG flags 0 level 7
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 5 tcp dpt:22 LOG flags 0 level 7
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 6 tcp dpt:22 LOG flags 0 level 7
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            cpu 7 tcp dpt:22 LOG flags 0 level 7
+leo@vu2004:~$
