@@ -2252,3 +2252,42 @@ leo@vu2004:~$ sudo tail -f /var/log/syslog
 Nov  8 02:38:04 vu2004 kernel: [ 2892.106378] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=27461 DF PROTO=TCP SPT=47002 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
 Nov  8 02:38:06 vu2004 systemd[1]: Started Session 7 of user leo.
 Nov  8 02:38:08 vu2004 systemd[1]: session-7.scope: Succeeded.
+
+==== -m connmark and  -j CONNMARK for connnect mark ====
+
+==== 在mangle表中对链接进行打码，在默认的filter表中对打码的包进行日志打印====
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -A INPUT -t mangle -p tcp --syn --dport 22 -j CONNMARK --set-xmark 1
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -A INPUT -m connmark --mark 1 -j LOG --log-level debug
+
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vnL INPUT -t mangle
+Chain INPUT (policy ACCEPT 185 packets, 13072 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 CONNMARK   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 flags:0x17/0x02 CONNMARK set 0x1
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vnL INPUT -t filter
+Chain INPUT (policy ACCEPT 175 packets, 12224 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            connmark match  0x1 LOG flags 0 level 7
+leo@vu2004:~/source/linux-source-5.4.0$ dmesg
+
+=== 进行一下对应规则链接的访问 ====
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ ssh leo@192.168.122.63
+
+
+==== 查看iptables规则的匹配情况 ====
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vnL INPUT -t mangle
+Chain INPUT (policy ACCEPT 307 packets, 23577 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    1    60 CONNMARK   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 flags:0x17/0x02 CONNMARK set 0x1
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vnL INPUT -t filter
+Chain INPUT (policy ACCEPT 288 packets, 22113 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   43  5141 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            connmark match  0x1 LOG flags 0 level 7
+
+==== 查看日志输出情况 =====
+leo@vu2004:~/source/linux-source-5.4.0$ dmesg
+[18291.095392] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=96 TOS=0x10 PREC=0x00 TTL=64 ID=34359 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK PSH URGP=0
+[18291.097016] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=34360 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
+[18292.418494] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=96 TOS=0x10 PREC=0x00 TTL=64 ID=34361 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK PSH URGP=0
+[18292.420236] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=34362 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
+[18293.936595] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=96 TOS=0x10 PREC=0x00 TTL=64 ID=34363 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK PSH URGP=0
+[18293.938286] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=52 TOS=0x10 PREC=0x00 TTL=64 ID=34364 DF PROTO=TCP SPT=43740 DPT=22 WINDOW=501 RES=0x00 ACK URGP=0
