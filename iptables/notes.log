@@ -2237,3 +2237,18 @@ Nov  8 02:23:46 vu2004 kernel: [ 2034.114148] IN=enp2s0 OUT= MAC=52:54:00:58:0e:
 
 leo@vu2004:~$
 
+
+==== iptables-m connlimit =====
+leo@vu2004:~$ sudo iptables -A INPUT -m connlimit --connlimit-above 1 -p tcp --syn --dport 22 -j LOG  --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 98 packets, 6832 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            #conn src/32 > 1 tcp dpt:22 flags:0x17/0x02 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 144 packets, 12065 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    1    60 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            #conn src/32 > 1 tcp dpt:22 flags:0x17/0x02 LOG flags 0 level 7
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov  8 02:38:04 vu2004 kernel: [ 2892.106378] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=27461 DF PROTO=TCP SPT=47002 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
+Nov  8 02:38:06 vu2004 systemd[1]: Started Session 7 of user leo.
+Nov  8 02:38:08 vu2004 systemd[1]: session-7.scope: Succeeded.
