@@ -2390,3 +2390,39 @@ leo@vu2004:~$ cat /proc/net/ipt_hashlimit/foo1
 第四个字段是令牌桶最大容量, 是一个定值
 
 第五个字段是一次触发使用的令牌数, 也是令牌产生速率, 也是一个定值
+
+==== -m hl ====
+leo@vu2004:~$ sudo ip6tables -A INPUT -m hl --hl-gt 10 -j LOG --log-level debug
+leo@vu2004:~$ sudo ip6tables -vnL INPUT
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all      *      *       ::/0                 ::/0                 HL match HL > 10 LOG flags 0 level 7
+leo@vu2004:~$ ping -6 fe80::5054:ff:fe10:49a5%enp1s0
+PING fe80::5054:ff:fe10:49a5%enp1s0(fe80::5054:ff:fe10:49a5%enp1s0) 56 data bytes
+64 bytes from fe80::5054:ff:fe10:49a5%enp1s0: icmp_seq=1 ttl=64 time=0.100 ms
+64 bytes from fe80::5054:ff:fe10:49a5%enp1s0: icmp_seq=2 ttl=64 time=0.060 ms
+64 bytes from fe80::5054:ff:fe10:49a5%enp1s0: icmp_seq=3 ttl=64 time=0.069 ms
+64 bytes from fe80::5054:ff:fe10:49a5%enp1s0: icmp_seq=4 ttl=64 time=0.087 ms
+64 bytes from fe80::5054:ff:fe10:49a5%enp1s0: icmp_seq=5 ttl=64 time=0.057 ms
+
+--- fe80::5054:ff:fe10:49a5%enp1s0 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4099ms
+rtt min/avg/max/mdev = 0.057/0.074/0.100/0.016 ms
+leo@vu2004:~$ sudo ip6tables -vnL INPUT
+Chain INPUT (policy ACCEPT 11 packets, 1096 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   11  1096 LOG        all      *      *       ::/0                 ::/0                 HL match HL > 10 LOG flags 0 level 7
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov 10 07:55:25 vu2004 kernel: [25702.360415] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=13670 PROTO=ICMPv6 TYPE=129 CODE=0 ID=1 SEQ=1
+Nov 10 07:55:26 vu2004 kernel: [25703.387620] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=801645 PROTO=ICMPv6 TYPE=128 CODE=0 ID=1 SEQ=2
+Nov 10 07:55:26 vu2004 kernel: [25703.387634] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=13670 PROTO=ICMPv6 TYPE=129 CODE=0 ID=1 SEQ=2
+Nov 10 07:55:27 vu2004 kernel: [25704.411619] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=801645 PROTO=ICMPv6 TYPE=128 CODE=0 ID=1 SEQ=3
+Nov 10 07:55:27 vu2004 kernel: [25704.411672] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=13670 PROTO=ICMPv6 TYPE=129 CODE=0 ID=1 SEQ=3
+Nov 10 07:55:28 vu2004 kernel: [25705.435676] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=801645 PROTO=ICMPv6 TYPE=128 CODE=0 ID=1 SEQ=4
+Nov 10 07:55:28 vu2004 kernel: [25705.435700] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=13670 PROTO=ICMPv6 TYPE=129 CODE=0 ID=1 SEQ=4
+Nov 10 07:55:29 vu2004 kernel: [25706.459651] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=801645 PROTO=ICMPv6 TYPE=128 CODE=0 ID=1 SEQ=5
+Nov 10 07:55:29 vu2004 kernel: [25706.459665] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:86:dd SRC=fe80:0000:0000:0000:5054:00ff:fe10:49a5 DST=fe80:0000:0000:0000:5054:00ff:fe10:49a5 LEN=104 TC=0 HOPLIMIT=64 FLOWLBL=13670 PROTO=ICMPv6 TYPE=129 CODE=0 ID=1 SEQ=5
+Nov 10 07:55:35 vu2004 kernel: [25712.735663] IN=enp8s0 OUT= MAC=33:33:00:00:00:02:fe:54:00:2b:80:69:86:dd SRC=fe80:0000:0000:0000:fc54:00ff:fe2b:8069 DST=ff02:0000:0000:0000:0000:0000:0000:0002 LEN=56 TC=0 HOPLIMIT=255 FLOWLBL=0 PROTO=ICMPv6 TYPE=133 CODE=0
+
+leo@vu2004:~$
+
