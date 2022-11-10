@@ -2469,3 +2469,35 @@ Nov 10 08:03:57 vu2004 kernel: [26214.869125] IN=enp2s0 OUT= MAC=52:54:00:58:0e:
 
 leo@vu2004:~$
 
+=== -m iprange ====
+leo@vu2004:~$ sudo iptables -A INPUT -m iprange --src-range 192.168.101.1-192.168.102.254 -m limit --limit 2 --limit-burst 2 -j LOG --log-level debug
+[sudo] password for leo:
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 107 packets, 7472 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            source IP range 192.168.101.1-192.168.102.254 limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ ping 192.168.101.207
+PING 192.168.101.207 (192.168.101.207) 56(84) bytes of data.
+64 字节，来自 192.168.101.207: icmp_seq=1 ttl=64 时间=0.267 毫秒
+64 字节，来自 192.168.101.207: icmp_seq=2 ttl=64 时间=0.248 毫秒
+
+--- 192.168.101.207 ping 统计 ---
+已发送 2 个包， 已接收 2 个包, 0% 包丢失, 耗时 1026 毫秒
+rtt min/avg/max/mdev = 0.248/0.257/0.267/0.009 ms
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ vim notes.log
+
+
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 280 packets, 19672 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    2   120 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            source IP range 192.168.101.1-192.168.102.254 limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo tail -f  /var/log/syslog
+Nov 10 08:46:59 vu2004 kernel: [28796.397677] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=38165 DF PROTO=ICMP TYPE=8 CODE=0 ID=23823 SEQ=256
+Nov 10 08:47:20 vu2004 kernel: [28817.335435] IN=enp8s0 OUT= MAC=52:54:00:2b:80:69:52:54:00:fc:a5:c9:08:00 SRC=192.168.101.1 DST=192.168.101.207 LEN=84 TOS=0x00 PREC=0x00 TTL=64 ID=48290 DF PROTO=ICMP TYPE=8 CODE=0 ID=2 SEQ=1
+Nov 10 08:47:21 vu2004 kernel: [28818.361017] IN=enp8s0 OUT= MAC=52:54:00:2b:80:69:52:54:00:fc:a5:c9:08:00 SRC=192.168.101.1 DST=192.168.101.207 LEN=84 TOS=0x00 PREC=0x00 TTL=64 ID=48432 DF PROTO=ICMP TYPE=8 CODE=0 ID=2 SEQ=2
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 337 packets, 23488 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    5   348 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            source IP range 192.168.101.1-192.168.102.254 limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$
+
