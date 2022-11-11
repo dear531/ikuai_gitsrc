@@ -2585,3 +2585,37 @@ leo@vu2004:~$ sudo nfacct get test
 { pkts = 00000000000000000057, bytes = 00000000000000003888 } = test;
 leo@vu2004:~$
 
+=== -m owner ===
+获取指定创建者的包
+
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -A OUTPUT -m owner --uid-owner leo -m limit --limit 2 --limit-burst 2 -j LOG --log-level debug
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 34 packets, 3100 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1000 limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vL OUTPUT
+Chain OUTPUT (policy ACCEPT 50 packets, 4940 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all  --  any    any     anywhere             anywhere             owner UID match leo limit: avg 2/sec burst 2 LOG level debug
+leo@vu2004:~/source/linux-source-5.4.0$ nc -vn 192.168.122.1 22
+Connection to 192.168.122.1 22 port [tcp/*] succeeded!
+SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.5
+
+leo@vu2004:~/source/linux-source-5.4.0$ sudo iptables -vL OUTPUT
+Chain OUTPUT (policy ACCEPT 80 packets, 8008 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    3   164 LOG        all  --  any    any     anywhere             anywhere             owner UID match leo limit: avg 2/sec burst 2 LOG level debug
+leo@vu2004:~/source/linux-source-5.4.0$ sudo tail -f /var/log/syslog
+Nov 11 10:06:05 vu2004 fwupdmgr[22232]: Updating lvfs
+Nov 11 10:06:10 vu2004 fwupdmgr[22232]: Successfully downloaded new metadata: 0 local devices supported
+Nov 11 10:06:10 vu2004 systemd[1]: fwupd-refresh.service: Succeeded.
+Nov 11 10:06:10 vu2004 systemd[1]: Finished Refresh fwupd metadata and update motd.
+Nov 11 10:14:55 vu2004 kernel: [23438.407142] x_tables: ip_tables: osf match: only valid for protocol 6
+Nov 11 10:15:00 vu2004 kernel: [23442.692494] x_tables: ip_tables: osf match: only valid for protocol 6
+Nov 11 10:17:01 vu2004 CRON[22337]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Nov 11 10:23:32 vu2004 kernel: [23955.210861] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=52981 DF PROTO=TCP SPT=57954 DPT=22 WINDOW=64240 RES=0x00 SYN URGP=0
+Nov 11 10:23:32 vu2004 kernel: [23955.211157] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=52982 DF PROTO=TCP SPT=57954 DPT=22 WINDOW=502 RES=0x00 ACK URGP=0
+Nov 11 10:23:35 vu2004 kernel: [23958.240778] IN= OUT=enp1s0 SRC=192.168.122.63 DST=192.168.122.1 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=52984 DF PROTO=TCP SPT=57954 DPT=22 WINDOW=502 RES=0x00 ACK FIN URGP=0
+
+leo@vu2004:~/source/linux-source-5.4.0$
+
