@@ -2562,3 +2562,26 @@ Nov 10 10:04:52 vu2004 kernel: [33469.625576] IN=enp1s0 OUT= MAC=52:54:00:10:49:
 
 leo@vu2004:~$
 
+
+==== -m nfacct ===
+安装nfacct命令
+leo@vu2004:~$ sudo apt-get install nfacct
+执行设置命令，不设置会报错
+leo@vu2004:~$ sudo iptables -A INPUT -p tcp -d 192.168.122.63 --dport 22 -m nfacct --nfacct-name test
+[sudo] password for leo:
+iptables: No chain/target/match by that name.
+leo@vu2004:~$ sudo nfacct add test
+leo@vu2004:~$ sudo nfacct get test
+{ pkts = 00000000000000000000, bytes = 00000000000000000000 } = test;
+
+leo@vu2004:~$ sudo iptables -A INPUT -p tcp -d 192.168.122.63 --dport 22 -m nfacct --nfacct-name test
+leo@vu2004:~$ sudo nfacct get test
+{ pkts = 00000000000000000039, bytes = 00000000000000002712 } = test;
+leo@vu2004:~$ sudo nfacct get test
+{ pkts = 00000000000000000045, bytes = 00000000000000003104 } = test;
+leo@vu2004:~$ sudo nfacct get test
+{ pkts = 00000000000000000051, bytes = 00000000000000003496 } = test;
+leo@vu2004:~$ sudo nfacct get test
+{ pkts = 00000000000000000057, bytes = 00000000000000003888 } = test;
+leo@vu2004:~$
+
