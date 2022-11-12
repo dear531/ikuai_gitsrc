@@ -2619,3 +2619,17 @@ Nov 11 10:23:35 vu2004 kernel: [23958.240778] IN= OUT=enp1s0 SRC=192.168.122.63 
 
 leo@vu2004:~/source/linux-source-5.4.0$
 
+
+==== -m quota ====
+leo@vu2004:~$ sudo iptables -A OUTPUT -p tcp --sport 22 -m quota --quota 2000 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 54 packets, 12872 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            PKTTYPE = broadcast LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            PKTTYPE = multicast LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            quota: 1 bytes LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            quota: 100 bytes LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            quota: 100 bytes LOG flags 0 level 7
+    8  2000 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:22 quota: 2000 bytes LOG flags 0 level 7
+
+leo@vu2004:~$ 
