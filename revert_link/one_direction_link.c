@@ -8,12 +8,10 @@ struct node {
 
 struct node *reserved(struct node *head)
 {
-	struct node *pp = NULL, *p = NULL, *c = NULL, *n = head;
-	while (NULL != n) {
-		p = c;
-		c = n;
-		n = n->next;
-		c->next = p;
+	struct node *p, *c, *n;
+	for (p = NULL, c = NULL, n = head; \
+		NULL != n; \
+		p = c, c = n, n = n->next, c->next = p) {
 	}
 	return c;
 }
