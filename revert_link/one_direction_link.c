@@ -9,18 +9,13 @@ struct node {
 struct node *reserved(struct node *head)
 {
 	struct node *pp = NULL, *p = NULL, *c = NULL, *n = head;
-	if (NULL == head) {
-		return head;
-	}
-#if 1
-	do {
+	while (NULL != n) {
 		p = c;
 		c = n;
 		n = n->next;
 		c->next = p;
-	} while (NULL != n);
+	}
 	return c;
-#endif
 }
 
 struct node *add_link(struct node *head, int data)
@@ -54,24 +49,21 @@ struct node *init_link(int num)
 
 void destroy_link(struct node *head)
 {
-	if (NULL == head) {
-		return;
-	}
 	struct node *c = NULL, *n = head;
-	do {
+	while (NULL != n) {
 		c = n;
 		n = n->next;
 #if 0
 		fprintf(stdout, "free c->data:%d\n", c->data);
 #endif
 		free(c);
-	} while (NULL != n);
+	}
 }
 
 int main(void)
 {
 	struct node *head = NULL;
-	head = init_link(4);
+	head = init_link(2);
 	print_link(head);
 #if 1
 	printf("====\n");
