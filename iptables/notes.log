@@ -2789,3 +2789,79 @@ Chain INPUT (policy ACCEPT 230 packets, 15540 bytes)
    48  3952 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            TIME from 00:00:00 to 11:30:00 UTC limit: avg 2/sec burst 2 LOG flags 0 level 7
 leo@vu2004:~$
 
+
+=== -m tos ===
+leo@vu2004:~$ sudo iptables -A INPUT -m tos --tos 0x08 -m limit --limit 2 --limit-burst 2 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 65 packets, 4572 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   75  5102 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   10   945 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 73 packets, 5060 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   75  5102 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   10   945 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 82 packets, 5600 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   75  5102 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   10   945 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 91 packets, 6148 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   76  5162 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   11  1005 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 99 packets, 6636 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   76  5162 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   11  1005 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 106 packets, 7072 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   76  5162 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   11  1005 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 115 packets, 7612 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   76  5162 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   11  1005 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 123 packets, 8100 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   76  5162 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   11  1005 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ vim /var/log/syslog
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov 16 04:07:33 vu2004 kernel: [ 4712.681920] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.53 DST=127.0.0.1 LEN=106 TOS=0x00 PREC=0x00 TTL=64 ID=50632 DF PROTO=UDP SPT=53 DPT=43124 LEN=86
+Nov 16 04:07:33 vu2004 kernel: [ 4712.682722] device enp1s0 left promiscuous mode
+Nov 16 04:07:35 vu2004 kernel: [ 4714.323391] device enp1s0 entered promiscuous mode
+Nov 16 04:07:35 vu2004 kernel: [ 4714.345784] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.53 LEN=83 TOS=0x00 PREC=0x00 TTL=64 ID=54596 DF PROTO=UDP SPT=41348 DPT=53 LEN=63
+Nov 16 04:07:35 vu2004 kernel: [ 4714.345791] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.53 LEN=83 TOS=0x00 PREC=0x00 TTL=64 ID=54596 DF PROTO=UDP SPT=41348 DPT=53 LEN=63
+Nov 16 04:07:35 vu2004 kernel: [ 4714.346054] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.53 DST=127.0.0.1 LEN=106 TOS=0x00 PREC=0x00 TTL=64 ID=50755 DF PROTO=UDP SPT=53 DPT=41348 LEN=86
+Nov 16 04:07:35 vu2004 kernel: [ 4714.346058] IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.53 DST=127.0.0.1 LEN=106 TOS=0x00 PREC=0x00 TTL=64 ID=50755 DF PROTO=UDP SPT=53 DPT=41348 LEN=86
+Nov 16 04:07:35 vu2004 kernel: [ 4714.348271] device enp1s0 left promiscuous mode
+Nov 16 04:08:00 vu2004 kernel: [ 4739.909053] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=10868 DF PROTO=ICMP TYPE=8 CODE=0 ID=38760 SEQ=256
+Nov 16 04:08:00 vu2004 kernel: [ 4739.909094] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=10868 DF PROTO=ICMP TYPE=8 CODE=0 ID=38760 SEQ=256
+Nov 16 04:08:30 vu2004 kernel: [ 4769.924830] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=12949 DF PROTO=ICMP TYPE=8 CODE=0 ID=13161 SEQ=256
+Nov 16 04:08:30 vu2004 kernel: [ 4769.924870] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=12949 DF PROTO=ICMP TYPE=8 CODE=0 ID=13161 SEQ=256
+
+
+
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 241 packets, 16156 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   78  5282 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+   13  1125 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x00/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+    0     0 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            tos match0x08/0xff limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$
+
