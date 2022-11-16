@@ -2932,3 +2932,17 @@ Nov 16 09:46:24 vu2004 kernel: [25044.180097] IN=enp1s0 OUT= MAC=52:54:00:10:49:
 
 leo@vu2004:~$
 
+==== -m u32 for icmp ====
+leo@vu2004:~$ sudo iptables -A INPUT -m u32 --u32 "6 & 0xFF = 1" -m limit --limit 2 --limit-burst 2 -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 103 packets, 7164 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    1    60 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            u32 "0x6&0xff=0x1" limit: avg 2/sec burst 2 LOG flags 0 level 7
+leo@vu2004:~$ sudo -i
+root@vu2004:~# > /var/log/syslog
+root@vu2004:~# logout
+leo@vu2004:~$ sudo tail -f /var/log/syslog
+Nov 16 10:02:16 vu2004 kernel: [25995.878461] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=51479 DF PROTO=ICMP TYPE=8 CODE=0 ID=30579 SEQ=256
+
+leo@vu2004:~$
+
