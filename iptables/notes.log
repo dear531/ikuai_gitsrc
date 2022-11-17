@@ -2946,3 +2946,72 @@ Nov 16 10:02:16 vu2004 kernel: [25995.878461] IN=enp2s0 OUT= MAC=52:54:00:58:0e:
 
 leo@vu2004:~$
 
+==== -j AUDIT ====
+leo@vu2004:~/tmp$ sudo iptables -A INPUT -p tcp --dport 22 -m limit --limit 1 --limit-burst 1 -j AUDIT --type accept
+leo@vu2004:~/tmp$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 439 packets, 28168 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   48  4236 AUDIT      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 limit: avg 1/sec burst 1 AUDIT accept
+leo@vu2004:~/tmp$
+
+leo@vu2004:~$ sudo tail -f /var/log/audit/audit.log
+type=USER_ACCT msg=audit(1668667629.862:253): pid=2216 uid=1000 auid=1000 ses=4 msg='op=PAM:accounting grantors=pam_permit acct="leo" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/1 res=success'
+type=USER_CMD msg=audit(1668667629.862:254): pid=2216 uid=1000 auid=1000 ses=4 msg='cwd="/home/leo/tmp" cmd=69707461626C6573202D4120494E505554202D7020746370202D2D64706F7274203232202D6D206C696D6974202D2D6C696D69742031202D2D6C696D69742D62757273742031202D6A204155444954202D2D7479706520616363657074 terminal=pts/1 res=success'
+type=CRED_REFR msg=audit(1668667629.866:255): pid=2216 uid=0 auid=1000 ses=4 msg='op=PAM:setcred grantors=pam_permit,pam_cap acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/1 res=success'
+type=USER_START msg=audit(1668667629.866:256): pid=2216 uid=0 auid=1000 ses=4 msg='op=PAM:session_open grantors=pam_env,pam_env,pam_permit,pam_umask,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/1 res=success'
+type=NETFILTER_CFG msg=audit(1668667629.874:257): table=filter family=2 entries=0
+type=SYSCALL msg=audit(1668667629.874:257): arch=c000003e syscall=313 success=yes exit=0 a0=0 a1=55bd5a2c4358 a2=0 a3=0 items=0 ppid=2197 pid=2218 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="modprobe" exe="/usr/bin/kmod" key=(null)
+type=KERN_MODULE msg=audit(1668667629.874:257): name="iptable_filter"
+type=PROCTITLE msg=audit(1668667629.874:257): proctitle=2F7362696E2F6D6F6470726F6265002D71002D2D0069707461626C655F66696C746572
+type=NETFILTER_CFG msg=audit(1668667629.882:258): table=filter family=2 entries=4
+type=SYSCALL msg=audit(1668667629.882:258): arch=c000003e syscall=54 success=yes exit=0 a0=4 a1=0 a2=40 a3=55639ab39f80 items=0 ppid=2216 pid=2217 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts1 ses=4 comm="iptables" exe="/usr/sbin/xtables-legacy-multi" key=(null)
+type=PROCTITLE msg=audit(1668667629.882:258): proctitle=69707461626C6573002D4100494E505554002D7000746370002D2D64706F7274003232002D6D006C696D6974002D2D6C696D69740031002D2D6C696D69742D62757273740031002D6A004155444954002D2D7479706500616363657074
+type=USER_END msg=audit(1668667629.882:259): pid=2216 uid=0 auid=1000 ses=4 msg='op=PAM:session_close grantors=pam_env,pam_env,pam_permit,pam_umask,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/1 res=success'
+type=CRED_DISP msg=audit(1668667629.882:260): pid=2216 uid=0 auid=1000 ses=4 msg='op=PAM:setcred grantors=pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/1 res=success'
+type=NETFILTER_PKT msg=audit(1668667629.882:261): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+type=NETFILTER_PKT msg=audit(1668667641.186:262): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+type=NETFILTER_PKT msg=audit(1668667642.370:263): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+type=NETFILTER_PKT msg=audit(1668667643.378:264): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667644.878:265): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+
+type=NETFILTER_PKT msg=audit(1668667646.234:266): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667647.390:267): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667648.402:268): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667649.494:269): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667650.770:270): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667651.986:271): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+type=NETFILTER_PKT msg=audit(1668667653.274:272): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+
+
+leo@vu2004:~$ sudo tail -f /var/log/audit/audit.log
+type=NETFILTER_PKT msg=audit(1668667653.274:272): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+type=NETFILTER_PKT msg=audit(1668667655.562:273): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+type=USER_END msg=audit(1668667655.578:274): pid=2198 uid=0 auid=1000 ses=1 msg='op=PAM:session_close grantors=pam_env,pam_env,pam_permit,pam_umask,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
+type=CRED_DISP msg=audit(1668667655.578:275): pid=2198 uid=0 auid=1000 ses=1 msg='op=PAM:setcred grantors=pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
+type=NETFILTER_PKT msg=audit(1668667658.906:276): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+type=NETFILTER_PKT msg=audit(1668667696.050:277): mark=0x0 saddr=192.168.122.1 daddr=192.168.122.63 proto=6
+type=USER_ACCT msg=audit(1668667696.058:278): pid=2220 uid=1000 auid=1000 ses=1 msg='op=PAM:accounting grantors=pam_permit acct="leo" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
+type=USER_CMD msg=audit(1668667696.058:279): pid=2220 uid=1000 auid=1000 ses=1 msg='cwd="/home/leo" cmd=7461696C202D66202F7661722F6C6F672F61756469742F61756469742E6C6F67 terminal=pts/0 res=success'
+type=CRED_REFR msg=audit(1668667696.062:280): pid=2220 uid=0 auid=1000 ses=1 msg='op=PAM:setcred grantors=pam_permit,pam_cap acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
+type=USER_START msg=audit(1668667696.062:281): pid=2220 uid=0 auid=1000 ses=1 msg='op=PAM:session_open grantors=pam_env,pam_env,pam_permit,pam_umask,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
+
+leo@vu2004:~$ 
