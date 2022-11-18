@@ -3015,3 +3015,12 @@ type=CRED_REFR msg=audit(1668667696.062:280): pid=2220 uid=0 auid=1000 ses=1 msg
 type=USER_START msg=audit(1668667696.062:281): pid=2220 uid=0 auid=1000 ses=1 msg='op=PAM:session_open grantors=pam_env,pam_env,pam_permit,pam_umask,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/0 res=success'
 
 leo@vu2004:~$ 
+
+==== -j NOTRACK === 
+leo@vu2004:~$ sudo iptables -A PREROUTING -t raw -p tcp --dport 22 -j NOTRACK
+leo@vu2004:~$ sudo iptables -vnL PREROUTING -t raw
+Chain PREROUTING (policy ACCEPT 1074 packets, 67166 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+  188 13120 CT         tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 NOTRACK
+leo@vu2004:~$
+
