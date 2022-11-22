@@ -3061,3 +3061,12 @@ leo@HPZBook15:~$ ls
 leo@HPZBook15:~$ sudo iptables -vnL INPUT 1
     7   391 NFQUEUE    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444 limit: avg 2/sec burst 2 NFQUEUE num 1
 
+==== -j RATEEST =====
+
+leo@vu2004:~$ sudo iptables -A OUTPUT -p tcp --sport 22 -o enp1s0 -j RATEEST --rateest-name enp1s0 --rateest-interval 250ms --rateest-ewmalog 0.5s
+leo@vu2004:~$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 7 packets, 1160 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    7  1160 RATEEST    tcp  --  *      enp1s0  0.0.0.0/0            0.0.0.0/0            tcp spt:22 name enp1s0 interval 250.0ms ewmalog 500.0ms
+leo@vu2004:~$
+
