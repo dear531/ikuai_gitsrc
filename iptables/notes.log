@@ -3070,3 +3070,24 @@ Chain OUTPUT (policy ACCEPT 7 packets, 1160 bytes)
     7  1160 RATEEST    tcp  --  *      enp1s0  0.0.0.0/0            0.0.0.0/0            tcp spt:22 name enp1s0 interval 250.0ms ewmalog 500.0ms
 leo@vu2004:~$
 
+=== -j REJECT ====
+
+插入规则
+leo@vu2004:~$ sudo iptables -A INPUT -p tcp --dport 4444 -j REJECT --reject-with icmp-host-unreachable
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 110 packets, 7644 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444 reject-with icmp-host-unreachable
+
+对该端口进行连接扫描，返回错误与设置的一致
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$ nc -vz 192.168.122.63 4444
+nc: connect to 192.168.122.63 port 4444 (tcp) failed: No route to host
+leo@HPZBook15:~/source/ikuai_gitsrc/iptables$
+
+查看规则命中情况
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 133 packets, 9216 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    1    60 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444 reject-with icmp-host-unreachable
+leo@vu2004:~$
+
