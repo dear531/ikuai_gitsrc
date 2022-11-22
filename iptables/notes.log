@@ -3024,3 +3024,40 @@ Chain PREROUTING (policy ACCEPT 1074 packets, 67166 bytes)
   188 13120 CT         tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 NOTRACK
 leo@vu2004:~$
 
+=== -j NFQUEUE ====
+netfilter官方下载库 libnetfilter_queue-1.0.3进入 examples 文件夹编译，用户空间是用这个库的实现，完成的队列消息接收
+
+leo@HPZBook15:~/source/libnetfilter_queue-1.0.3/examples$ sudo ./nf-queue 1
+[sudo] leo 的密码：
+packet received (id=1 hw=0x0800 hook=1, payload len 57, checksum not ready)
+packet received (id=2 hw=0x0800 hook=1, payload len 57, checksum not ready)
+packet received (id=3 hw=0x0800 hook=1, payload len 57, checksum not ready)
+
+leo@HPZBook15:~/source/libnetfilter_queue-1.0.3/examples$
+
+
+leo@HPZBook15:~$ sudo iptables -I INPUT -p tcp --dport 4444 -m limit --limit 2 --limit-burst 2 -j NFQUEUE --queue-num 1
+leo@HPZBook15:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 NFQUEUE    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444 limit: avg 2/sec burst 2 NFQUEUE num 1
+
+leo@HPZBook15:~$ nc -l -p 4444
+fdsa
+fdsa
+fdsa
+fdsa
+
+leo@HPZBook15:~$
+
+leo@HPZBook15:~$ nc 192.168.0.200 4444
+fdsa
+fdsa
+fdsa
+fdsa
+
+leo@HPZBook15:~$ ls
+
+leo@HPZBook15:~$ sudo iptables -vnL INPUT 1
+    7   391 NFQUEUE    tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444 limit: avg 2/sec burst 2 NFQUEUE num 1
+
