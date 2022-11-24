@@ -3091,3 +3091,15 @@ Chain INPUT (policy ACCEPT 133 packets, 9216 bytes)
     1    60 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:4444 reject-with icmp-host-unreachable
 leo@vu2004:~$
 
+=== -j TCPMSS ====
+leo@vu2004:~$ sudo iptables -A OUTPUT -p tcp --tcp-flags SYN,RST SYN --sport 22 -m limit --limit 2 --limit-burst 2 -j TCPMSS --clamp-mss-to-pmtu
+leo@vu2004:~$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 33 packets, 2948 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 TCPMSS     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:22 flags:0x06/0x02 limit: avg 2/sec burst 2 TCPMSS clamp to PMTU
+leo@vu2004:~$ sudo iptables -vnL OUTPUT
+Chain OUTPUT (policy ACCEPT 67 packets, 9213 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    1    60 TCPMSS     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:22 flags:0x06/0x02 limit: avg 2/sec burst 2 TCPMSS clamp to PMTU
+leo@vu2004:~$
+
