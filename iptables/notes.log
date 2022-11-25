@@ -3117,4 +3117,13 @@ Chain INPUT (policy ACCEPT 173 packets, 11921 bytes)
     4   221 TCPOPTSTRIP  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2222 TCPOPTSTRIP options 4
 leo@vu2004:~$
 
+=== -j TEE ====
+
+leo@vu2004:~$ sudo iptables -A INPUT -s 192.168.102.237 -j TEE --gateway 192.168.102.224
+[sudo] password for leo:
+leo@vu2004:~$ sudo iptables -vnL INPUT
+Chain INPUT (policy ACCEPT 381 packets, 25604 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   44  2632 TEE        all  --  *      *       192.168.102.237      0.0.0.0/0            TEE gw:192.168.102.224
+leo@vu2004:~$
 
