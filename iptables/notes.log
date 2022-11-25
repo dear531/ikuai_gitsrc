@@ -3246,3 +3246,21 @@ Chain INPUT (policy ACCEPT 161 packets, 14619 bytes)
     4   221 TOS        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2222 TOS set 0x01/0xff
 leo@vu2004:~$
 
+
+=== -j TPROXY ====
+leo@vu2004:~$ sudo iptables -A PREROUTING -t mangle -p tcp -s 192.168.122.1 --dport 2222 -j TPROXY --on-ip 192.168.101.207
+iptables v1.8.4 (legacy): TPROXY: option "--on-port" must be specified
+
+Try `iptables -h' or 'iptables --help' for more information.
+leo@vu2004:~$ sudo iptables -A PREROUTING -t mangle -p tcp -s 192.168.122.1 --dport 2222 -j TPROXY --on-ip 192.168.101.207 --on-port 3333
+leo@vu2004:~$ sudo iptables -vnL PREROUTING -t mangle
+Chain PREROUTING (policy ACCEPT 218 packets, 18153 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 TPROXY     tcp  --  *      *       192.168.122.1        0.0.0.0/0            tcp dpt:2222 TPROXY redirect 192.168.101.207:3333 mark 0x0/0x0
+leo@vu2004:~$ nc -l -p 3333
+
+leo@vu2004:~$ sudo iptables -vnL PREROUTING -t mangle
+Chain PREROUTING (policy ACCEPT 338 packets, 26881 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    5   300 TPROXY     tcp  --  *      *       192.168.122.1        0.0.0.0/0            tcp dpt:2222 TPROXY redirect 192.168.101.207:3333 mark 0x0/0x0
+leo@vu2004:~$ 
