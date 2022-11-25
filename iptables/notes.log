@@ -3127,3 +3127,106 @@ Chain INPUT (policy ACCEPT 381 packets, 25604 bytes)
    44  2632 TEE        all  --  *      *       192.168.102.237      0.0.0.0/0            TEE gw:192.168.102.224
 leo@vu2004:~$
 
+在192.168.122.63对192.168.102.237访问
+leo@vu2004:~$ ip -o addr show
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet6 ::1/128 scope host \       valid_lft forever preferred_lft forever
+2: enp1s0    inet 192.168.122.63/24 brd 192.168.122.255 scope global dynamic enp1s0\       valid_lft 3424sec preferred_lft 3424sec
+2: enp1s0    inet6 fe80::5054:ff:fe10:49a5/64 scope link \       valid_lft forever preferred_lft forever
+3: enp2s0    inet 192.168.102.188/24 brd 192.168.102.255 scope global enp2s0\       valid_lft forever preferred_lft forever
+3: enp2s0    inet6 fe80::5054:ff:fe58:ef1/64 scope link \       valid_lft forever preferred_lft forever
+4: enp8s0    inet 192.168.101.207/24 brd 192.168.101.255 scope global dynamic enp8s0\       valid_lft 3438sec preferred_lft 3438sec
+4: enp8s0    inet6 fe80::5054:ff:fe2b:8069/64 scope link \       valid_lft forever preferred_lft forever
+leo@vu2004:~$ nc -vz 192.168.102.237 22
+Connection to 192.168.102.237 22 port [tcp/ssh] succeeded!
+leo@vu2004:~$
+
+在192.168.102.224抓包看结果
+root@iKuai:/$ip -o addr show
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+1: lo    inet 192.0.0.0/32 scope global lo\       valid_lft forever preferred_lft forever
+9: lan1    inet 192.168.101.5/24 brd 192.168.101.255 scope global lan1\       valid_lft forever preferred_lft forever
+10: wan1    inet 192.168.102.224/24 brd 192.168.102.255 scope global wan1\       valid_lft forever preferred_lft forever
+root@iKuai:/$
+
+root@iKuai:/$tcpdump -i wan1 host 192.168.102.237 -U
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on wan1, link-type EN10MB (Ethernet), capture size 65535 bytes
+15:03:43.099037 IP 192.168.102.237 > 192.168.102.188: ICMP echo request, id 37926, seq 256, length 40
+15:03:43.099344 IP 192.168.102.188 > 192.168.102.237: ICMP echo reply, id 37926, seq 256, length 40
+15:03:48.114363 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1460,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114391 IP 192.168.102.224 > 192.168.102.237: ICMP redirect 192.168.102.188 to host 192.168.102.188, length 68
+15:03:48.114408 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114514 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114522 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114608 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114616 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114624 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [.], ack 2, win 510, options [nop,nop,TS val 3066964641 ecr 199690259], length 0
+15:03:48.114668 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114675 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114743 IP 192.168.102.188.45142 > 192.168.102.237.ssh: Flags [R], seq 4054967022, win 0, length 0
+15:03:48.114781 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114788 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114859 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114871 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114922 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114929 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114975 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.114982 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115099 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115109 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115166 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115173 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115221 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115229 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115276 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115283 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115328 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115336 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115381 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115388 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115434 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115441 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115487 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115494 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115544 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115551 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115598 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115605 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115650 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115657 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115701 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115707 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115752 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115759 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115803 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115810 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115857 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115864 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115891 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [P.], seq 1:411, ack 2, win 510, options [nop,nop,TS val 3066964642 ecr 199690259], length 410
+15:03:48.115951 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115957 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.115963 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [F.], seq 411, ack 2, win 510, options [nop,nop,TS val 3066964643 ecr 199690259], length 0
+15:03:48.116013 IP 192.168.102.188.45142 > 192.168.102.237.ssh: Flags [R], seq 4054967022, win 0, length 0
+15:03:48.116025 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116030 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116086 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116094 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116140 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116146 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116194 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116201 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116248 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116255 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116301 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116308 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116354 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116360 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:48.116411 IP 192.168.102.237.ssh > 192.168.102.188.45142: Flags [S.], seq 1427479374, ack 4054967021, win 65160, options [mss 1400,sackOK,TS val 3066964641 ecr 199690259,nop,wscale 7], length 0
+15:03:53.117944 ARP, Request who-has 192.168.102.237 tell 192.168.102.224, length 28
+15:03:53.118657 ARP, Reply 192.168.102.237 is-at 52:54:00:94:91:78 (oui Unknown), length 28
+^C
+73 packets captured
+73 packets received by filter
+0 packets dropped by kernel
+root@iKuai:/$
