@@ -3103,3 +3103,18 @@ Chain OUTPUT (policy ACCEPT 67 packets, 9213 bytes)
     1    60 TCPMSS     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp spt:22 flags:0x06/0x02 limit: avg 2/sec burst 2 TCPMSS clamp to PMTU
 leo@vu2004:~$
 
+==== -j TCPOPTSTRIP 剥离掉tcp头中的内容 ====
+leo@vu2004:~$ sudo iptables -vnL INPUT -t mangle
+Chain INPUT (policy ACCEPT 114 packets, 7952 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 TCPOPTSTRIP  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2222 TCPOPTSTRIP options 4
+leo@vu2004:~$ nc -l -p 2222
+fdsa
+
+leo@vu2004:~$ sudo iptables -vnL INPUT -t mangle
+Chain INPUT (policy ACCEPT 173 packets, 11921 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    4   221 TCPOPTSTRIP  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2222 TCPOPTSTRIP options 4
+leo@vu2004:~$
+
+
