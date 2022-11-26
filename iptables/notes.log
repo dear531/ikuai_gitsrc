@@ -3287,3 +3287,25 @@ Chain PREROUTING (policy ACCEPT 139 packets, 8424 bytes)
    10   892 TRACE      tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 limit: avg 1/sec burst 1
 leo@vu2004:~$
 
+=== -j 
+
+leo@vu2004:~$ sudo iptables -A INPUT -t mangle -p icmp -j TTL --ttl-dec 4
+leo@vu2004:~$ sudo iptables -A INPUT -t mangle -p icmp -j LOG --log-level debug
+leo@vu2004:~$ sudo iptables -vnL INPUT -t mangle
+Chain INPUT (policy ACCEPT 11 packets, 784 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 TTL        icmp --  *      *       0.0.0.0/0            0.0.0.0/0            TTL decrement by 4
+    0     0 LOG        icmp --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 7
+leo@vu2004:~$ sudo iptables -vnL INPUT -t mangle
+Chain INPUT (policy ACCEPT 1909 packets, 3686K bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    2   144 TTL        icmp --  *      *       0.0.0.0/0            0.0.0.0/0            TTL decrement by 4
+    2   144 LOG        icmp --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 7
+leo@vu2004:~$
+
+leo@vu2004:~$ sudo dmesg -c
+[ 6316.698045] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=60 ID=26246 DF PROTO=ICMP TYPE=8 CODE=0 ID=58373 SEQ=256
+[ 6376.755081] IN=enp2s0 OUT= MAC=52:54:00:58:0e:f1:52:54:00:94:91:78:08:00 SRC=192.168.102.237 DST=192.168.102.188 LEN=60 TOS=0x00 PREC=0x00 TTL=60 ID=34687 DF PROTO=ICMP TYPE=8 CODE=0 ID=64262 SEQ=256
+[ 6381.910350] IN=enp1s0 OUT= MAC=52:54:00:10:49:a5:52:54:00:3f:a2:e8:08:00 SRC=192.168.122.1 DST=192.168.122.63 LEN=84 TOS=0x00 PREC=0x00 TTL=60 ID=53170 DF PROTO=ICMP TYPE=8 CODE=0 ID=8 SEQ=1
+leo@vu2004:~$
+
